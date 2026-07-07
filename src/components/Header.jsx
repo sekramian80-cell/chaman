@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
 import { navItems } from '../data/content.js';
 
-export function Header() {
+export function Header({ currentPath = '/' }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="سبزپوشان">
+      <a className="brand" href="#/" aria-label="سبزپوشان" onClick={closeMenu}>
         <span className="brand__mark">س</span>
         <span>
           <strong>سبزپوشان</strong>
@@ -19,7 +19,12 @@ export function Header() {
 
       <nav className={`main-nav ${isMenuOpen ? 'main-nav--open' : ''}`} aria-label="منوی اصلی">
         {navItems.map((item) => (
-          <a key={item.href} href={item.href} onClick={closeMenu}>
+          <a
+            className={currentPath === item.path ? 'main-nav__link--active' : ''}
+            key={item.href}
+            href={item.href}
+            onClick={closeMenu}
+          >
             {item.label}
           </a>
         ))}

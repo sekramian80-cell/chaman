@@ -14,11 +14,11 @@ import {
 } from 'lucide-react';
 
 export const navItems = [
-  { label: 'خدمات', href: '#services' },
-  { label: 'محصولات', href: '#products' },
-  { label: 'روند اجرا', href: '#process' },
-  { label: 'نمونه کار', href: '#projects' },
-  { label: 'سوالات', href: '#faq' },
+  { label: 'خدمات', href: '#/services', path: '/services' },
+  { label: 'محصولات', href: '#/products', path: '/products' },
+  { label: 'روند اجرا', href: '#/process', path: '/process' },
+  { label: 'نمونه کار', href: '#/projects', path: '/projects' },
+  { label: 'سوالات', href: '#/faq', path: '/faq' },
 ];
 
 export const heroStats = [

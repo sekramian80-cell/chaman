@@ -19,7 +19,7 @@ export function Hero() {
               مشاوره رایگان
               <ArrowLeft size={18} />
             </a>
-            <a className="btn btn--ghost" href="#projects">
+            <a className="btn btn--ghost" href="#/projects">
               <PlayCircle size={19} />
               دیدن نمونه کارها
             </a>

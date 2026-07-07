@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="container site-footer__inner">
         <div>
-          <a className="brand brand--footer" href="#top" aria-label="سبزپوشان">
+          <a className="brand brand--footer" href="#/" aria-label="سبزپوشان">
             <span className="brand__mark">س</span>
             <span>
               <strong>سبزپوشان</strong>

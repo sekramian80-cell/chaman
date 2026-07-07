@@ -32,7 +32,7 @@ export function ProjectGallery() {
           </p>
           <div>
             <strong>مدیر مجموعه کافه باغ</strong>
-            <a href="#contact">
+            <a href="tel:+989120000000">
               درخواست بازدید
               <ArrowLeft size={17} />
             </a>
