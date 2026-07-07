@@ -1,9 +1,19 @@
 import { ArrowLeft } from 'lucide-react';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 
-export function PageHero({ eyebrow, title, description, primaryLabel, secondaryLabel, secondaryHref = '#/projects' }) {
+export function PageHero({
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  secondaryLabel,
+  secondaryHref = '#/projects',
+  image,
+}) {
+  const heroStyle = image ? { '--page-hero-image': `url(${image})` } : undefined;
+
   return (
-    <section className="page-hero">
+    <section className="page-hero" style={heroStyle}>
       <div className="page-hero__glow" />
       <div className="container page-hero__inner">
         <ScrollReveal className="page-hero__copy">

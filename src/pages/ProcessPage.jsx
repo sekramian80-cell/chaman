@@ -2,6 +2,7 @@ import { CalendarCheck, FileText, Hammer, MessagesSquare } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { Process } from '../components/Process.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import processHero from '../assets/hero-process-football.png';
 import { PageHero } from './PageHero.jsx';
 
 const timeline = [
@@ -15,6 +16,7 @@ export function ProcessPage() {
   return (
     <>
       <PageHero
+        image={processHero}
         eyebrow="صفحه روند اجرا"
         title="روند همکاری سریع، شفاف و مرحله‌به‌مرحله"
         description="این صفحه برای توضیح دمو از مسیر اجرای پروژه طراحی شده تا مشتری بداند از اولین تماس تا تحویل چه اتفاقی می‌افتد."

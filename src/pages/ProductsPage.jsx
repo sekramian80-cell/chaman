@@ -2,6 +2,7 @@ import { Droplets, Leaf, ShieldCheck, Sun } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { ProductShowcase } from '../components/ProductShowcase.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import productsHero from '../assets/hero-products-football.png';
 import { PageHero } from './PageHero.jsx';
 
 const productCards = [
@@ -15,6 +16,7 @@ export function ProductsPage() {
   return (
     <>
       <PageHero
+        image={productsHero}
         eyebrow="صفحه محصولات"
         title="مدل‌های پیشنهادی چمن مصنوعی"
         description="در این صفحه چند مدل دمو برای مقایسه ظاهر، تراکم، دوام و کاربردهای مختلف قرار گرفته است."

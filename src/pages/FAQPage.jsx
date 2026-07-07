@@ -2,6 +2,7 @@ import { HelpCircle, MessageCircle, PhoneCall } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { FAQ } from '../components/FAQ.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import faqHero from '../assets/hero-faq-football.png';
 import { PageHero } from './PageHero.jsx';
 
 const supportItems = [
@@ -14,6 +15,7 @@ export function FAQPage() {
   return (
     <>
       <PageHero
+        image={faqHero}
         eyebrow="صفحه سوالات"
         title="پاسخ سوالات رایج قبل از خرید و نصب"
         description="اینجا سوالات پرتکرار به شکل دمو دسته‌بندی شده‌اند تا تصمیم‌گیری درباره مدل، قیمت و نگهداری ساده‌تر شود."

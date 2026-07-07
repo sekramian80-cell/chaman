@@ -1,6 +1,7 @@
 import { CheckCircle2, ClipboardList, Sparkles, Timer } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import servicesHero from '../assets/hero-services-football.png';
 import { Services } from '../components/Services.jsx';
 import { PageHero } from './PageHero.jsx';
 
@@ -16,6 +17,7 @@ export function ServicesPage() {
   return (
     <>
       <PageHero
+        image={servicesHero}
         eyebrow="صفحه خدمات"
         title="خدمات چمن مصنوعی برای هر نوع فضا"
         description="در این بخش نمونه خدمات دمو را می‌بینید؛ از مشاوره و انتخاب مدل تا زیرسازی، نصب و نگهداری."

@@ -2,6 +2,7 @@ import { MapPin, Ruler, Sparkles } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { ProjectGallery } from '../components/ProjectGallery.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import projectsHero from '../assets/hero-projects-football.png';
 import { PageHero } from './PageHero.jsx';
 
 const projectStats = [
@@ -14,6 +15,7 @@ export function ProjectsPage() {
   return (
     <>
       <PageHero
+        image={projectsHero}
         eyebrow="صفحه نمونه کار"
         title="نمونه پروژه‌های دمو برای نمایش کیفیت اجرا"
         description="در این بخش چند سناریوی پیشفرض از پروژه‌ها، متراژها و کاربردهای رایج قرار گرفته تا صفحه نمونه‌کار کامل‌تر باشد."

@@ -1106,9 +1106,13 @@ img {
   overflow: hidden;
   color: #ffffff;
   background:
-    radial-gradient(circle at 18% 22%, rgba(42, 157, 143, 0.34), transparent 28%),
-    radial-gradient(circle at 82% 72%, rgba(240, 184, 79, 0.22), transparent 24%),
-    linear-gradient(135deg, #102820, #1f7a4d 64%, #2a9d8f);
+    radial-gradient(circle at 18% 22%, rgba(42, 157, 143, 0.34), transparent 30%),
+    radial-gradient(circle at 82% 72%, rgba(240, 184, 79, 0.2), transparent 26%),
+    linear-gradient(90deg, rgba(7, 21, 10, 0.2), rgba(7, 21, 10, 0.72) 46%, rgba(7, 21, 10, 0.92)),
+    linear-gradient(180deg, rgba(7, 21, 10, 0.12), rgba(7, 21, 10, 0.78)),
+    var(--page-hero-image, linear-gradient(135deg, #102820, #1f7a4d 64%, #2a9d8f));
+  background-position: center;
+  background-size: cover;
 }
 
 .page-hero::after {
