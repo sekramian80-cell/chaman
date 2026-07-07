@@ -331,8 +331,9 @@ img {
   background:
     radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.5), transparent 24%),
     linear-gradient(135deg, #8ee35e, #2a9d8f 44%, #176332 76%, #c9a84c);
+  background-size: 190% 190%;
   border: 1px solid rgba(183, 241, 125, 0.56);
-  border-radius: 999px 18px 999px 18px / 20px 999px 20px 999px;
+  border-radius: 999px;
   box-shadow:
     0 14px 36px rgba(42, 157, 143, 0.28),
     0 0 22px rgba(126, 217, 87, 0.16),
@@ -341,6 +342,7 @@ img {
   transition:
     transform 180ms ease,
     box-shadow 180ms ease;
+  animation: gradientBreath 6.4s ease infinite, buttonGlow 3.2s ease-in-out infinite;
 }
 
 .icon-link::before,
@@ -372,7 +374,7 @@ img {
   min-width: 142px;
   min-height: 64px;
   padding: 0 22px;
-  border-radius: 999px 22px 999px 22px / 24px 999px 24px 999px;
+  border-radius: 999px;
   font-weight: 850;
 }
 
@@ -501,7 +503,7 @@ img {
   padding: 13px 24px;
   font-weight: 850;
   border: 1px solid transparent;
-  border-radius: 999px 22px 999px 22px / 24px 999px 24px 999px;
+  border-radius: 999px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.24),
     0 18px 48px rgba(0, 0, 0, 0.28);
@@ -558,7 +560,7 @@ img {
     0 0 28px rgba(126, 217, 87, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.46);
   text-shadow: 0 1px 16px rgba(7, 21, 10, 0.46);
-  animation: gradientBreath 5.8s ease infinite;
+  animation: gradientBreath 5.8s ease infinite, buttonGlow 3.2s ease-in-out infinite;
 }
 
 .btn--ghost {
@@ -1524,6 +1526,17 @@ img {
   }
 }
 
+@keyframes buttonGlow {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+
+  50% {
+    filter: brightness(1.09) saturate(1.18);
+  }
+}
+
 @keyframes faqDrop {
   from {
     opacity: 0;
@@ -1539,11 +1552,21 @@ img {
 @keyframes btnShine {
   0% {
     right: -80%;
+    opacity: 0;
   }
 
-  42%,
+  12% {
+    opacity: 0.86;
+  }
+
+  46% {
+    right: 130%;
+    opacity: 0;
+  }
+
   100% {
     right: 130%;
+    opacity: 0;
   }
 }
 
