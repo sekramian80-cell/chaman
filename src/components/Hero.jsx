@@ -1,5 +1,5 @@
 import { ArrowLeft, MessageCircle, PlayCircle } from 'lucide-react';
-import heroImage from '../assets/hero-artificial-grass.png';
+import heroImage from '../assets/hero-football-field.png';
 import { heroStats } from '../data/content.js';
 
 export function Hero() {

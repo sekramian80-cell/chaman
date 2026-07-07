@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 
 export const navItems = [
+  { label: 'خانه', href: '#/', path: '/' },
   { label: 'خدمات', href: '#/services', path: '/services' },
   { label: 'محصولات', href: '#/products', path: '/products' },
   { label: 'روند اجرا', href: '#/process', path: '/process' },
