@@ -6,11 +6,11 @@ export function Footer() {
     <footer className="site-footer">
       <div className="container site-footer__inner">
         <div>
-          <a className="brand brand--footer" href="#/" aria-label="سبزپوشان">
-            <span className="brand__mark">س</span>
+          <a className="brand brand--footer" href="#/" aria-label="فراز چمن">
+            <span className="brand__mark">ف</span>
             <span>
-              <strong>سبزپوشان</strong>
-              <small>چمن مصنوعی مدرن</small>
+              <strong>فراز چمن</strong>
+              <small>طراحی و اجرای چمن مصنوعی</small>
             </span>
           </a>
           <p>فروش، طراحی و اجرای چمن مصنوعی برای خانه، ویلا، روف گاردن و کسب‌وکارها.</p>

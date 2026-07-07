@@ -9,11 +9,12 @@ export function Header({ currentPath = '/' }) {
 
   return (
     <header className="site-header">
-      <a className="brand" href="#/" aria-label="سبزپوشان" onClick={closeMenu}>
-        <span className="brand__mark">س</span>
+      <span className="site-header__sheen" aria-hidden="true" />
+      <a className="brand" href="#/" aria-label="فراز چمن" onClick={closeMenu}>
+        <span className="brand__mark">ف</span>
         <span>
-          <strong>سبزپوشان</strong>
-          <small>چمن مصنوعی مدرن</small>
+          <strong>فراز چمن</strong>
+          <small>طراحی و اجرای چمن مصنوعی</small>
         </span>
       </a>
 

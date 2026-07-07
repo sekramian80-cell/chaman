@@ -9,7 +9,7 @@ export function Hero() {
       <div className="hero__content">
         <div className="hero__copy">
           <span className="eyebrow">طراحی، فروش و اجرای تخصصی</span>
-          <h1>چمن مصنوعی سبزپوشان</h1>
+          <h1>چمن مصنوعی فراز چمن</h1>
           <p>
             فضای بیرونی شما را با چمنی تمیز، همیشه سبز و کم‌نگهداری به یک محیط لوکس
             برای زندگی، کار و پذیرایی تبدیل می‌کنیم.

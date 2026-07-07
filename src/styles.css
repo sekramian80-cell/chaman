@@ -76,74 +76,133 @@ img {
 
 .site-header {
   position: sticky;
-  top: 16px;
+  top: 18px;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: min(var(--container), calc(100% - 40px));
-  min-height: 72px;
-  margin: 16px auto -88px;
-  padding: 10px 14px;
+  width: min(1160px, calc(100% - 42px));
+  min-height: 78px;
+  margin: 18px auto -96px;
+  padding: 11px 13px 11px 18px;
   overflow: hidden;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(242, 255, 236, 0.52)),
-    rgba(251, 252, 247, 0.56);
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: var(--radius-lg);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(239, 255, 227, 0.45) 42%, rgba(42, 157, 143, 0.16)),
+    rgba(246, 251, 241, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 34px 18px 34px 18px / 28px 42px 28px 42px;
   box-shadow:
-    0 24px 70px rgba(7, 46, 30, 0.18),
-    0 8px 26px rgba(42, 157, 143, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(22px) saturate(160%);
+    0 28px 86px rgba(16, 40, 32, 0.2),
+    0 10px 30px rgba(42, 157, 143, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(31, 122, 77, 0.14);
+  backdrop-filter: blur(26px) saturate(176%);
 }
 
 .site-header::before {
   position: absolute;
-  inset: -110% -24%;
+  inset: -130% -30%;
   z-index: -2;
   content: '';
   background:
-    radial-gradient(circle at 12% 28%, rgba(167, 201, 87, 0.72), transparent 24%),
-    radial-gradient(circle at 42% 18%, rgba(42, 157, 143, 0.56), transparent 22%),
-    radial-gradient(circle at 68% 62%, rgba(240, 184, 79, 0.52), transparent 24%),
-    radial-gradient(circle at 86% 72%, rgba(31, 122, 77, 0.62), transparent 26%),
+    conic-gradient(from 130deg at 50% 50%, rgba(167, 201, 87, 0.72), rgba(42, 157, 143, 0.55), rgba(240, 184, 79, 0.46), rgba(31, 122, 77, 0.58), rgba(167, 201, 87, 0.72)),
+    radial-gradient(circle at 10% 34%, rgba(255, 255, 255, 0.78), transparent 18%),
+    radial-gradient(circle at 86% 64%, rgba(231, 111, 81, 0.28), transparent 22%),
     linear-gradient(110deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0));
-  filter: blur(26px);
-  opacity: 0.9;
-  animation: headerAura 8s ease-in-out infinite alternate;
+  filter: blur(34px);
+  opacity: 0.82;
+  animation: headerAura 9s ease-in-out infinite alternate;
 }
 
 .site-header::after {
   position: absolute;
-  inset: 0;
+  inset: 1px;
   z-index: -1;
   content: '';
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 22% 74%, rgba(255, 255, 255, 0.3)),
-    linear-gradient(135deg, rgba(167, 201, 87, 0.16), rgba(42, 157, 143, 0.14), rgba(240, 184, 79, 0.12));
+    linear-gradient(100deg, rgba(255, 255, 255, 0.54), transparent 18% 72%, rgba(255, 255, 255, 0.28)),
+    radial-gradient(circle at 50% 105%, rgba(167, 201, 87, 0.28), transparent 42%),
+    linear-gradient(135deg, rgba(167, 201, 87, 0.12), rgba(42, 157, 143, 0.12), rgba(240, 184, 79, 0.1));
+  border-radius: inherit;
   pointer-events: none;
 }
 
+.site-header__sheen {
+  position: absolute;
+  inset: 8px 11px auto;
+  height: 19px;
+  pointer-events: none;
+}
+
+.site-header__sheen::before,
+.site-header__sheen::after {
+  position: absolute;
+  content: '';
+  border-radius: 999px;
+}
+
+.site-header__sheen::before {
+  right: 18px;
+  left: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.96), transparent);
+}
+
+.site-header__sheen::after {
+  left: 28px;
+  width: 120px;
+  height: 18px;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.42), transparent 72%);
+  filter: blur(5px);
+}
+
 .brand {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-width: 182px;
+  gap: 12px;
+  min-width: 196px;
+  padding: 5px 6px 5px 12px;
+  border-radius: 24px 10px 24px 10px / 18px 28px 18px 28px;
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease;
+}
+
+.brand:hover {
+  background: rgba(255, 255, 255, 0.26);
+  transform: translateY(-1px);
 }
 
 .brand__mark {
+  position: relative;
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   place-items: center;
   color: #ffffff;
-  font-weight: 900;
+  font-size: 1.34rem;
+  font-weight: 950;
   background:
-    radial-gradient(circle at 28% 22%, var(--color-lime), transparent 32%),
-    var(--gradient-brand);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 14px 34px rgba(29, 127, 77, 0.28);
+    radial-gradient(circle at 26% 22%, rgba(255, 255, 255, 0.72), transparent 18%),
+    conic-gradient(from 160deg, var(--color-lime), var(--color-teal), var(--color-green), var(--color-gold), var(--color-lime));
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 20px 9px 20px 9px / 16px 24px 16px 24px;
+  box-shadow:
+    0 16px 36px rgba(42, 157, 143, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52);
+}
+
+.brand__mark::after {
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  content: '';
+  background: conic-gradient(from 30deg, rgba(167, 201, 87, 0.36), rgba(42, 157, 143, 0.28), rgba(240, 184, 79, 0.32), rgba(167, 201, 87, 0.36));
+  border-radius: inherit;
+  filter: blur(12px);
+  opacity: 0.86;
 }
 
 .brand strong,
@@ -152,53 +211,83 @@ img {
 }
 
 .brand strong {
-  font-size: 1.05rem;
+  color: var(--color-green-dark);
+  font-size: 1.1rem;
   line-height: 1.3;
 }
 
 .brand small {
-  color: var(--color-muted);
+  color: rgba(16, 40, 32, 0.64);
   font-size: 0.75rem;
   line-height: 1.5;
 }
 
 .main-nav {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px;
-  background: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.62);
-  border-radius: 999px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
-  backdrop-filter: blur(14px);
+  gap: 6px;
+  padding: 7px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.44), rgba(255, 255, 255, 0.18)),
+    rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 24px 12px 24px 12px / 18px 30px 18px 30px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.64),
+    0 10px 28px rgba(16, 40, 32, 0.08);
+  backdrop-filter: blur(16px);
 }
 
 .main-nav a {
-  min-height: 38px;
-  padding: 8px 16px;
+  position: relative;
+  min-height: 40px;
+  padding: 8px 15px;
+  overflow: hidden;
   color: #314039;
   font-size: 0.94rem;
-  border-radius: 999px;
+  border-radius: 18px 8px 18px 8px / 14px 22px 14px 22px;
   transition:
     color 180ms ease,
     background-color 180ms ease,
     transform 180ms ease;
 }
 
+.main-nav a::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background:
+    radial-gradient(circle at 24% 10%, rgba(255, 255, 255, 0.72), transparent 32%),
+    linear-gradient(135deg, rgba(167, 201, 87, 0.26), rgba(42, 157, 143, 0.18));
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
 .main-nav a:hover {
   color: var(--color-green-dark);
-  background: linear-gradient(135deg, rgba(167, 201, 87, 0.28), rgba(42, 157, 143, 0.16));
   transform: translateY(-1px);
+}
+
+.main-nav a:hover::before {
+  opacity: 1;
 }
 
 .main-nav__link--active {
   color: var(--color-green-dark);
-  background: linear-gradient(135deg, rgba(167, 201, 87, 0.34), rgba(42, 157, 143, 0.2));
-  box-shadow: inset 0 0 0 1px rgba(42, 157, 143, 0.16);
+  background:
+    radial-gradient(circle at 22% 10%, rgba(255, 255, 255, 0.72), transparent 32%),
+    linear-gradient(135deg, rgba(167, 201, 87, 0.38), rgba(42, 157, 143, 0.24));
+  box-shadow:
+    inset 0 0 0 1px rgba(42, 157, 143, 0.18),
+    0 8px 20px rgba(42, 157, 143, 0.12);
 }
 
 .header-actions {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -209,15 +298,30 @@ img {
 .icon-link,
 .menu-toggle {
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   place-items: center;
-  color: var(--color-green-dark);
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.68);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 12px 30px rgba(23, 33, 29, 0.1);
-  backdrop-filter: blur(12px);
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.62), transparent 28%),
+    var(--gradient-brand);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 18px 8px 18px 8px / 14px 24px 14px 24px;
+  box-shadow:
+    0 14px 32px rgba(42, 157, 143, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52);
+  backdrop-filter: blur(14px);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.icon-link:hover,
+.menu-toggle:hover {
+  box-shadow:
+    0 18px 42px rgba(42, 157, 143, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px) rotate(-2deg);
 }
 
 .menu-toggle {
@@ -1176,6 +1280,11 @@ img {
   color: #ffffff;
 }
 
+.brand--footer strong,
+.brand--footer small {
+  color: #ffffff;
+}
+
 .site-footer p {
   max-width: 390px;
   margin: 18px 0 0;
@@ -1317,12 +1426,13 @@ img {
 @media (max-width: 1020px) {
   .site-header {
     width: calc(100% - 28px);
-    padding-inline: 12px;
+    padding-inline: 10px;
+    border-radius: 28px 14px 28px 14px / 22px 34px 22px 34px;
   }
 
   .main-nav {
     position: fixed;
-    top: 102px;
+    top: 108px;
     right: 14px;
     left: 14px;
     display: none;
@@ -1331,7 +1441,7 @@ img {
       linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(242, 255, 236, 0.68)),
       rgba(251, 252, 247, 0.72);
     border-color: rgba(255, 255, 255, 0.72);
-    border-radius: var(--radius-lg);
+    border-radius: 26px 12px 26px 12px / 20px 32px 20px 32px;
     box-shadow: var(--shadow-soft);
     backdrop-filter: blur(22px) saturate(150%);
   }
@@ -1341,7 +1451,7 @@ img {
   }
 
   .main-nav a {
-    border-radius: var(--radius-sm);
+    border-radius: 18px 8px 18px 8px / 14px 22px 14px 22px;
   }
 
   .menu-toggle {
@@ -1395,6 +1505,7 @@ img {
 
   .brand {
     min-width: 0;
+    padding-inline: 5px;
   }
 
   .brand small {
