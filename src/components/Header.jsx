@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
 import { navItems } from '../data/content.js';
 
 export function Header({ currentPath = '/' }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 26);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="site-header">
+    <>
+    <div className={`top-scroll-fade ${hasScrolled ? 'top-scroll-fade--visible' : ''}`} aria-hidden="true" />
+    <header className={`site-header ${hasScrolled ? 'site-header--scrolled' : ''}`}>
       <span className="site-header__sheen" aria-hidden="true" />
       <a className="brand" href="#/" aria-label="فراز چمن" onClick={closeMenu}>
         <span className="brand__mark">ف</span>
@@ -47,5 +60,6 @@ export function Header({ currentPath = '/' }) {
         </button>
       </div>
     </header>
+    </>
   );
 }

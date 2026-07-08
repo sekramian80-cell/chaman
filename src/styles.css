@@ -85,6 +85,29 @@ img {
   margin-inline: auto;
 }
 
+.top-scroll-fade {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 70;
+  height: 156px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(126, 217, 87, 0.12), transparent 58%),
+    linear-gradient(180deg, rgba(7, 21, 10, 0.72), rgba(7, 21, 10, 0.42) 46%, rgba(7, 21, 10, 0));
+  backdrop-filter: blur(10px) saturate(125%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 44%, transparent 100%);
+  transform: translateY(-18px);
+  transition:
+    opacity 260ms ease,
+    transform 260ms ease;
+}
+
+.top-scroll-fade--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .site-header {
   position: fixed;
   top: 18px;
@@ -104,6 +127,11 @@ img {
   box-shadow: none;
   transform: translateX(50%);
   backdrop-filter: none;
+}
+
+.site-header--scrolled::before {
+  opacity: 1;
+  filter: blur(20px);
 }
 
 .site-header::before {
@@ -1692,6 +1720,11 @@ img {
   .hero__content,
   .trust-strip {
     width: min(100% - 28px, var(--container));
+  }
+
+  .top-scroll-fade {
+    height: 128px;
+    backdrop-filter: blur(8px) saturate(122%);
   }
 
   .brand {
