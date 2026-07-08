@@ -736,7 +736,30 @@ img {
 }
 
 .section {
+  position: relative;
   padding: 108px 0;
+}
+
+.section::before,
+.contact-cta::before,
+.site-footer::before {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: 86px;
+  content: '';
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 26% 0%, rgba(150, 230, 99, 0.08), transparent 46%),
+    radial-gradient(ellipse at 76% 0%, rgba(216, 185, 91, 0.055), transparent 42%),
+    linear-gradient(180deg, rgba(13, 36, 18, 0.42), rgba(13, 36, 18, 0));
+}
+
+.section > .container,
+.contact-cta__inner,
+.site-footer__inner {
+  position: relative;
+  z-index: 1;
 }
 
 .section--warm {
@@ -748,11 +771,19 @@ img {
 }
 
 .section--dark {
+  position: relative;
   color: #ffffff;
   background:
     radial-gradient(circle at 12% 20%, rgba(150, 230, 99, 0.24), transparent 28%),
     radial-gradient(circle at 86% 84%, rgba(42, 157, 143, 0.24), transparent 30%),
     linear-gradient(135deg, #173f24, #1f5a35 56%, #37724b);
+}
+
+.section--dark::before {
+  background:
+    radial-gradient(ellipse at 24% 0%, rgba(42, 157, 143, 0.1), transparent 46%),
+    radial-gradient(ellipse at 78% 0%, rgba(150, 230, 99, 0.085), transparent 42%),
+    linear-gradient(180deg, rgba(13, 36, 18, 0.34), rgba(13, 36, 18, 0));
 }
 
 .section-header {
@@ -1172,12 +1203,20 @@ img {
 }
 
 .contact-cta {
+  position: relative;
   padding: 84px 0;
   color: #ffffff;
   background:
     radial-gradient(circle at 88% 22%, rgba(240, 184, 79, 0.3), transparent 26%),
     radial-gradient(circle at 10% 80%, rgba(42, 157, 143, 0.3), transparent 30%),
     linear-gradient(135deg, #173f24, #2a8650);
+}
+
+.contact-cta::before {
+  background:
+    radial-gradient(ellipse at 24% 0%, rgba(42, 157, 143, 0.12), transparent 46%),
+    radial-gradient(ellipse at 82% 0%, rgba(216, 185, 91, 0.1), transparent 42%),
+    linear-gradient(180deg, rgba(13, 36, 18, 0.34), rgba(13, 36, 18, 0));
 }
 
 .contact-cta__inner {
@@ -1460,9 +1499,17 @@ img {
 }
 
 .site-footer {
+  position: relative;
   padding: 52px 0;
   color: rgba(255, 255, 255, 0.82);
   background: #14221b;
+}
+
+.site-footer::before {
+  height: 70px;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(150, 230, 99, 0.07), transparent 46%),
+    linear-gradient(180deg, rgba(13, 36, 18, 0.36), rgba(13, 36, 18, 0));
 }
 
 .site-footer__inner {
@@ -1729,6 +1776,15 @@ img {
   .hero__content,
   .trust-strip {
     width: min(100% - 28px, var(--container));
+  }
+
+  .section::before,
+  .contact-cta::before {
+    height: 62px;
+  }
+
+  .site-footer::before {
+    height: 52px;
   }
 
   .top-scroll-fade {
