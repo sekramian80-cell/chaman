@@ -475,6 +475,15 @@ img {
     animation: heroRise 900ms ease both;
 }
 
+.hero__copy {
+    text-align: center;
+}
+
+.hero__copy .eyebrow,
+.hero__fifa-badge {
+    margin-inline: auto;
+}
+
 .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -502,9 +511,10 @@ img {
 }
 
 .hero h1 {
-    max-width: 760px;
-    font-size: 4.65rem;
+    max-width: 980px;
+    font-size: clamp(2.9rem, 5vw, 4.15rem);
     font-weight: 950;
+    text-wrap: balance;
 }
 
 .hero__fifa-badge {
@@ -513,7 +523,7 @@ img {
     display: inline-flex;
     align-items: center;
     min-height: 46px;
-    margin-top: 22px;
+    margin-top: 20px;
     padding: 9px 18px;
     color: #f8ffe8;
     font-size: 1.08rem;
@@ -543,7 +553,7 @@ img {
 
 .hero p {
     max-width: 660px;
-    margin: 22px 0 0;
+    margin: 22px auto 0;
     color: rgba(255, 255, 255, 0.88);
     font-size: 1.24rem;
 }
@@ -554,6 +564,10 @@ img {
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 34px;
+}
+
+.hero__actions {
+    justify-content: center;
 }
 
 .btn {
@@ -1842,20 +1856,26 @@ img {
     .hero__content {
         min-height: calc(84svh - 76px);
         padding: 142px 0 168px;
+        text-align: center;
     }
 
     .hero h1 {
-        font-size: 3.08rem;
+        max-width: 100%;
+        font-size: clamp(2.08rem, 9vw, 2.72rem);
+        line-height: 1.28;
     }
 
     .hero__fifa-badge {
         max-width: 100%;
         min-height: 42px;
-        padding: 8px 14px;
-        font-size: 0.98rem;
+        padding: 8px 13px;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        white-space: nowrap;
     }
 
     .hero p {
+        max-width: 92%;
         font-size: 1.05rem;
     }
 
@@ -1963,7 +1983,11 @@ img {
 
 @media (max-width: 420px) {
     .hero h1 {
-        font-size: 2.62rem;
+        font-size: clamp(1.9rem, 8.4vw, 2.2rem);
+    }
+
+    .hero__fifa-badge {
+        white-space: normal;
     }
 
     .btn {
