@@ -1,10 +1,9 @@
-import { MapPin, MapPinned, MessageCircle, Navigation, Phone } from "lucide-react";
+import { MapPin, MapPinned, MessageCircle, Phone } from "lucide-react";
 import logoUrl from "../assets/logo-faraz.png";
 
 const locationAddress = "کرج - بلوار یادگار امام شمال - بین بلال ۶ و ۷ - مجتمع نور هشتم";
 const mapCoordinates = "35.823127306947775,50.96402704728472";
 const mapEmbedUrl = `https://www.google.com/maps?q=${mapCoordinates}&z=17&output=embed&hl=fa`;
-const mapDirectionsUrl = `https://www.google.com/maps?q=${mapCoordinates}`;
 
 export function Footer() {
     return (
@@ -23,16 +22,6 @@ export function Footer() {
                             <MapPinned size={18} />
                             موقعیت دفتر
                         </h2>
-                        <a
-                            className="footer-map__route"
-                            href={mapDirectionsUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            aria-label="مسیریابی در گوگل‌مپ"
-                            title="مسیریابی در گوگل‌مپ"
-                        >
-                            <Navigation size={18} />
-                        </a>
                     </div>
 
                     <div className="footer-map__canvas">

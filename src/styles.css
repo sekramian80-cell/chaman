@@ -1558,14 +1558,16 @@ img {
 
 .footer-map {
     display: grid;
+    width: min(100%, 260px);
     align-content: start;
     gap: 10px;
+    margin-inline: auto;
 }
 
 .footer-map__heading {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 12px;
 }
 
@@ -1580,32 +1582,14 @@ img {
 }
 
 .footer-map__heading h2 svg,
-.footer-map__address svg,
-.footer-map__route {
+.footer-map__address svg {
     color: var(--color-lime);
-}
-
-.footer-map__route {
-    display: grid;
-    flex: 0 0 auto;
-    width: 38px;
-    height: 38px;
-    place-items: center;
-    background: rgba(150, 230, 99, 0.1);
-    border: 1px solid rgba(150, 230, 99, 0.22);
-    border-radius: 50%;
-    transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
-}
-
-.footer-map__route:hover {
-    background: rgba(150, 230, 99, 0.18);
-    border-color: rgba(150, 230, 99, 0.4);
-    transform: translateY(-2px) rotate(-6deg);
 }
 
 .footer-map__canvas {
     width: 100%;
-    height: 170px;
+    aspect-ratio: 1;
+    height: auto;
     overflow: hidden;
     background: rgba(8, 22, 11, 0.72);
     border: 1px solid rgba(150, 230, 99, 0.22);
@@ -2152,12 +2136,8 @@ img {
     }
 
     .footer-map {
-        width: min(100%, 420px);
+        width: min(100%, 260px);
         margin-inline: auto;
-    }
-
-    .footer-map__canvas {
-        height: 190px;
     }
 
     .footer-map__address {
