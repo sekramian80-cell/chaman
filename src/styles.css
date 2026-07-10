@@ -651,6 +651,13 @@ img {
     animation: floatPanel 4.6s ease-in-out infinite;
 }
 
+@media (min-width: 1021px) {
+    .hero__panel {
+        margin-top: 150px;
+        margin-bottom: -6px;
+    }
+}
+
 .hero__panel strong {
     font-size: 1.1rem;
     line-height: 1.6;
