@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
+import logoUrl from "../assets/logo-faraz-mark.png";
 import { navItems } from "../content/navigation.js";
 
 export function Header({ currentPath = "/" }) {
@@ -24,7 +25,9 @@ export function Header({ currentPath = "/" }) {
             <header className={`site-header ${hasScrolled ? "site-header--scrolled" : ""}`}>
                 <span className="site-header__sheen" aria-hidden="true" />
                 <a className="brand" href="/" aria-label="فراز چمن" onClick={closeMenu}>
-                    <span className="brand__mark">ف</span>
+                    <span className="brand__mark" aria-hidden="true">
+                        <img className="brand__logo" src={logoUrl} alt="" />
+                    </span>
                     <span>
                         <strong>فراز چمن</strong>
                         <small>طراحی و اجرای چمن مصنوعی</small>

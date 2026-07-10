@@ -1,4 +1,5 @@
 import { MapPin, MessageCircle, Phone } from "lucide-react";
+import logoUrl from "../assets/logo-faraz.png";
 import { navItems } from "../content/navigation.js";
 
 export function Footer() {
@@ -7,11 +8,7 @@ export function Footer() {
             <div className="container site-footer__inner">
                 <div>
                     <a className="brand brand--footer" href="#/" aria-label="فراز چمن">
-                        <span className="brand__mark">ف</span>
-                        <span>
-                            <strong>فراز چمن</strong>
-                            <small>طراحی و اجرای چمن مصنوعی</small>
-                        </span>
+                        <img className="brand__full-logo" src={logoUrl} alt="لوگوی فراز چمن" />
                     </a>
                     <p>فروش، طراحی و اجرای چمن مصنوعی برای خانه، ویلا، روف گاردن و کسب‌وکارها.</p>
                 </div>

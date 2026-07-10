@@ -217,28 +217,33 @@ img {
 
 .brand__mark {
     position: relative;
-    display: grid;
+    display: block;
+    flex: 0 0 auto;
     width: 48px;
     height: 48px;
-    place-items: center;
-    color: #ffffff;
-    font-size: 1.34rem;
-    font-weight: 950;
-    background:
-        radial-gradient(circle at 26% 22%, rgba(255, 255, 255, 0.72), transparent 18%),
-        conic-gradient(
-            from 160deg,
-            var(--color-lime),
-            var(--color-teal),
-            var(--color-green),
-            var(--color-gold),
-            var(--color-lime)
-        );
-    border: 1px solid rgba(255, 255, 255, 0.58);
+    overflow: hidden;
+    background: rgba(2, 8, 3, 0.9);
+    border: 1px solid rgba(167, 201, 87, 0.5);
     border-radius: 18px;
     box-shadow:
-        0 16px 36px rgba(42, 157, 143, 0.26),
-        inset 0 1px 0 rgba(255, 255, 255, 0.52);
+        0 16px 36px rgba(42, 157, 143, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.brand__logo {
+    position: absolute;
+    inset: 3px;
+    width: calc(100% - 6px);
+    max-width: 100%;
+    height: calc(100% - 6px);
+    object-fit: contain;
+    pointer-events: none;
+    transition: transform 260ms ease, filter 260ms ease;
+}
+
+.brand:hover .brand__logo {
+    filter: brightness(1.08) saturate(1.08);
+    transform: scale(1.04);
 }
 
 .brand__mark::after {
@@ -1552,7 +1557,24 @@ img {
 }
 
 .brand--footer {
+    justify-content: center;
+    width: 190px;
+    min-width: 0;
+    min-height: 142px;
+    padding: 0;
     color: #ffffff;
+}
+
+.brand__full-logo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    transition: filter 260ms ease, transform 260ms ease;
+}
+
+.brand--footer:hover .brand__full-logo {
+    filter: brightness(1.08) saturate(1.06);
+    transform: scale(1.025);
 }
 
 .brand--footer strong,
@@ -1833,7 +1855,6 @@ img {
     .brand__mark {
         width: 44px;
         height: 44px;
-        font-size: 1.2rem;
         border-radius: 16px;
     }
 
