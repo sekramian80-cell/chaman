@@ -1,1 +1,0 @@
-import{j as e}from"./index-Dad15Pgz.js";import{S as i}from"./ScrollReveal-BB9wNyr7.js";function c({eyebrow:r,title:s,description:n}){return e.jsxs(i,{className:"section-header",children:[e.jsx("span",{children:r}),e.jsx("h2",{children:s}),e.jsx("p",{children:n})]})}export{c as S};
