@@ -1,33 +1,33 @@
-import { services } from '../data/content.js';
-import { ScrollReveal } from './ScrollReveal.jsx';
-import { SectionHeader } from './SectionHeader.jsx';
+import { services } from "../content/services.js";
+import { ScrollReveal } from "./ScrollReveal.jsx";
+import { SectionHeader } from "./SectionHeader.jsx";
 
 export function Services() {
-  return (
-    <section id="services" className="section section--warm">
-      <div className="container">
-        <SectionHeader
-          eyebrow="خدمات"
-          title="برای هر فضا، چمن مناسب همان فضا"
-          description="انتخاب چمن فقط به ظاهر آن محدود نیست؛ تراکم، ارتفاع، زیرسازی و نوع استفاده تعیین می‌کند پروژه چقدر تمیز و بادوام بماند."
-        />
+    return (
+        <section id="services" className="section section--warm">
+            <div className="container">
+                <SectionHeader
+                    eyebrow="خدمات"
+                    title="برای هر فضا، چمن مناسب همان فضا"
+                    description="انتخاب چمن فقط به ظاهر آن محدود نیست؛ تراکم، ارتفاع، زیرسازی و نوع استفاده تعیین می‌کند پروژه چقدر تمیز و بادوام بماند."
+                />
 
-        <div className="service-grid">
-          {services.map((service, index) => {
-            const Icon = service.icon;
+                <div className="service-grid">
+                    {services.map((service, index) => {
+                        const Icon = service.icon;
 
-            return (
-              <ScrollReveal className="service-card" delay={index * 90} key={service.title}>
-                <div className="service-card__icon">
-                  <Icon size={27} />
+                        return (
+                            <ScrollReveal className="service-card" delay={index * 90} key={service.title}>
+                                <div className="service-card__icon">
+                                    <Icon size={27} />
+                                </div>
+                                <h3>{service.title}</h3>
+                                <p>{service.description}</p>
+                            </ScrollReveal>
+                        );
+                    })}
                 </div>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-              </ScrollReveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
+            </div>
+        </section>
+    );
 }
