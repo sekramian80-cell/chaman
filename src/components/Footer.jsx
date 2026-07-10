@@ -27,7 +27,7 @@ export function Footer() {
                 <div className="footer-contact">
                     <a href="tel:+989123365430">
                         <Phone size={18} />
-                        <bdi dir="ltr">09123365430</bdi>
+                        <bdi dir="ltr">۰۹۱۲۳۳۶۵۴۳۰</bdi>
                     </a>
                     <span>
                         <MapPin size={18} />

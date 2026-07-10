@@ -4,7 +4,7 @@
 
 export const contactInfo = {
   phone: '+989123365430',
-  phoneDisplay: '09123365430',
+  phoneDisplay: '۰۹۱۲۳۳۶۵۴۳۰',
   whatsappLabel: 'چت واتساپ',
   location: 'تهران و کرج، اجرای پروژه در سراسر کشور',
   whatsapp: 'https://wa.me/989123365430',
