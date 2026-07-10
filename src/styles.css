@@ -221,21 +221,15 @@ img {
     flex: 0 0 auto;
     width: 48px;
     height: 48px;
-    overflow: hidden;
-    background: rgba(2, 8, 3, 0.9);
-    border: 1px solid rgba(167, 201, 87, 0.5);
-    border-radius: 18px;
-    box-shadow:
-        0 16px 36px rgba(42, 157, 143, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    background: transparent;
 }
 
 .brand__logo {
     position: absolute;
-    inset: 3px;
-    width: calc(100% - 6px);
+    inset: 0;
+    width: 100%;
     max-width: 100%;
-    height: calc(100% - 6px);
+    height: 100%;
     object-fit: contain;
     pointer-events: none;
     transition: transform 260ms ease, filter 260ms ease;
@@ -247,20 +241,7 @@ img {
 }
 
 .brand__mark::after {
-    position: absolute;
-    inset: -6px;
-    z-index: -1;
-    content: "";
-    background: conic-gradient(
-        from 30deg,
-        rgba(167, 201, 87, 0.36),
-        rgba(42, 157, 143, 0.28),
-        rgba(240, 184, 79, 0.32),
-        rgba(167, 201, 87, 0.36)
-    );
-    border-radius: inherit;
-    filter: blur(12px);
-    opacity: 0.86;
+    content: none;
 }
 
 .brand strong,
@@ -1563,6 +1544,18 @@ img {
     min-height: 142px;
     padding: 0;
     color: #ffffff;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.brand--footer:hover {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
 }
 
 .brand__full-logo {
@@ -1855,7 +1848,15 @@ img {
     .brand__mark {
         width: 44px;
         height: 44px;
-        border-radius: 16px;
+    }
+
+    .brand--footer {
+        width: 190px;
+        max-width: 190px;
+        min-width: 0;
+        min-height: 142px;
+        margin-inline: auto;
+        padding: 0;
     }
 
     .brand strong {
