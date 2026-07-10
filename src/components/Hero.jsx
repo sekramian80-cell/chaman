@@ -34,7 +34,9 @@ export function Hero() {
             <div className="hero__stats" aria-label="آمار کسب‌وکار">
                 {heroStats.map((stat) => (
                     <div key={stat.label}>
-                        <strong>{stat.value}</strong>
+                        <strong>
+                            <bdi dir="ltr">{stat.value}</bdi>
+                        </strong>
                         <span>{stat.label}</span>
                     </div>
                 ))}
