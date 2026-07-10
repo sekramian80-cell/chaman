@@ -779,15 +779,21 @@ img {
 .contact-cta::before,
 .site-footer::before {
     position: absolute;
-    inset: 0 0 auto;
+    inset: -1px 0 auto;
     z-index: 0;
-    height: 86px;
+    height: 112px;
     content: "";
     pointer-events: none;
     background:
-        radial-gradient(ellipse at 26% 0%, rgba(150, 230, 99, 0.08), transparent 46%),
-        radial-gradient(ellipse at 76% 0%, rgba(216, 185, 91, 0.055), transparent 42%),
-        linear-gradient(180deg, rgba(13, 36, 18, 0.42), rgba(13, 36, 18, 0));
+        radial-gradient(ellipse at 32% -8%, rgba(150, 230, 99, 0.14), transparent 58%),
+        radial-gradient(ellipse at 72% -12%, rgba(216, 185, 91, 0.09), transparent 54%),
+        linear-gradient(180deg, rgba(13, 36, 18, 0.5), rgba(13, 36, 18, 0));
+    clip-path: ellipse(86% 64% at 50% 0%);
+    filter: blur(0.4px);
+}
+
+.section:nth-of-type(even)::before {
+    clip-path: ellipse(82% 62% at 44% 0%);
 }
 
 .section > .container,
@@ -1243,9 +1249,10 @@ img {
 
 .contact-cta::before {
     background:
-        radial-gradient(ellipse at 24% 0%, rgba(42, 157, 143, 0.12), transparent 46%),
-        radial-gradient(ellipse at 82% 0%, rgba(216, 185, 91, 0.1), transparent 42%),
-        linear-gradient(180deg, rgba(13, 36, 18, 0.34), rgba(13, 36, 18, 0));
+        radial-gradient(ellipse at 26% -8%, rgba(42, 157, 143, 0.2), transparent 58%),
+        radial-gradient(ellipse at 78% -12%, rgba(216, 185, 91, 0.14), transparent 54%),
+        linear-gradient(180deg, rgba(13, 36, 18, 0.42), rgba(13, 36, 18, 0));
+    clip-path: ellipse(88% 66% at 52% 0%);
 }
 
 .contact-cta__inner {
@@ -1532,10 +1539,12 @@ img {
 }
 
 .site-footer::before {
-    height: 70px;
+    height: 92px;
     background:
-        radial-gradient(ellipse at 30% 0%, rgba(150, 230, 99, 0.07), transparent 46%),
-        linear-gradient(180deg, rgba(13, 36, 18, 0.36), rgba(13, 36, 18, 0));
+        radial-gradient(ellipse at 34% -8%, rgba(150, 230, 99, 0.12), transparent 58%),
+        radial-gradient(ellipse at 76% -10%, rgba(216, 185, 91, 0.08), transparent 52%),
+        linear-gradient(180deg, rgba(13, 36, 18, 0.46), rgba(13, 36, 18, 0));
+    clip-path: ellipse(90% 66% at 48% 0%);
 }
 
 .site-footer__inner {
@@ -1833,11 +1842,13 @@ img {
 
     .section::before,
     .contact-cta::before {
-        height: 62px;
+        height: 74px;
+        clip-path: ellipse(108% 62% at 50% 0%);
     }
 
     .site-footer::before {
-        height: 52px;
+        height: 64px;
+        clip-path: ellipse(112% 64% at 50% 0%);
     }
 
     .top-scroll-fade {

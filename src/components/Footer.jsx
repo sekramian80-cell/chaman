@@ -28,7 +28,7 @@ export function Footer() {
                     </a>
                     <span>
                         <MapPin size={18} />
-                        تهران و کرج، اجرای پروژه در سراسر کشور
+                        اجرای پروژه در تهران و کرج و سراسر کشور در کمترین زمان
                     </span>
                     <a href="https://wa.me/989123365430">
                         <MessageCircle size={18} />
