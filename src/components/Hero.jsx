@@ -10,6 +10,7 @@ export function Hero() {
                 <div className="hero__copy">
                     <span className="eyebrow">{heroContent.eyebrow}</span>
                     <h1>{heroContent.title}</h1>
+                    <div className="hero__fifa-badge">{heroContent.fifaBadge}</div>
                     <p>{heroContent.description}</p>
                     <div className="hero__actions">
                         <a className="btn btn--primary" href={heroContent.primaryCta.href}>
