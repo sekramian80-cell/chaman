@@ -1949,11 +1949,79 @@ img {
         padding: 74px 0;
     }
 
+    .section-header,
+    .product-showcase__content,
+    .split-panel,
+    .contact-cta__inner,
+    .site-footer__inner {
+        text-align: center;
+    }
+
+    .section-header {
+        margin-inline: auto;
+    }
+
+    .section-header p,
+    .product-showcase__content > .reveal p,
+    .split-panel p,
+    .contact-cta p,
+    .site-footer p {
+        margin-inline: auto;
+    }
+
     .section-header h2,
     .product-showcase h2,
     .contact-cta h2,
     .split-panel h2 {
         font-size: 2.08rem;
+    }
+
+    .trust-strip__item,
+    .service-card,
+    .project-card,
+    .demo-card,
+    .metric-card,
+    .process-step,
+    .testimonial,
+    .faq-item,
+    .check-pill {
+        text-align: center;
+    }
+
+    .trust-strip__item,
+    .check-pill {
+        justify-content: center;
+    }
+
+    .demo-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .footer-nav a,
+    .footer-contact a,
+    .footer-contact span {
+        justify-content: center;
+    }
+
+    .service-card__icon,
+    .demo-card svg,
+    .metric-card svg,
+    .timeline-item svg {
+        margin-inline: auto;
+    }
+
+    .hero__actions,
+    .contact-cta__actions {
+        width: 100%;
+    }
+
+    .hero__actions .btn,
+    .contact-cta__actions .btn {
+        width: min(100%, 320px);
+        margin-inline: auto;
     }
 
     .product-showcase__layout {
@@ -1980,7 +2048,7 @@ img {
     }
 
     .testimonial div {
-        align-items: flex-start;
+        align-items: center;
         grid-column: 1;
         flex-direction: column;
     }
@@ -1990,8 +2058,9 @@ img {
     }
 
     .timeline-item {
-        align-items: start;
+        align-items: center;
         grid-template-columns: 1fr;
+        justify-items: center;
     }
 }
 
