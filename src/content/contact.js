@@ -3,11 +3,11 @@
  */
 
 export const contactInfo = {
-  phone: '+989120000000',
-  phoneDisplay: '۰۹۱۲ ۰۰۰ ۰۰۰۰',
-  instagram: 'https://instagram.com/',
+  phone: '+989123365430',
+  phoneDisplay: '۰۹۱۲ ۳۳۶ ۵۴۳۰',
+  whatsappLabel: 'چت واتساپ',
   location: 'تهران و کرج، اجرای پروژه در سراسر کشور',
-  whatsapp: 'https://wa.me/989120000000',
+  whatsapp: 'https://wa.me/989123365430',
 };
 
 export const contactCTA = {
@@ -18,12 +18,12 @@ export const contactCTA = {
   primaryCta: {
     label: 'تماس مستقیم',
     icon: 'Phone',
-    href: 'tel:+989120000000',
+    href: 'tel:+989123365430',
   },
   secondaryCta: {
     label: 'پیام در واتساپ',
     icon: 'MessageCircle',
-    href: 'https://wa.me/989120000000',
+    href: 'https://wa.me/989123365430',
   },
 };
 

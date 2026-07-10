@@ -14,11 +14,11 @@ export function ContactCTA() {
         </div>
 
         <div className="contact-cta__actions">
-          <a className="btn btn--primary" href="tel:+989120000000">
+          <a className="btn btn--primary" href="tel:+989123365430">
             <Phone size={18} />
             تماس مستقیم
           </a>
-          <a className="btn btn--light" href="https://wa.me/989120000000">
+          <a className="btn btn--light" href="https://wa.me/989123365430">
             <MessageCircle size={18} />
             پیام در واتساپ
             <ArrowLeft size={17} />

@@ -45,7 +45,7 @@ export function Header({ currentPath = "/" }) {
                 </nav>
 
                 <div className="header-actions">
-                    <a className="icon-link header-cta" href="tel:+989120000000" aria-label="تماس تلفنی">
+                    <a className="icon-link header-cta" href="tel:+989123365430" aria-label="تماس تلفنی">
                         <Phone size={19} />
                         <span>تماس سریع</span>
                     </a>

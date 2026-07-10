@@ -22,7 +22,7 @@ export function PageHero({
                     <p>{description}</p>
                     <div className="hero__actions">
                         {primaryLabel && (
-                            <a className="btn btn--primary" href="tel:+989120000000">
+                            <a className="btn btn--primary" href="tel:+989123365430">
                                 {primaryLabel}
                                 <ArrowLeft size={18} />
                             </a>

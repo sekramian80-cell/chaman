@@ -1,4 +1,4 @@
-import { Instagram, MapPin, Phone } from "lucide-react";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
 import { navItems } from "../content/navigation.js";
 
 export function Footer() {
@@ -25,17 +25,17 @@ export function Footer() {
                 </nav>
 
                 <div className="footer-contact">
-                    <a href="tel:+989120000000">
+                    <a href="tel:+989123365430">
                         <Phone size={18} />
-                        ۰۹۱۲ ۰۰۰ ۰۰۰۰
+                        ۰۹۱۲ ۳۳۶ ۵۴۳۰
                     </a>
                     <span>
                         <MapPin size={18} />
                         تهران و کرج، اجرای پروژه در سراسر کشور
                     </span>
-                    <a href="https://instagram.com/">
-                        <Instagram size={18} />
-                        صفحه اینستاگرام
+                    <a href="https://wa.me/989123365430">
+                        <MessageCircle size={18} />
+                        چت واتساپ
                     </a>
                 </div>
             </div>
