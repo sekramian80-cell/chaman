@@ -21,7 +21,7 @@ export const CONFIG = {
     },
 
     /** فعال‌سازی دریافت داده از API وردپرس (در صورت false فقط از داده‌های محلی استفاده می‌شود) */
-    USE_API: false,
+    USE_API: true,
 
     /** تنظیمات کش */
     CACHE: {

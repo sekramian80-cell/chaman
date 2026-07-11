@@ -1,32 +1,27 @@
-/**
- * مدل داده برای خدمات (Services)
- * قابل استفاده هم برای fallback محلی و هم برای داده‌های API
- *
- * @typedef {Object} Service
- * @property {number} id - شناسه
- * @property {string} icon - نام آیکون (lucide-react)
- * @property {string} title - عنوان خدمت
- * @property {string} description - توضیحات
- */
+import defaultServiceImage from '../assets/services/villa-yard.jpg';
+import { stripHtml } from '../utils/html.js';
+import { resolveIcon } from '../utils/iconMap.js';
 
 /**
- * @typedef {Object} ServicePlan
- * @property {number} id - شناسه
- * @property {string} icon - نام آیکون
- * @property {string} title - عنوان پکیج
- * @property {string} text - توضیحات
- */
-
-/**
- * تبدیل داده‌های API (Custom Post Type یا Category) به مدل Service
+ * تبدیل داده‌های API به مدل Service
  * @param {Array<Object>} apiItems
- * @returns {Array<Service>}
  */
+export function mapServicesFromAPI(apiItems = []) {
+    return apiItems.map((item) => ({
+        id: item.id,
+        icon: resolveIcon(item.acf?.icon_name),
+        image: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || defaultServiceImage,
+        imageAlt: stripHtml(item.title?.rendered) || 'خدمت چمن مصنوعی',
+        title: stripHtml(item.title?.rendered) || '',
+        description:
+            item.acf?.short_description ||
+            stripHtml(item.excerpt?.rendered) ||
+            stripHtml(item.content?.rendered) ||
+            '',
+    }));
+}
+
+/** @deprecated از mapServicesFromAPI استفاده کنید */
 export function mapServices(apiItems = []) {
-  return apiItems.map((item) => ({
-    id: item.id,
-    icon: item.acf?.icon || item.meta?.icon || 'Home',
-    title: item.title?.rendered || item.name || '',
-    description: item.excerpt?.rendered || item.description || '',
-  }));
+    return mapServicesFromAPI(apiItems);
 }

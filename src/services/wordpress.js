@@ -82,6 +82,23 @@ export async function getMediaById(id) {
 }
 
 /**
+ * دریافت لیست یک Custom Post Type
+ * @param {string} postType - نامک CPT (مثلاً service, product)
+ * @param {Object} params
+ * @returns {Promise<Array>}
+ */
+export async function getCustomPosts(postType, params = {}) {
+    return apiGet(postType, {
+        per_page: params.perPage ?? 100,
+        page: params.page ?? 1,
+        orderby: params.orderBy ?? 'date',
+        order: params.order ?? 'asc',
+        _embed: 1,
+        ...params,
+    });
+}
+
+/**
  * دریافت منوها (اختیاری - نیاز به افزونه یا WP REST API Menus)
  * @returns {Promise<Array>}
  */

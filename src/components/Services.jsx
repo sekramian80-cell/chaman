@@ -1,8 +1,11 @@
-import { services } from "../content/services.js";
-import { ScrollReveal } from "./ScrollReveal.jsx";
-import { SectionHeader } from "./SectionHeader.jsx";
+import { useSiteContent } from '../hooks/useSiteContent.js';
+import { ScrollReveal } from './ScrollReveal.jsx';
+import { SectionHeader } from './SectionHeader.jsx';
 
 export function Services() {
+    const { services } = useSiteContent();
+    const items = services.items;
+
     return (
         <section id="services" className="section section--warm">
             <div className="container">
@@ -13,11 +16,11 @@ export function Services() {
                 />
 
                 <div className="service-grid">
-                    {services.map((service, index) => {
+                    {items.map((service, index) => {
                         const Icon = service.icon;
 
                         return (
-                            <ScrollReveal className="service-card" delay={index * 90} key={service.title}>
+                            <ScrollReveal className="service-card" delay={index * 90} key={service.id ?? service.title}>
                                 <div className="service-card__media">
                                     <img src={service.image} alt={service.imageAlt} loading="lazy" decoding="async" />
                                     <div className="service-card__icon">
