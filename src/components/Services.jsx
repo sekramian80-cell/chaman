@@ -18,11 +18,16 @@ export function Services() {
 
                         return (
                             <ScrollReveal className="service-card" delay={index * 90} key={service.title}>
-                                <div className="service-card__icon">
-                                    <Icon size={27} />
+                                <div className="service-card__media">
+                                    <img src={service.image} alt={service.imageAlt} loading="lazy" />
+                                    <div className="service-card__icon">
+                                        <Icon size={25} />
+                                    </div>
                                 </div>
-                                <h3>{service.title}</h3>
-                                <p>{service.description}</p>
+                                <div className="service-card__body">
+                                    <h3>{service.title}</h3>
+                                    <p>{service.description}</p>
+                                </div>
                             </ScrollReveal>
                         );
                     })}

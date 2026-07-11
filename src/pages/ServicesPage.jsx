@@ -24,10 +24,17 @@ export function ServicesPage() {
                         const Icon = plan.icon;
 
                         return (
-                            <ScrollReveal className="demo-card" delay={index * 90} key={plan.title}>
-                                <Icon size={28} />
-                                <h3>{plan.title}</h3>
-                                <p>{plan.text}</p>
+                            <ScrollReveal className="service-plan-card" delay={index * 90} key={plan.title}>
+                                <div className="service-plan-card__media">
+                                    <img src={plan.image} alt={plan.imageAlt} loading="lazy" />
+                                    <span className="service-plan-card__icon">
+                                        <Icon size={24} />
+                                    </span>
+                                </div>
+                                <div className="service-plan-card__body">
+                                    <h3>{plan.title}</h3>
+                                    <p>{plan.text}</p>
+                                </div>
                             </ScrollReveal>
                         );
                     })}
