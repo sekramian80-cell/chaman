@@ -1,5 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
-import heroImage from "../assets/hero-artificial-grass.png";
+import heroImage from "../assets/hero-artificial-grass.jpg";
 import { productHighlights } from "../content/products.js";
 import { ScrollReveal } from "./ScrollReveal.jsx";
 
@@ -8,7 +8,7 @@ export function ProductShowcase() {
         <section id="products" className="section product-showcase">
             <div className="container product-showcase__layout">
                 <ScrollReveal className="product-showcase__media">
-                    <img src={heroImage} alt="نمای نزدیک از چمن مصنوعی اجرا شده در فضای مدرن" />
+                    <img src={heroImage} alt="نمای نزدیک از چمن مصنوعی اجرا شده در فضای مدرن" loading="lazy" decoding="async" />
                     <div className="quality-badge">
                         <CheckCircle2 size={20} />
                         <span>نصب تمیز، برش دقیق، تحویل آماده استفاده</span>

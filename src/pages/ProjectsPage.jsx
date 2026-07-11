@@ -1,7 +1,7 @@
 import { ContactCTA } from "../components/ContactCTA.jsx";
 import { ProjectGallery } from "../components/ProjectGallery.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
-import projectsHero from "../assets/hero-projects-football.png";
+import projectsHero from "../assets/hero-projects-football.jpg";
 import { PageHero } from "./PageHero.jsx";
 import { projectStats } from "../content/projects.js";
 

@@ -11,7 +11,7 @@ export function Footer() {
             <div className="container site-footer__inner">
                 <div>
                     <a className="brand brand--footer" href="#/" aria-label="فراز چمن">
-                        <img className="brand__full-logo" src={logoUrl} alt="لوگوی فراز چمن" />
+                        <img className="brand__full-logo" src={logoUrl} alt="لوگوی فراز چمن" loading="lazy" decoding="async" />
                     </a>
                     <p>فروش، طراحی و اجرای چمن مصنوعی برای خانه، ویلا، روف گاردن و کسب‌وکارها.</p>
                 </div>

@@ -1,7 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import { ContactCTA } from "../components/ContactCTA.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
-import servicesHero from "../assets/hero-services-football.png";
+import servicesHero from "../assets/hero-services-football.jpg";
 import { Services } from "../components/Services.jsx";
 import { PageHero } from "./PageHero.jsx";
 import { servicePlans, serviceChecklist } from "../content/services.js";
@@ -26,7 +26,7 @@ export function ServicesPage() {
                         return (
                             <ScrollReveal className="service-plan-card" delay={index * 90} key={plan.title}>
                                 <div className="service-plan-card__media">
-                                    <img src={plan.image} alt={plan.imageAlt} loading="lazy" />
+                                    <img src={plan.image} alt={plan.imageAlt} loading="lazy" decoding="async" />
                                     <span className="service-plan-card__icon">
                                         <Icon size={24} />
                                     </span>

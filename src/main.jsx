@@ -1,6 +1,5 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "samim-font/dist/font-face.css";
 import App from "./App.jsx";
 import { ContentProvider } from "./context/ContentProvider.jsx";
 import "./styles.css";

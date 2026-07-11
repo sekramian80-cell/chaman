@@ -1,7 +1,7 @@
 import { ContactCTA } from "../components/ContactCTA.jsx";
 import { ProductShowcase } from "../components/ProductShowcase.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
-import productsHero from "../assets/hero-products-football.png";
+import productsHero from "../assets/hero-products-football.jpg";
 import { PageHero } from "./PageHero.jsx";
 import { productCards } from "../content/products.js";
 

@@ -1,5 +1,5 @@
 import { ArrowLeft, MessageCircle, PlayCircle } from "lucide-react";
-import heroImage from "../assets/hero-football-field.png";
+import heroImage from "../assets/hero-football-field.jpg";
 import { heroContent, heroStats } from "../content/hero.js";
 
 export function Hero() {

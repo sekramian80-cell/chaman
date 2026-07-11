@@ -26,7 +26,7 @@ export function Header({ currentPath = "/" }) {
                 <span className="site-header__sheen" aria-hidden="true" />
                 <a className="brand" href="/" aria-label="فراز چمن" onClick={closeMenu}>
                     <span className="brand__mark" aria-hidden="true">
-                        <img className="brand__logo" src={logoUrl} alt="" />
+                        <img className="brand__logo" src={logoUrl} alt="" decoding="async" fetchPriority="high" />
                     </span>
                     <span>
                         <strong>فراز چمن</strong>

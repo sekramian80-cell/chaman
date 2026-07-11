@@ -1,7 +1,7 @@
 import { ContactCTA } from "../components/ContactCTA.jsx";
 import { FAQ } from "../components/FAQ.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
-import faqHero from "../assets/hero-faq-football.png";
+import faqHero from "../assets/hero-faq-football.jpg";
 import { PageHero } from "./PageHero.jsx";
 import { supportItems } from "../content/faq.js";
 

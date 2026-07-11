@@ -1,7 +1,7 @@
 import { ContactCTA } from "../components/ContactCTA.jsx";
 import { Process } from "../components/Process.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
-import processHero from "../assets/hero-process-football.png";
+import processHero from "../assets/hero-process-football.jpg";
 import { PageHero } from "./PageHero.jsx";
 import { processTimeline } from "../content/process.js";
 
