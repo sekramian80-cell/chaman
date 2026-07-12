@@ -2534,18 +2534,9 @@ img {
     animation: loaderOrbit 1.4s cubic-bezier(0.6, 0.1, 0.4, 0.9) infinite;
 }
 
-.site-loader__glow {
-    position: absolute;
-    inset: 14%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(150, 230, 99, 0.28), transparent 68%);
-    filter: blur(6px);
-    animation: loaderGlow 1.9s ease-in-out infinite;
-}
-
 .site-loader__mark img {
-    width: 58%;
-    height: 58%;
+    width: 62%;
+    height: 62%;
     object-fit: contain;
     filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.4));
     animation: loaderLogoPulse 1.9s ease-in-out infinite;
@@ -2570,19 +2561,6 @@ img {
     }
 }
 
-@keyframes loaderGlow {
-    0%,
-    100% {
-        opacity: 0.4;
-        transform: scale(0.9);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.1);
-    }
-}
-
 @keyframes loaderFadeIn {
     from {
         opacity: 0;
@@ -2595,7 +2573,6 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
     .site-loader__ring,
-    .site-loader__glow,
     .site-loader__mark img,
     .site-loader__field {
         animation-duration: 3s;

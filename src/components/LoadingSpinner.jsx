@@ -13,7 +13,6 @@ export function LoadingSpinner({ message = "در حال بارگذاری" }) {
             <div className="site-loader__field" aria-hidden="true" />
             <div className="site-loader__mark" aria-hidden="true">
                 <span className="site-loader__ring" />
-                <span className="site-loader__glow" />
                 <img src={logoUrl} alt="" decoding="async" />
             </div>
         </div>
