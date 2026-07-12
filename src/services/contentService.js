@@ -33,6 +33,16 @@ export function getLocalContent() {
     };
 }
 
+function mergeServices(apiItems, localItems) {
+    const mapped = mapServicesFromAPI(apiItems);
+    if (!mapped.length) return localItems;
+
+    const apiTitles = new Set(mapped.map((item) => item.title.trim()));
+    const extras = localItems.filter((item) => !apiTitles.has(item.title.trim()));
+
+    return [...mapped, ...extras];
+}
+
 function useApiSection(apiItems, localItems) {
     return apiItems.length > 0 ? apiItems : localItems;
 }
@@ -54,7 +64,7 @@ export async function fetchSiteContent() {
         ...local,
         services: {
             ...local.services,
-            items: useApiSection(mapServicesFromAPI(serviceItems), local.services.items),
+            items: mergeServices(serviceItems, local.services.items),
         },
         products: {
             ...local.products,

@@ -13,6 +13,8 @@ export function mapServicesFromAPI(apiItems = []) {
         image: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || defaultServiceImage,
         imageAlt: stripHtml(item.title?.rendered) || 'خدمت چمن مصنوعی',
         title: stripHtml(item.title?.rendered) || '',
+        tag: item.acf?.service_tag || '',
+        highlight: item.acf?.service_highlight || '',
         description:
             item.acf?.short_description ||
             stripHtml(item.excerpt?.rendered) ||
