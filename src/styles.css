@@ -2393,118 +2393,46 @@ img {
     min-height: 100svh;
     overflow: hidden;
     place-items: center;
-    color: #f5fff0;
-    background: #0a1d0e;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(57, 166, 77, 0.16), transparent 60%),
+        #0a1d0e;
     isolation: isolate;
-}
-
-.site-loader__field {
-    position: absolute;
-    inset: clamp(22px, 5vw, 68px);
-    z-index: -1;
-    overflow: hidden;
-    background: repeating-linear-gradient(
-        90deg,
-        rgba(150, 230, 99, 0.028) 0,
-        rgba(150, 230, 99, 0.028) 8%,
-        transparent 8%,
-        transparent 16%
-    );
-    border: 1px solid rgba(150, 230, 99, 0.1);
-    border-radius: 8px;
-}
-
-.site-loader__field::before,
-.site-loader__field::after {
-    position: absolute;
-    content: "";
-    pointer-events: none;
-}
-
-.site-loader__field::before {
-    top: 0;
-    right: 50%;
-    bottom: 0;
-    width: 1px;
-    background: rgba(150, 230, 99, 0.08);
-}
-
-.site-loader__field::after {
-    top: 50%;
-    right: 50%;
-    width: min(150px, 24vw);
-    aspect-ratio: 1;
-    border: 1px solid rgba(150, 230, 99, 0.08);
-    border-radius: 50%;
-    transform: translate(50%, -50%);
-}
-
-.site-loader__stage {
-    display: grid;
-    width: min(86vw, 360px);
-    justify-items: center;
-    gap: 8px;
-    text-align: center;
-    animation: loaderStageIn 440ms ease both;
+    animation: loaderFadeIn 320ms ease both;
 }
 
 .site-loader__mark {
     position: relative;
     display: grid;
-    width: 112px;
-    height: 112px;
-    margin-bottom: 10px;
+    width: clamp(120px, 34vw, 160px);
+    aspect-ratio: 1;
     place-items: center;
 }
 
-.site-loader__mark span {
+.site-loader__ring {
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(150, 230, 99, 0.22);
+    border: 2px solid transparent;
     border-top-color: #96e663;
-    border-right-color: rgba(216, 185, 91, 0.72);
+    border-right-color: rgba(216, 185, 91, 0.7);
     border-radius: 50%;
-    box-shadow: 0 0 28px rgba(57, 166, 77, 0.14);
-    animation: loaderOrbit 1.35s linear infinite;
+    animation: loaderOrbit 1.4s cubic-bezier(0.6, 0.1, 0.4, 0.9) infinite;
+}
+
+.site-loader__glow {
+    position: absolute;
+    inset: 14%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(150, 230, 99, 0.28), transparent 68%);
+    filter: blur(6px);
+    animation: loaderGlow 1.9s ease-in-out infinite;
 }
 
 .site-loader__mark img {
-    width: 76px;
-    height: 76px;
+    width: 58%;
+    height: 58%;
     object-fit: contain;
-    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.34));
-    animation: loaderLogoPulse 1.35s ease-in-out infinite;
-}
-
-.site-loader__stage strong {
-    color: #ffffff;
-    font-size: 1.35rem;
-    line-height: 1.5;
-}
-
-.site-loader__stage p {
-    margin: 0;
-    color: rgba(221, 242, 213, 0.68);
-    font-size: 0.88rem;
-}
-
-.site-loader__progress {
-    position: relative;
-    width: min(220px, 70vw);
-    height: 4px;
-    margin-top: 16px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 999px;
-}
-
-.site-loader__progress span {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 38%;
-    background: linear-gradient(90deg, #39a64d, #96e663, #d8b95b);
-    border-radius: inherit;
-    animation: loaderProgress 1.15s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.4));
+    animation: loaderLogoPulse 1.9s ease-in-out infinite;
 }
 
 @keyframes loaderOrbit {
@@ -2516,49 +2444,44 @@ img {
 @keyframes loaderLogoPulse {
     0%,
     100% {
-        transform: scale(0.96);
+        transform: scale(0.94);
+        opacity: 0.9;
     }
 
     50% {
-        transform: scale(1.04);
+        transform: scale(1.06);
+        opacity: 1;
     }
 }
 
-@keyframes loaderProgress {
-    from {
-        transform: translateX(-180%);
+@keyframes loaderGlow {
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(0.9);
     }
 
-    to {
-        transform: translateX(290%);
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
     }
 }
 
-@keyframes loaderStageIn {
+@keyframes loaderFadeIn {
     from {
         opacity: 0;
-        transform: translateY(12px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
-@media (max-width: 480px) {
-    .site-loader__field {
-        inset: 14px;
-    }
-
-    .site-loader__mark {
-        width: 96px;
-        height: 96px;
-    }
-
+@media (prefers-reduced-motion: reduce) {
+    .site-loader__ring,
+    .site-loader__glow,
     .site-loader__mark img {
-        width: 66px;
-        height: 66px;
+        animation-duration: 3s;
     }
 }
 
