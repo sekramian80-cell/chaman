@@ -405,8 +405,16 @@ img {
     backdrop-filter: blur(20px) saturate(150%);
 }
 
+.main-nav__submenu::before {
+    position: absolute;
+    top: -12px;
+    right: 0;
+    left: 0;
+    height: 12px;
+    content: "";
+}
+
 .main-nav__group:hover .main-nav__submenu,
-.main-nav__group--open .main-nav__submenu,
 .main-nav__group:focus-within .main-nav__submenu {
     opacity: 1;
     visibility: visible;
