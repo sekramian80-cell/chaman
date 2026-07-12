@@ -19,12 +19,16 @@ export async function apiGet(endpoint, params = {}) {
     }
   });
 
+  // جلوگیری از کش مرورگر/سرور تا تازه‌ترین محتوای وردپرس دریافت شود
+  url.searchParams.set('_', Date.now().toString());
+
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST.TIMEOUT);
 
   try {
     const response = await fetch(url.toString(), {
       signal: controller.signal,
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
       },
