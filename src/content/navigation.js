@@ -21,7 +21,6 @@ export const navItems = [
         label: "روند اجرا",
         href: "/process",
         path: "/process",
-        children: [{ id: 41, label: "سوالات", href: "/faq", path: "/faq" }],
     },
     { id: 5, label: "نمونه کار", href: "/projects", path: "/projects" },
     { id: 6, label: "تماس با ما", href: "/contact", path: "/contact" },

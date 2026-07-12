@@ -1,4 +1,5 @@
 import { ContactCTA } from "../components/ContactCTA.jsx";
+import { FAQ } from "../components/FAQ.jsx";
 import { Process } from "../components/Process.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
 import processHero from "../assets/hero-process-football.jpg";
@@ -35,6 +36,7 @@ export function ProcessPage() {
                     })}
                 </div>
             </section>
+            <FAQ />
             <ContactCTA />
         </>
     );
