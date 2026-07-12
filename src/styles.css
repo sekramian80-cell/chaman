@@ -2400,6 +2400,39 @@ img {
     animation: loaderFadeIn 320ms ease both;
 }
 
+.site-loader__field {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background-image: var(--loader-image);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transform: scale(1.05);
+    animation: loaderFieldZoom 6s ease-in-out infinite alternate;
+}
+
+.site-loader__field::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(10, 29, 14, 0.35), rgba(10, 29, 14, 0.82) 72%),
+        linear-gradient(180deg, rgba(10, 29, 14, 0.55), rgba(10, 29, 14, 0.75));
+}
+
+@keyframes loaderFieldZoom {
+    from {
+        transform: scale(1.05);
+    }
+
+    to {
+        transform: scale(1.14);
+    }
+}
+
 .site-loader__mark {
     position: relative;
     display: grid;
@@ -2480,7 +2513,8 @@ img {
 @media (prefers-reduced-motion: reduce) {
     .site-loader__ring,
     .site-loader__glow,
-    .site-loader__mark img {
+    .site-loader__mark img,
+    .site-loader__field {
         animation-duration: 3s;
     }
 }
