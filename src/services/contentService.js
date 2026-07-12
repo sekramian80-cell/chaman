@@ -16,6 +16,8 @@ import { mapFaqsFromAPI } from '../models/FaqModel.js';
 import { mapProductsFromAPI } from '../models/ProductModel.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
+import { mapMenuTree } from '../models/MenuItemModel.js';
+import { fetchNavigationMenu } from './menuService.js';
 import { getCustomPosts } from './wordpress.js';
 
 export function getLocalContent() {
@@ -53,15 +55,19 @@ function useApiSection(apiItems, localItems) {
 export async function fetchSiteContent() {
     const local = getLocalContent();
 
-    const [serviceItems, productItems, projectItems, faqItems] = await Promise.all([
+    const [serviceItems, productItems, projectItems, faqItems, menuItems] = await Promise.all([
         getCustomPosts('service'),
         getCustomPosts('product'),
         getCustomPosts('project'),
         getCustomPosts('faq'),
+        fetchNavigationMenu(),
     ]);
 
     return {
         ...local,
+        navigation: {
+            items: menuItems.length ? menuItems : local.navigation.items,
+        },
         services: {
             ...local.services,
             items: mergeServices(serviceItems, local.services.items),

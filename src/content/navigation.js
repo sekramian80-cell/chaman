@@ -1,7 +1,8 @@
 /**
- * محتوای منوی اصلی سایت
- * این فایل به عنوان fallback در صورت عدم دسترسی به API استفاده می‌شود
+ * محتوای منوی اصلی سایت (fallback)
  */
+
+import { mapMenuTree } from '../models/MenuItemModel.js';
 
 export const navItems = [
     { id: 1, label: "خانه", href: "/", path: "/" },
@@ -35,23 +36,9 @@ export function isNavItemActive(item, currentPath) {
 }
 
 /**
- * نگاشت منو به داده‌های API وردپرس
- * @param {Array} apiItems - آیتم‌های منو از API
- * @returns {Array} - فرمت استاندارد شده
+ * نگاشت منوی وردپرس (سازگاری با نسخه‌های قبلی)
  */
 export function mapMenuFromAPI(apiItems = []) {
-    if (!apiItems.length) return navItems;
-
-    return apiItems.map((item) => ({
-        id: item.id,
-        label: item.title?.rendered || item.title,
-        href: item.url || `/${item.slug}`,
-        path: item.slug ? `/${item.slug}` : "/",
-        children: item.children?.map((child) => ({
-            id: child.id,
-            label: child.title?.rendered || child.title,
-            href: child.url || `/${child.slug}`,
-            path: child.slug ? `/${child.slug}` : "/",
-        })),
-    }));
+    const items = mapMenuTree(apiItems);
+    return items.length ? items : navItems;
 }

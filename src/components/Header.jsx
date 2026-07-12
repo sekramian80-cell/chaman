@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import logoUrl from "../assets/logo-faraz-mark.png";
-import { isNavItemActive, navItems } from "../content/navigation.js";
+import { isNavItemActive } from "../content/navigation.js";
+import { useSiteContent } from "../hooks/useSiteContent.js";
 
 function NavItem({ item, currentPath, closeMenu }) {
     const hasChildren = item.children?.length > 0;
@@ -61,6 +62,8 @@ function NavItem({ item, currentPath, closeMenu }) {
 }
 
 export function Header({ currentPath = "/" }) {
+    const { navigation } = useSiteContent();
+    const menuItems = navigation?.items?.length ? navigation.items : [];
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
 
@@ -92,8 +95,8 @@ export function Header({ currentPath = "/" }) {
                 </a>
 
                 <nav className={`main-nav ${isMenuOpen ? "main-nav--open" : ""}`} aria-label="منوی اصلی">
-                    {navItems.map((item) => (
-                        <NavItem closeMenu={closeMenu} currentPath={currentPath} item={item} key={item.href} />
+                    {menuItems.map((item) => (
+                        <NavItem closeMenu={closeMenu} currentPath={currentPath} item={item} key={item.id ?? item.href} />
                     ))}
                 </nav>
 

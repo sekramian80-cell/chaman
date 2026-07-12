@@ -34,4 +34,10 @@ export const CONFIG = {
         LAZY_LOAD: true,
         PLACEHOLDER_COLOR: "#0d2412", // رنگ پس‌زمینه دارک
     },
+
+    /** تنظیمات منوی وردپرس */
+    MENU: {
+        LOCATION: "primary",
+        SLUG: "منوی-اصلی",
+    },
 };
