@@ -7,9 +7,12 @@ import { HomePage } from "./pages/HomePage.jsx";
 const pageLoaders = {
     "/services": () => import("./pages/ServicesPage.jsx"),
     "/products": () => import("./pages/ProductsPage.jsx"),
+    "/products/sports": () => import("./pages/ProductsPage.jsx"),
+    "/products/decorative": () => import("./pages/ProductsPage.jsx"),
     "/process": () => import("./pages/ProcessPage.jsx"),
     "/projects": () => import("./pages/ProjectsPage.jsx"),
     "/faq": () => import("./pages/FAQPage.jsx"),
+    "/contact": () => import("./pages/ContactPage.jsx"),
 };
 
 const ServicesPage = lazy(() => pageLoaders["/services"]().then((m) => ({ default: m.ServicesPage })));
@@ -17,14 +20,18 @@ const ProductsPage = lazy(() => pageLoaders["/products"]().then((m) => ({ defaul
 const ProcessPage = lazy(() => pageLoaders["/process"]().then((m) => ({ default: m.ProcessPage })));
 const ProjectsPage = lazy(() => pageLoaders["/projects"]().then((m) => ({ default: m.ProjectsPage })));
 const FAQPage = lazy(() => pageLoaders["/faq"]().then((m) => ({ default: m.FAQPage })));
+const ContactPage = lazy(() => pageLoaders["/contact"]().then((m) => ({ default: m.ContactPage })));
 
 const routes = {
     "/": HomePage,
     "/services": ServicesPage,
     "/products": ProductsPage,
+    "/products/sports": ProductsPage,
+    "/products/decorative": ProductsPage,
     "/process": ProcessPage,
     "/projects": ProjectsPage,
     "/faq": FAQPage,
+    "/contact": ContactPage,
 };
 
 function getCurrentPath() {
@@ -40,7 +47,6 @@ export default function App() {
             window.scrollTo({ top: 0, behavior: "auto" });
         };
 
-        // SPA link interceptor: prevent full reloads on internal links
         const handleLinkClick = (e) => {
             const link = e.target.closest("a");
             if (!link) return;
@@ -48,7 +54,6 @@ export default function App() {
             const href = link.getAttribute("href");
             if (!href) return;
 
-            // Only handle internal paths (skip tel:, mailto:, external URLs, anchors)
             if (
                 href.startsWith("http") ||
                 href.startsWith("tel:") ||
@@ -58,7 +63,6 @@ export default function App() {
                 return;
             }
 
-            // Skip if target is _blank
             if (link.target === "_blank") return;
 
             e.preventDefault();

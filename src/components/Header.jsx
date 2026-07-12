@@ -1,7 +1,64 @@
 import { useEffect, useState } from "react";
-import { Menu, Phone, X } from "lucide-react";
+import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import logoUrl from "../assets/logo-faraz-mark.png";
-import { navItems } from "../content/navigation.js";
+import { isNavItemActive, navItems } from "../content/navigation.js";
+
+function NavItem({ item, currentPath, closeMenu }) {
+    const hasChildren = item.children?.length > 0;
+    const isActive = isNavItemActive(item, currentPath);
+    const [isOpen, setIsOpen] = useState(isActive);
+
+    useEffect(() => {
+        if (isActive) setIsOpen(true);
+    }, [isActive, currentPath]);
+
+    if (!hasChildren) {
+        return (
+            <a
+                className={currentPath === item.path ? "main-nav__link--active" : ""}
+                href={item.href}
+                onClick={closeMenu}
+            >
+                {item.label}
+            </a>
+        );
+    }
+
+    return (
+        <div className={`main-nav__group ${isOpen ? "main-nav__group--open" : ""}`}>
+            <div className="main-nav__parent">
+                <a
+                    className={isActive ? "main-nav__link--active" : ""}
+                    href={item.href}
+                    onClick={closeMenu}
+                >
+                    {item.label}
+                </a>
+                <button
+                    className="main-nav__toggle"
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-label={`${isOpen ? "بستن" : "باز کردن"} زیرمنوی ${item.label}`}
+                    onClick={() => setIsOpen((open) => !open)}
+                >
+                    <ChevronDown size={18} />
+                </button>
+            </div>
+            <div className="main-nav__submenu">
+                {item.children.map((child) => (
+                    <a
+                        className={currentPath === child.path ? "main-nav__link--active" : ""}
+                        key={child.href}
+                        href={child.href}
+                        onClick={closeMenu}
+                    >
+                        {child.label}
+                    </a>
+                ))}
+            </div>
+        </div>
+    );
+}
 
 export function Header({ currentPath = "/" }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,14 +93,7 @@ export function Header({ currentPath = "/" }) {
 
                 <nav className={`main-nav ${isMenuOpen ? "main-nav--open" : ""}`} aria-label="منوی اصلی">
                     {navItems.map((item) => (
-                        <a
-                            className={currentPath === item.path ? "main-nav__link--active" : ""}
-                            key={item.href}
-                            href={item.href}
-                            onClick={closeMenu}
-                        >
-                            {item.label}
-                        </a>
+                        <NavItem closeMenu={closeMenu} currentPath={currentPath} item={item} key={item.href} />
                     ))}
                 </nav>
 
