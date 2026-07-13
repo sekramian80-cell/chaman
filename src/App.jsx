@@ -7,8 +7,8 @@ import { HomePage } from "./pages/HomePage.jsx";
 const pageLoaders = {
     "/services": () => import("./pages/ServicesPage.jsx"),
     "/products": () => import("./pages/ProductsPage.jsx"),
-    "/products/sports": () => import("./pages/ProductsPage.jsx"),
-    "/products/decorative": () => import("./pages/ProductsPage.jsx"),
+    "/products/sports": () => import("./pages/ProductCategoryPage.jsx"),
+    "/products/decorative": () => import("./pages/ProductCategoryPage.jsx"),
     "/process": () => import("./pages/ProcessPage.jsx"),
     "/projects": () => import("./pages/ProjectsPage.jsx"),
     "/faq": () => import("./pages/FAQPage.jsx"),
@@ -17,6 +17,12 @@ const pageLoaders = {
 
 const ServicesPage = lazy(() => pageLoaders["/services"]().then((m) => ({ default: m.ServicesPage })));
 const ProductsPage = lazy(() => pageLoaders["/products"]().then((m) => ({ default: m.ProductsPage })));
+const ProductSportsPage = lazy(() =>
+    pageLoaders["/products/sports"]().then((m) => ({ default: m.ProductSportsPage })),
+);
+const ProductDecorativePage = lazy(() =>
+    pageLoaders["/products/decorative"]().then((m) => ({ default: m.ProductDecorativePage })),
+);
 const ProcessPage = lazy(() => pageLoaders["/process"]().then((m) => ({ default: m.ProcessPage })));
 const ProjectsPage = lazy(() => pageLoaders["/projects"]().then((m) => ({ default: m.ProjectsPage })));
 const FAQPage = lazy(() => pageLoaders["/faq"]().then((m) => ({ default: m.FAQPage })));
@@ -26,8 +32,8 @@ const routes = {
     "/": HomePage,
     "/services": ServicesPage,
     "/products": ProductsPage,
-    "/products/sports": ProductsPage,
-    "/products/decorative": ProductsPage,
+    "/products/sports": ProductSportsPage,
+    "/products/decorative": ProductDecorativePage,
     "/process": ProcessPage,
     "/projects": ProjectsPage,
     "/faq": FAQPage,

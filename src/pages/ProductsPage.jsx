@@ -1,38 +1,33 @@
 import { ContactCTA } from "../components/ContactCTA.jsx";
+import { ProductCategoryPreview } from "../components/ProductCategoryPreview.jsx";
 import { ProductShowcase } from "../components/ProductShowcase.jsx";
-import { ScrollReveal } from "../components/ScrollReveal.jsx";
 import productsHero from "../assets/hero-products-football.jpg";
+import { productCategoryList } from "../content/productCategories.js";
+import { useSiteContent } from "../hooks/useSiteContent.js";
 import { PageHero } from "./PageHero.jsx";
-import { productCards } from "../content/products.js";
 
 export function ProductsPage() {
+    const { products } = useSiteContent();
+
     return (
         <>
             <PageHero
                 image={productsHero}
                 eyebrow="صفحه محصولات"
-                title="مدل‌های پیشنهادی چمن مصنوعی"
-                description="در این صفحه چند مدل دمو برای مقایسه ظاهر، تراکم، دوام و کاربردهای مختلف قرار گرفته است."
+                title="دسته‌بندی محصولات و نمونه پروژه‌های چمن مصنوعی"
+                description="محصولات بر اساس کاربرد به دو بخش ورزشی و تزیینی تقسیم شده‌اند تا انتخاب مدل و دیدن نمونه اجرا ساده‌تر باشد."
                 primaryLabel="استعلام قیمت"
-                secondaryLabel="مشاهده پروژه‌ها"
+                secondaryLabel="مشاهده خدمات"
+                secondaryHref="/services"
             />
             <ProductShowcase />
-            <section className="section section--warm">
-                <div className="container page-grid page-grid--four">
-                    {productCards.map((item, index) => {
-                        const Icon = item.icon;
-
-                        return (
-                            <ScrollReveal className="demo-card product-demo-card" delay={index * 80} key={item.title}>
-                                <Icon size={28} />
-                                <h3>{item.title}</h3>
-                                <p>{item.text}</p>
-                                <small>دمو محصول</small>
-                            </ScrollReveal>
-                        );
-                    })}
-                </div>
-            </section>
+            {productCategoryList.map((category) => (
+                <ProductCategoryPreview
+                    category={category}
+                    items={products?.byCategory?.[category.slug] || []}
+                    key={category.slug}
+                />
+            ))}
             <ContactCTA />
         </>
     );

@@ -4,7 +4,8 @@
 import { navItems } from '../content/navigation.js';
 import { heroContent, heroStats } from '../content/hero.js';
 import { services, servicePlans, serviceChecklist } from '../content/services.js';
-import { productHighlights, productCards } from '../content/products.js';
+import { productCategoryConfig } from '../content/productCategories.js';
+import { productHighlights, sportsProducts, decorativeProducts } from '../content/products.js';
 import { processSteps, processTimeline } from '../content/process.js';
 import { projects, projectStats } from '../content/projects.js';
 import { faqs, supportItems } from '../content/faq.js';
@@ -13,7 +14,7 @@ import { trustItems } from '../content/trust.js';
 import { testimonial } from '../content/testimonial.js';
 import { CONFIG } from '../config/index.js';
 import { mapFaqsFromAPI } from '../models/FaqModel.js';
-import { mapProductsFromAPI } from '../models/ProductModel.js';
+import { filterProductsByCategory, mapProductsFromAPI } from '../models/ProductModel.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
 import { mapMenuTree } from '../models/MenuItemModel.js';
@@ -25,7 +26,15 @@ export function getLocalContent() {
         navigation: { items: navItems },
         hero: { content: heroContent, stats: heroStats },
         services: { items: services, plans: servicePlans, checklist: serviceChecklist },
-        products: { highlights: productHighlights, cards: productCards },
+        products: {
+            highlights: productHighlights,
+            byCategory: {
+                sports: sportsProducts,
+                decorative: decorativeProducts,
+            },
+            categories: productCategoryConfig,
+            cards: [...sportsProducts, ...decorativeProducts],
+        },
         process: { steps: processSteps, timeline: processTimeline },
         projects: { items: projects, stats: projectStats },
         faq: { items: faqs, support: supportItems },
@@ -47,6 +56,28 @@ function mergeServices(apiItems, localItems) {
 
 function useApiSection(apiItems, localItems) {
     return apiItems.length > 0 ? apiItems : localItems;
+}
+
+function buildProductsState(apiItems, localProducts) {
+    const mapped = mapProductsFromAPI(apiItems);
+    const hasApiProducts = mapped.length > 0;
+
+    const sports = hasApiProducts
+        ? filterProductsByCategory(mapped, 'sports')
+        : localProducts.byCategory.sports;
+    const decorative = hasApiProducts
+        ? filterProductsByCategory(mapped, 'decorative')
+        : localProducts.byCategory.decorative;
+
+    return {
+        highlights: localProducts.highlights,
+        categories: localProducts.categories,
+        byCategory: {
+            sports: sports.length ? sports : localProducts.byCategory.sports,
+            decorative: decorative.length ? decorative : localProducts.byCategory.decorative,
+        },
+        cards: [...(sports.length ? sports : localProducts.byCategory.sports), ...(decorative.length ? decorative : localProducts.byCategory.decorative)],
+    };
 }
 
 /**
@@ -72,10 +103,7 @@ export async function fetchSiteContent() {
             ...local.services,
             items: mergeServices(serviceItems, local.services.items),
         },
-        products: {
-            ...local.products,
-            cards: useApiSection(mapProductsFromAPI(productItems), local.products.cards),
-        },
+        products: buildProductsState(productItems, local.products),
         projects: {
             ...local.projects,
             items: useApiSection(mapProjectsFromAPI(projectItems), local.projects.items),
