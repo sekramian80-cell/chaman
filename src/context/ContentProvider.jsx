@@ -40,7 +40,7 @@ export function ContentProvider({ children }) {
                 setValue({
                     ...getLocalContent(),
                     loading: false,
-                    error: error.message || 'خطا در دریافت اطلاعات از وردپرس',
+                    error: error.message || 'خطا در دریافت اطلاعات',
                     isFromAPI: false,
                 });
             });
@@ -51,7 +51,7 @@ export function ContentProvider({ children }) {
     }, []);
 
     if (value.loading) {
-        return <LoadingSpinner message="در حال دریافت محتوا از وردپرس" />;
+        return <LoadingSpinner message="در حال بارگذاری" />;
     }
 
     return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>;

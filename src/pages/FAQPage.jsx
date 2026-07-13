@@ -12,7 +12,7 @@ export function FAQPage() {
                 image={faqHero}
                 eyebrow="صفحه سوالات"
                 title="پاسخ سوالات رایج قبل از خرید و نصب"
-                description="اینجا سوالات پرتکرار به شکل دمو دسته‌بندی شده‌اند تا تصمیم‌گیری درباره مدل، قیمت و نگهداری ساده‌تر شود."
+                description="پاسخ پرتکرارترین سوال‌ها درباره مدل، قیمت و نگهداری تا تصمیم‌گیری برای شما ساده‌تر شود."
                 primaryLabel="پرسیدن سوال"
                 secondaryLabel="دیدن محصولات"
                 secondaryHref="/products"

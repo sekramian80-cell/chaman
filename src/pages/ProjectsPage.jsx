@@ -11,8 +11,8 @@ export function ProjectsPage() {
             <PageHero
                 image={projectsHero}
                 eyebrow="صفحه نمونه کار"
-                title="نمونه پروژه‌های دمو برای نمایش کیفیت اجرا"
-                description="در این بخش چند سناریوی پیشفرض از پروژه‌ها، متراژها و کاربردهای رایج قرار گرفته تا صفحه نمونه‌کار کامل‌تر باشد."
+                title="نمونه پروژه‌های اجرا شده و کیفیت کار ما"
+                description="مجموعه‌ای از پروژه‌ها، متراژها و کاربردهای مختلف که کیفیت و دقت اجرای ما را نشان می‌دهد."
                 primaryLabel="درخواست بازدید"
                 secondaryLabel="مشاهده خدمات"
                 secondaryHref="/services"

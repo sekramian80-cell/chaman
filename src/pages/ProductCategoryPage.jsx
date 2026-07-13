@@ -38,7 +38,7 @@ export function ProductCategoryPage({ categorySlug }) {
                     <ScrollReveal className="product-category-page__intro">
                         <span className="eyebrow">نمونه پروژه‌ها</span>
                         <h2>گالری اجراهای {category.title}</h2>
-                        <p>این بخش نمونه پروژه‌های این دسته را نشان می‌دهد. محتوای واقعی از وردپرس خوانده می‌شود.</p>
+                        <p>مجموعه‌ای از پروژه‌های اجرا شده در این دسته؛ برای مشاوره و استعلام قیمت با ما در تماس باشید.</p>
                     </ScrollReveal>
 
                     {items.length > 0 ? (
@@ -49,8 +49,8 @@ export function ProductCategoryPage({ categorySlug }) {
                         </div>
                     ) : (
                         <ScrollReveal className="empty-state">
-                            <strong>هنوز پروژه‌ای برای این دسته ثبت نشده است.</strong>
-                            <p>در وردپرس یک محصول جدید بسازید و دسته «{category.title}» را برایش انتخاب کنید.</p>
+                            <strong>به‌زودی نمونه پروژه‌های این دسته اضافه می‌شود.</strong>
+                            <p>برای دیدن نمونه‌کارها یا دریافت مشاوره درباره «{category.title}» با ما تماس بگیرید.</p>
                         </ScrollReveal>
                     )}
                 </div>
