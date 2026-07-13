@@ -1747,85 +1747,116 @@ img {
 
 .subcategory-slider {
     position: relative;
-    width: 100%;
+    width: min(calc(var(--container) + 120px), calc(100% - 24px));
+    margin-inline: auto;
+    padding-inline: 8px;
     overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
 .subcategory-slider__fade {
     position: absolute;
     top: 0;
     bottom: 0;
-    z-index: 2;
-    width: 80px;
+    z-index: 3;
+    width: 70px;
     pointer-events: none;
 }
 
 .subcategory-slider__fade--start {
     left: 0;
-    background: linear-gradient(90deg, rgba(11, 30, 16, 0.95), transparent);
+    background: linear-gradient(90deg, rgba(11, 30, 16, 0.92), transparent);
 }
 
 .subcategory-slider__fade--end {
     right: 0;
-    background: linear-gradient(270deg, rgba(11, 30, 16, 0.95), transparent);
+    background: linear-gradient(270deg, rgba(11, 30, 16, 0.92), transparent);
+}
+
+.subcategory-slider__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    color: #f3ffe9;
+    cursor: pointer;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.2), rgba(150, 230, 99, 0.08)), rgba(16, 42, 22, 0.72);
+    border: 1px solid rgba(198, 255, 168, 0.34);
+    border-radius: 999px;
+    box-shadow: 0 14px 34px rgba(6, 20, 10, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    transform: translateY(-50%);
+    transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.subcategory-slider__nav:hover {
+    border-color: rgba(198, 255, 168, 0.6);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.subcategory-slider__nav--prev {
+    left: 14px;
+}
+
+.subcategory-slider__nav--next {
+    right: 14px;
 }
 
 .subcategory-slider__track {
     display: flex;
-    gap: 18px;
+    gap: 22px;
     width: max-content;
-    padding: 8px 0 12px;
-    animation: subcategoryMarquee 55s linear infinite;
-}
-
-.subcategory-slider:hover .subcategory-slider__track {
-    animation-play-state: paused;
+    padding: 10px 0 14px;
+    will-change: transform;
 }
 
 .subcategory-slider__card {
     position: relative;
     isolation: isolate;
-    flex: 0 0 220px;
+    flex: 0 0 300px;
     overflow: hidden;
-    border: 1px solid rgba(198, 255, 168, 0.24);
-    border-radius: 22px;
+    border: 1px solid rgba(198, 255, 168, 0.26);
+    border-radius: 26px;
     background:
-        linear-gradient(160deg, rgba(255, 255, 255, 0.18), rgba(236, 255, 229, 0.06) 48%, rgba(150, 230, 99, 0.05)),
-        rgba(28, 58, 34, 0.38);
+        linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(236, 255, 229, 0.08) 48%, rgba(150, 230, 99, 0.06)),
+        rgba(30, 62, 36, 0.34);
     box-shadow:
-        0 18px 48px rgba(6, 20, 10, 0.32),
-        inset 0 1px 0 rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
+        0 22px 58px rgba(6, 20, 10, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    backdrop-filter: blur(18px) saturate(155%);
+    -webkit-backdrop-filter: blur(18px) saturate(155%);
     transition:
-        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.35s ease,
-        box-shadow 0.35s ease;
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 .subcategory-slider__card::before {
     position: absolute;
     inset: 0 0 auto;
     z-index: 2;
-    height: 2px;
+    height: 3px;
     content: "";
     background: linear-gradient(90deg, transparent, var(--color-lime), var(--color-teal), transparent);
-    opacity: 0.65;
+    opacity: 0.7;
 }
 
 .subcategory-slider__card:hover {
-    border-color: rgba(198, 255, 168, 0.52);
+    border-color: rgba(198, 255, 168, 0.56);
     box-shadow:
-        0 28px 68px rgba(6, 20, 10, 0.46),
-        0 0 0 1px rgba(150, 230, 99, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.42);
-    transform: translateY(-6px) scale(1.02);
+        0 34px 82px rgba(6, 20, 10, 0.5),
+        0 0 0 1px rgba(150, 230, 99, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.46);
+    transform: translateY(-8px) scale(1.02);
 }
 
 .subcategory-slider__media {
     position: relative;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 11;
     overflow: hidden;
 }
 
@@ -1833,7 +1864,7 @@ img {
     position: absolute;
     inset: 0;
     content: "";
-    background: linear-gradient(180deg, transparent 50%, rgba(11, 30, 16, 0.5));
+    background: linear-gradient(180deg, transparent 46%, rgba(11, 30, 16, 0.55));
     pointer-events: none;
 }
 
@@ -1841,53 +1872,29 @@ img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .subcategory-slider__card:hover .subcategory-slider__media img {
-    transform: scale(1.08);
+    transform: scale(1.09);
 }
 
 .subcategory-slider__body {
-    padding: 16px 18px 18px;
+    padding: 18px 20px 20px;
 }
 
 .subcategory-slider__body h3 {
     margin: 0;
     color: #f3ffe9;
-    font-size: 0.98rem;
+    font-size: 1.12rem;
     font-weight: 850;
     line-height: 1.55;
     text-align: center;
 }
 
-@keyframes subcategoryMarquee {
-    from {
-        transform: translate3d(0, 0, 0);
-    }
-
-    to {
-        transform: translate3d(-50%, 0, 0);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .subcategory-slider__track {
-        animation: none;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: auto;
-        max-width: var(--container);
-        margin-inline: auto;
-        padding-inline: 20px;
-    }
-
-    .subcategory-slider {
-        mask-image: none;
-    }
-
-    .subcategory-slider__fade {
-        display: none;
+@media (max-width: 900px) {
+    .subcategory-slider__card {
+        flex-basis: 264px;
     }
 }
 
@@ -1897,11 +1904,12 @@ img {
     }
 
     .subcategory-slider__card {
-        flex-basis: 190px;
+        flex-basis: 78vw;
     }
 
-    .subcategory-slider__track {
-        animation-duration: 42s;
+    .subcategory-slider__nav {
+        width: 40px;
+        height: 40px;
     }
 }
 

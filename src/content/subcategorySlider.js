@@ -1,39 +1,20 @@
 /**
  * داده اسلایدر زیردسته‌ها — صفحه اصلی
+ * عکس‌ها از Wikimedia Commons (لایسنس آزاد) دانلود شده‌اند.
  */
-import heroArtificialGrass from '../assets/hero-artificial-grass.jpg';
-import commercialSpaceImage from '../assets/services/commercial-space.jpg';
-import residentialBalconyImage from '../assets/services/residential-balcony.jpg';
-import rooftopGardenImage from '../assets/services/rooftop-garden.jpg';
-import sportsFieldImage from '../assets/services/sports-field.jpg';
-import villaYardImage from '../assets/services/villa-yard.jpg';
 import { productSubcategories } from './productSubcategories.js';
 
-const subcategoryImages = {
-    football: sportsFieldImage,
-    club: sportsFieldImage,
-    padel: sportsFieldImage,
-    golf: sportsFieldImage,
-    tennis: sportsFieldImage,
-    paintball: sportsFieldImage,
-    futsal: sportsFieldImage,
-    school: sportsFieldImage,
-    hockey: sportsFieldImage,
-    restaurant: commercialSpaceImage,
-    rooftop: rooftopGardenImage,
-    'terrace-balcony': residentialBalconyImage,
-    kindergarten: villaYardImage,
-    garden: villaYardImage,
-    patio: villaYardImage,
-    hall: commercialSpaceImage,
-    yard: villaYardImage,
-    workplace: commercialSpaceImage,
-    villa: villaYardImage,
-    'tile-grass': heroArtificialGrass,
-    'wall-grass': heroArtificialGrass,
-    moketi: heroArtificialGrass,
-    'grass-fence': heroArtificialGrass,
-};
+const subcategoryImages = import.meta.glob('../assets/subcategories/*.jpg', {
+    eager: true,
+    import: 'default',
+});
+
+function imageForSlug(slug) {
+    const entry = Object.entries(subcategoryImages).find(([path]) =>
+        path.endsWith(`/${slug}.jpg`),
+    );
+    return entry ? entry[1] : null;
+}
 
 const categoryPaths = {
     sports: '/products/sports',
@@ -46,7 +27,7 @@ function buildSliderItems(parent, items) {
         label: item.label,
         title: `چمن مصنوعی ${item.label}`,
         href: categoryPaths[parent],
-        image: subcategoryImages[item.slug] || heroArtificialGrass,
+        image: imageForSlug(item.slug),
         parent,
     }));
 }
@@ -54,4 +35,4 @@ function buildSliderItems(parent, items) {
 export const subcategorySliderItems = [
     ...buildSliderItems('sports', productSubcategories.sports),
     ...buildSliderItems('decorative', productSubcategories.decorative),
-];
+].filter((item) => item.image);
