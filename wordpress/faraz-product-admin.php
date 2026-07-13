@@ -1,14 +1,13 @@
 <?php
 /**
- * فراز چمن — فرم ساده افزودن محصول در پیشخوان وردپرس
+ * فراز چمن — فرم افزودن محصول با دسته و زیردسته
  *
  * نحوه نصب:
- * 1. در وردپرس برو به Code Snippets → Add New
- * 2. کل این فایل را کپی کن (از خط بعد از این کامنت تا انتها)
- * 3. نوع Snippet را PHP Snippet بگذار و Run everywhere را فعال کن
- * 4. Save و Activate
+ * 1. Code Snippets → Snippet قبلی «فراز چمن — افزودن محصول» را باز کن
+ * 2. کل این کد را جایگزین کد قبلی کن
+ * 3. Save Changes
  *
- * پیش‌نیاز: CPT با نامک product و taxonomy با نامک product_category
+ * پیش‌نیاز: CPT با نامک product و taxonomy با نامک product_category (ترجیحاً سلسله‌مراتبی)
  */
 
 if (!defined('ABSPATH')) {
@@ -16,6 +15,66 @@ if (!defined('ABSPATH')) {
 }
 
 const FARAZ_PRODUCT_META_PREFIX = '_faraz_';
+const FARAZ_MAIN_CATEGORY_SLUGS = ['sports', 'decorative'];
+
+/**
+ * ----------------------------------------
+ * ساختار دسته‌ها و زیردسته‌ها
+ * ----------------------------------------
+ */
+function faraz_get_product_subcategories_tree()
+{
+    return [
+        'sports' => [
+            ['slug' => 'football', 'label' => 'فوتبال'],
+            ['slug' => 'club', 'label' => 'باشگاه'],
+            ['slug' => 'padel', 'label' => 'پدل'],
+            ['slug' => 'golf', 'label' => 'گلف'],
+            ['slug' => 'tennis', 'label' => 'تنیس'],
+            ['slug' => 'paintball', 'label' => 'پینت بال'],
+            ['slug' => 'futsal', 'label' => 'فوتسال'],
+            ['slug' => 'school', 'label' => 'مدرسه'],
+            ['slug' => 'hockey', 'label' => 'هاکی'],
+        ],
+        'decorative' => [
+            ['slug' => 'restaurant', 'label' => 'رستوران'],
+            ['slug' => 'rooftop', 'label' => 'پشت بام'],
+            ['slug' => 'terrace-balcony', 'label' => 'تراس و بالکن'],
+            ['slug' => 'kindergarten', 'label' => 'مهدکودک'],
+            ['slug' => 'garden', 'label' => 'باغ'],
+            ['slug' => 'patio', 'label' => 'پاسیو'],
+            ['slug' => 'hall', 'label' => 'تالار'],
+            ['slug' => 'yard', 'label' => 'حیاط'],
+            ['slug' => 'workplace', 'label' => 'محیط کار'],
+            ['slug' => 'villa', 'label' => 'ویلا'],
+            ['slug' => 'tile-grass', 'label' => 'تایلی'],
+            ['slug' => 'wall-grass', 'label' => 'دیواری'],
+            ['slug' => 'moketi', 'label' => 'موکتی'],
+            ['slug' => 'grass-fence', 'label' => 'فنس چمن'],
+        ],
+    ];
+}
+
+function faraz_get_main_categories()
+{
+    return [
+        'sports' => 'چمن مصنوعی ورزشی',
+        'decorative' => 'چمن مصنوعی تزیینی',
+    ];
+}
+
+function faraz_get_subcategory_label($slug)
+{
+    foreach (faraz_get_product_subcategories_tree() as $items) {
+        foreach ($items as $item) {
+            if ($item['slug'] === $slug) {
+                return $item['label'];
+            }
+        }
+    }
+
+    return '';
+}
 
 /**
  * ----------------------------------------
@@ -35,6 +94,7 @@ add_action('init', function () {
         'seo_description' => 'string',
         'robots_noindex' => 'string',
         'gallery' => 'string',
+        'subcategory' => 'string',
     ];
 
     foreach ($meta_fields as $key => $type) {
@@ -68,6 +128,9 @@ add_filter('rest_prepare_product', function ($response, $post) {
         }
     }
 
+    $subcategory = faraz_get_product_subcategory_slug($id);
+    $primary_category = faraz_get_product_primary_category_slug($id);
+
     $data = $response->get_data();
     $data['acf'] = array_merge($data['acf'] ?? [], [
         'short_description' => faraz_get_product_meta($id, 'short_description') ?: get_the_excerpt($post),
@@ -77,6 +140,9 @@ add_filter('rest_prepare_product', function ($response, $post) {
         'seo_description' => faraz_get_product_meta($id, 'seo_description'),
         'robots_noindex' => faraz_get_product_meta($id, 'robots_noindex') === '1',
         'gallery' => $gallery,
+        'primary_category' => $primary_category,
+        'subcategory' => $subcategory,
+        'subcategory_label' => faraz_get_subcategory_label($subcategory),
     ]);
 
     $response->set_data($data);
@@ -86,7 +152,7 @@ add_filter('rest_prepare_product', function ($response, $post) {
 
 /**
  * ----------------------------------------
- * ایجاد دسته‌بندی‌های پیش‌فرض
+ * ایجاد دسته‌بندی‌ها و زیردسته‌های پیش‌فرض
  * ----------------------------------------
  */
 add_action('init', function () {
@@ -94,14 +160,16 @@ add_action('init', function () {
         return;
     }
 
-    $categories = [
-        'sports' => 'چمن مصنوعی ورزشی',
-        'decorative' => 'چمن مصنوعی تزیینی',
-    ];
+    foreach (faraz_get_main_categories() as $slug => $name) {
+        faraz_ensure_product_term($slug, $name, 0);
+    }
 
-    foreach ($categories as $slug => $name) {
-        if (!term_exists($slug, 'product_category')) {
-            wp_insert_term($name, 'product_category', ['slug' => $slug]);
+    foreach (faraz_get_product_subcategories_tree() as $parent_slug => $children) {
+        $parent = get_term_by('slug', $parent_slug, 'product_category');
+        $parent_id = $parent ? (int) $parent->term_id : 0;
+
+        foreach ($children as $child) {
+            faraz_ensure_product_term($child['slug'], $child['label'], $parent_id);
         }
     }
 }, 20);
@@ -135,9 +203,10 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_register_style('faraz-product-admin', false);
     wp_enqueue_style('faraz-product-admin');
     wp_add_inline_style('faraz-product-admin', faraz_product_admin_css());
-    wp_register_script('faraz-product-admin', false, ['jquery'], '1.0.0', true);
+    wp_register_script('faraz-product-admin', false, ['jquery'], '1.1.0', true);
     wp_enqueue_script('faraz-product-admin');
     wp_add_inline_script('faraz-product-admin', faraz_product_admin_js());
+    wp_localize_script('faraz-product-admin', 'farazProductSubcategories', faraz_get_product_subcategories_tree());
 });
 
 /**
@@ -168,10 +237,21 @@ function faraz_handle_save_product()
     $seo_description = sanitize_textarea_field(wp_unslash($_POST['seo_description'] ?? ''));
     $slug = sanitize_title(wp_unslash($_POST['post_slug'] ?? ''));
     $category = sanitize_key($_POST['product_category'] ?? '');
+    $subcategory = sanitize_key($_POST['product_subcategory'] ?? '');
     $featured_image_id = absint($_POST['featured_image_id'] ?? 0);
     $gallery_raw = sanitize_text_field(wp_unslash($_POST['gallery_ids'] ?? ''));
     $allow_index = isset($_POST['robots_index']) && $_POST['robots_index'] === '1';
     $status = isset($_POST['save_as_draft']) ? 'draft' : 'publish';
+
+    $main_categories = array_keys(faraz_get_main_categories());
+    if (!in_array($category, $main_categories, true)) {
+        faraz_redirect_with_notice('error', 'دسته اصلی محصول معتبر نیست.');
+    }
+
+    $allowed_subcategories = array_column(faraz_get_product_subcategories_tree()[$category] ?? [], 'slug');
+    if (!in_array($subcategory, $allowed_subcategories, true)) {
+        faraz_redirect_with_notice('error', 'زیردسته محصول را انتخاب کنید.');
+    }
 
     $gallery_ids = array_values(array_filter(array_map('absint', explode(',', $gallery_raw))));
 
@@ -197,12 +277,7 @@ function faraz_handle_save_product()
         set_post_thumbnail($post_id, $featured_image_id);
     }
 
-    if ($category && taxonomy_exists('product_category')) {
-        $term = get_term_by('slug', $category, 'product_category');
-        if ($term && !is_wp_error($term)) {
-            wp_set_object_terms($post_id, [(int) $term->term_id], 'product_category', false);
-        }
-    }
+    faraz_assign_product_terms($post_id, $category, $subcategory);
 
     faraz_update_product_meta($post_id, 'short_description', $short_description);
     faraz_update_product_meta($post_id, 'project_meta', $project_meta);
@@ -211,6 +286,7 @@ function faraz_handle_save_product()
     faraz_update_product_meta($post_id, 'seo_description', $seo_description);
     faraz_update_product_meta($post_id, 'robots_noindex', $allow_index ? '0' : '1');
     faraz_update_product_meta($post_id, 'gallery', implode(',', $gallery_ids));
+    faraz_update_product_meta($post_id, 'subcategory', $subcategory);
 
     if (function_exists('update_field')) {
         update_field('short_description', $short_description, $post_id);
@@ -220,6 +296,7 @@ function faraz_handle_save_product()
         update_field('seo_description', $seo_description, $post_id);
         update_field('gallery', $gallery_ids, $post_id);
         update_field('robots_noindex', $allow_index ? 0 : 1, $post_id);
+        update_field('subcategory', $subcategory, $post_id);
     }
 
     $message = $status === 'publish'
@@ -251,16 +328,12 @@ function faraz_render_add_product_page()
     $notice = sanitize_key($_GET['faraz_notice'] ?? '');
     $message = isset($_GET['faraz_message']) ? sanitize_text_field(wp_unslash($_GET['faraz_message'])) : '';
     $saved_post_id = absint($_GET['faraz_post_id'] ?? 0);
-
-    $categories = [
-        'sports' => 'چمن مصنوعی ورزشی',
-        'decorative' => 'چمن مصنوعی تزیینی',
-    ];
+    $categories = faraz_get_main_categories();
 
     ?>
     <div class="wrap faraz-product-admin" dir="rtl">
         <h1>افزودن محصول جدید</h1>
-        <p class="description">از این فرم برای ثبت سریع محصول در دسته ورزشی یا تزیینی استفاده کنید. داده‌ها در API سایت React هم در دسترس خواهند بود.</p>
+        <p class="description">ابتدا دسته اصلی (ورزشی یا تزیینی) را انتخاب کنید، سپس زیردسته دقیق پروژه را مشخص کنید.</p>
 
         <?php if ($notice === 'success' && $message !== '') : ?>
             <div class="notice notice-success is-dismissible">
@@ -345,13 +418,21 @@ function faraz_render_add_product_page()
                         <h2>تنظیمات انتشار</h2>
 
                         <p>
-                            <label><strong>۵. دسته‌بندی محصول</strong> <span class="required">*</span></label>
+                            <label><strong>۵. دسته اصلی محصول</strong> <span class="required">*</span></label>
                             <?php foreach ($categories as $slug => $label) : ?>
                                 <label class="faraz-radio">
                                     <input type="radio" name="product_category" value="<?php echo esc_attr($slug); ?>" <?php checked($slug, 'sports'); ?> required />
                                     <?php echo esc_html($label); ?>
                                 </label>
                             <?php endforeach; ?>
+                        </p>
+
+                        <p>
+                            <label for="product_subcategory"><strong>زیردسته محصول</strong> <span class="required">*</span></label>
+                            <select id="product_subcategory" name="product_subcategory" class="regular-text" required>
+                                <option value="">یک زیردسته انتخاب کنید</option>
+                            </select>
+                            <span class="faraz-hint">با تغییر دسته اصلی، لیست زیردسته‌ها به‌روز می‌شود.</span>
                         </p>
 
                         <p>
@@ -424,6 +505,93 @@ function faraz_get_product_gallery_ids($post_id)
     return array_values(array_filter(array_map('absint', explode(',', $raw))));
 }
 
+function faraz_ensure_product_term($slug, $name, $parent_id = 0)
+{
+    $existing = get_term_by('slug', $slug, 'product_category');
+
+    if ($existing && !is_wp_error($existing)) {
+        if ($parent_id > 0 && (int) $existing->parent !== (int) $parent_id) {
+            wp_update_term((int) $existing->term_id, 'product_category', ['parent' => (int) $parent_id]);
+        }
+
+        return (int) $existing->term_id;
+    }
+
+    $args = ['slug' => $slug];
+    if ($parent_id > 0) {
+        $args['parent'] = (int) $parent_id;
+    }
+
+    $result = wp_insert_term($name, 'product_category', $args);
+
+    if (is_wp_error($result)) {
+        return 0;
+    }
+
+    return (int) $result['term_id'];
+}
+
+function faraz_assign_product_terms($post_id, $category_slug, $subcategory_slug)
+{
+    if (!taxonomy_exists('product_category')) {
+        return;
+    }
+
+    $term_ids = [];
+    $parent_term = get_term_by('slug', $category_slug, 'product_category');
+    $child_term = get_term_by('slug', $subcategory_slug, 'product_category');
+
+    if ($parent_term && !is_wp_error($parent_term)) {
+        $term_ids[] = (int) $parent_term->term_id;
+    }
+
+    if ($child_term && !is_wp_error($child_term)) {
+        $term_ids[] = (int) $child_term->term_id;
+    }
+
+    if ($term_ids) {
+        wp_set_object_terms((int) $post_id, $term_ids, 'product_category', false);
+    }
+}
+
+function faraz_get_product_terms($post_id)
+{
+    $terms = get_the_terms((int) $post_id, 'product_category');
+
+    if (!$terms || is_wp_error($terms)) {
+        return [];
+    }
+
+    return $terms;
+}
+
+function faraz_get_product_primary_category_slug($post_id)
+{
+    foreach (faraz_get_product_terms($post_id) as $term) {
+        if (in_array($term->slug, FARAZ_MAIN_CATEGORY_SLUGS, true)) {
+            return $term->slug;
+        }
+    }
+
+    return '';
+}
+
+function faraz_get_product_subcategory_slug($post_id)
+{
+    $saved = faraz_get_product_meta($post_id, 'subcategory');
+    if ($saved !== '') {
+        return $saved;
+    }
+
+    foreach (faraz_get_product_terms($post_id) as $term) {
+        if (!in_array($term->slug, FARAZ_MAIN_CATEGORY_SLUGS, true)) {
+            return $term->slug;
+        }
+    }
+
+    return '';
+}
+
 function faraz_redirect_with_notice($type, $message)
 {
     $redirect = add_query_arg([
@@ -448,6 +616,7 @@ function faraz_product_admin_css()
         .faraz-hint { display: block; color: #646970; font-size: 12px; margin-top: 6px; }
         .required { color: #d63638; }
         .faraz-radio, .faraz-check { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-weight: 400; }
+        #product_subcategory { width: 100%; max-width: 100%; }
         .faraz-media-block { margin-bottom: 18px; }
         .faraz-media-preview { min-height: 160px; border: 1px dashed #c3c4c7; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f6f7f7; }
         .faraz-media-preview img { width: 100%; height: auto; display: block; }
@@ -495,6 +664,29 @@ jQuery(function ($) {
             });
         });
     }
+
+    function getSelectedMainCategory() {
+        return $('input[name="product_category"]:checked').val() || 'sports';
+    }
+
+    function renderSubcategories() {
+        const main = getSelectedMainCategory();
+        const $select = $('#product_subcategory');
+        const items = (window.farazProductSubcategories && window.farazProductSubcategories[main]) || [];
+        const current = $select.val();
+
+        $select.empty().append('<option value="">یک زیردسته انتخاب کنید</option>');
+        items.forEach(function (item) {
+            $select.append('<option value="' + item.slug + '">' + item.label + '</option>');
+        });
+
+        if (current && items.some(function (item) { return item.slug === current; })) {
+            $select.val(current);
+        }
+    }
+
+    renderSubcategories();
+    $('input[name="product_category"]').on('change', renderSubcategories);
 
     $('#pick-featured-image').on('click', function (e) {
         e.preventDefault();
