@@ -11,6 +11,20 @@ function extractCategorySlugs(item) {
         .filter(Boolean);
 }
 
+function buildProductMeta(item) {
+    const parts = [];
+
+    if (item.acf?.project_meta) {
+        parts.push(item.acf.project_meta);
+    }
+
+    if (item.acf?.product_price) {
+        parts.push(item.acf.product_price);
+    }
+
+    return parts.join(' · ');
+}
+
 /**
  * تبدیل داده‌های API به کارت/پروژه محصول
  * @param {Array<Object>} apiItems
@@ -24,7 +38,10 @@ export function mapProductsFromAPI(apiItems = []) {
             stripHtml(item.excerpt?.rendered) ||
             stripHtml(item.content?.rendered) ||
             '',
-        meta: item.acf?.project_meta || '',
+        meta: buildProductMeta(item),
+        price: item.acf?.product_price || '',
+        slug: item.slug || '',
+        gallery: item.acf?.gallery || [],
         image: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || defaultProductImage,
         imageAlt: stripHtml(item.title?.rendered) || 'پروژه چمن مصنوعی',
         categories: extractCategorySlugs(item),
