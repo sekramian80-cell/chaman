@@ -1,6 +1,7 @@
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { Hero } from '../components/Hero.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import { SubcategorySlider } from '../components/SubcategorySlider.jsx';
 import { TrustStrip } from '../components/TrustStrip.jsx';
 
 const homeHighlights = [
@@ -34,6 +35,7 @@ export function HomePage() {
           </div>
         </div>
       </section>
+      <SubcategorySlider />
       <ContactCTA />
     </>
   );
