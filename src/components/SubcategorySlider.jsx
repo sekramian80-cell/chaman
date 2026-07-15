@@ -88,9 +88,6 @@ export function SubcategorySlider() {
                     pausedRef.current = false;
                 }}
             >
-                <div className="subcategory-slider__fade subcategory-slider__fade--start" aria-hidden="true" />
-                <div className="subcategory-slider__fade subcategory-slider__fade--end" aria-hidden="true" />
-
                 <button
                     type="button"
                     className="subcategory-slider__nav subcategory-slider__nav--prev"

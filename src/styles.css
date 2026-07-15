@@ -1722,6 +1722,11 @@ img {
     padding-top: 0;
     padding-bottom: 88px;
     overflow: hidden;
+    background: transparent;
+}
+
+.subcategory-slider-section::before {
+    display: none;
 }
 
 .subcategory-slider-section__header {
@@ -1747,29 +1752,15 @@ img {
 
 .subcategory-slider {
     position: relative;
-    width: min(calc(var(--container) + 120px), calc(100% - 24px));
+    width: 100%;
     margin-inline: auto;
-    padding-inline: 8px;
+    padding-inline: 0;
     overflow: hidden;
+    background: transparent;
 }
 
 .subcategory-slider__fade {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 3;
-    width: 70px;
-    pointer-events: none;
-}
-
-.subcategory-slider__fade--start {
-    left: 0;
-    background: linear-gradient(90deg, rgba(11, 30, 16, 0.92), transparent);
-}
-
-.subcategory-slider__fade--end {
-    right: 0;
-    background: linear-gradient(270deg, rgba(11, 30, 16, 0.92), transparent);
+    display: none;
 }
 
 .subcategory-slider__nav {
@@ -1781,12 +1772,12 @@ img {
     justify-content: center;
     width: 46px;
     height: 46px;
-    color: #f3ffe9;
+    color: #1b3d22;
     cursor: pointer;
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.2), rgba(150, 230, 99, 0.08)), rgba(16, 42, 22, 0.72);
-    border: 1px solid rgba(198, 255, 168, 0.34);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.72), rgba(236, 255, 229, 0.5));
+    border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 999px;
-    box-shadow: 0 14px 34px rgba(6, 20, 10, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 14px 34px rgba(6, 20, 10, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     transform: translateY(-50%);
@@ -1794,7 +1785,7 @@ img {
 }
 
 .subcategory-slider__nav:hover {
-    border-color: rgba(198, 255, 168, 0.6);
+    border-color: rgba(150, 230, 99, 0.7);
     transform: translateY(-50%) scale(1.08);
 }
 
@@ -1810,8 +1801,9 @@ img {
     display: flex;
     gap: 22px;
     width: max-content;
-    padding: 10px 0 14px;
+    padding: 10px 24px 14px;
     will-change: transform;
+    background: transparent;
 }
 
 .subcategory-slider__card {
@@ -1819,16 +1811,16 @@ img {
     isolation: isolate;
     flex: 0 0 300px;
     overflow: hidden;
-    border: 1px solid rgba(198, 255, 168, 0.26);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 26px;
     background:
-        linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(236, 255, 229, 0.08) 48%, rgba(150, 230, 99, 0.06)),
-        rgba(30, 62, 36, 0.34);
+        linear-gradient(165deg, rgba(255, 255, 255, 0.58), rgba(236, 255, 229, 0.42) 48%, rgba(198, 255, 168, 0.22)),
+        rgba(255, 255, 255, 0.28);
     box-shadow:
-        0 22px 58px rgba(6, 20, 10, 0.34),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32);
-    backdrop-filter: blur(18px) saturate(155%);
-    -webkit-backdrop-filter: blur(18px) saturate(155%);
+        0 18px 46px rgba(6, 20, 10, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
     transition:
         transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
         border-color 0.4s ease,
@@ -1842,15 +1834,15 @@ img {
     height: 3px;
     content: "";
     background: linear-gradient(90deg, transparent, var(--color-lime), var(--color-teal), transparent);
-    opacity: 0.7;
+    opacity: 0.85;
 }
 
 .subcategory-slider__card:hover {
-    border-color: rgba(198, 255, 168, 0.56);
+    border-color: rgba(255, 255, 255, 0.8);
     box-shadow:
-        0 34px 82px rgba(6, 20, 10, 0.5),
-        0 0 0 1px rgba(150, 230, 99, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.46);
+        0 28px 68px rgba(6, 20, 10, 0.34),
+        0 0 0 1px rgba(150, 230, 99, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
     transform: translateY(-8px) scale(1.02);
 }
 
@@ -1864,7 +1856,7 @@ img {
     position: absolute;
     inset: 0;
     content: "";
-    background: linear-gradient(180deg, transparent 46%, rgba(11, 30, 16, 0.55));
+    background: linear-gradient(180deg, transparent 55%, rgba(255, 255, 255, 0.35));
     pointer-events: none;
 }
 
@@ -1881,11 +1873,12 @@ img {
 
 .subcategory-slider__body {
     padding: 18px 20px 20px;
+    background: transparent;
 }
 
 .subcategory-slider__body h3 {
     margin: 0;
-    color: #f3ffe9;
+    color: #16371c;
     font-size: 1.12rem;
     font-weight: 850;
     line-height: 1.55;

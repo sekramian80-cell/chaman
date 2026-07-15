@@ -1,1 +1,0 @@
-import{j as e,S as a}from"./index-iruJRbeb.js";function i({eyebrow:s,title:r,description:n}){return e.jsxs(a,{className:"section-header",children:[e.jsx("span",{children:s}),e.jsx("h2",{children:r}),e.jsx("p",{children:n})]})}export{i as S};
