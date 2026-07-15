@@ -1,5 +1,6 @@
 import { MapPin, MapPinned, MessageCircle, Phone } from "lucide-react";
 import logoUrl from "../assets/logo-faraz.png";
+import { contactInfo } from "../content/contact.js";
 
 const locationAddress = "کرج - بلوار یادگار امام شمال - بین بلال ۶ و ۷ - مجتمع نور هشتم";
 const mapCoordinates = "35.823127306947775,50.96402704728472";
@@ -7,9 +8,9 @@ const mapEmbedUrl = `https://www.google.com/maps?q=${mapCoordinates}&z=17&output
 
 export function Footer() {
     return (
-        <footer className="site-footer">
+        <footer className="site-footer site-footer--premium">
             <div className="container site-footer__inner">
-                <div>
+                <div className="site-footer__brand">
                     <a className="brand brand--footer" href="/" aria-label="فراز چمن">
                         <img className="brand__full-logo" src={logoUrl} alt="لوگوی فراز چمن" loading="lazy" decoding="async" />
                     </a>
@@ -41,17 +42,17 @@ export function Footer() {
                 </section>
 
                 <div className="footer-contact">
-                    <a href="tel:+989123365430">
+                    <a href={`tel:${contactInfo.phone}`}>
                         <Phone size={18} />
-                        <bdi dir="ltr">۰۹۱۲۳۳۶۵۴۳۰</bdi>
+                        <bdi dir="ltr">{contactInfo.phoneDisplay}</bdi>
                     </a>
                     <span>
                         <MapPin size={18} />
-                        اجرای پروژه در تهران و کرج و سراسر کشور در کمترین زمان
+                        {contactInfo.location}
                     </span>
-                    <a href="https://wa.me/989123365430">
+                    <a href={contactInfo.whatsapp}>
                         <MessageCircle size={18} />
-                        چت واتساپ
+                        {contactInfo.whatsappLabel}
                     </a>
                 </div>
             </div>

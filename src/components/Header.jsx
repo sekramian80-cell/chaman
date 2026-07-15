@@ -79,10 +79,30 @@ export function Header({ currentPath = "/" }) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (!isMenuOpen) return undefined;
+
+        const onKeyDown = (event) => {
+            if (event.key === "Escape") closeMenu();
+        };
+
+        document.body.classList.add("nav-lock");
+        window.addEventListener("keydown", onKeyDown);
+
+        return () => {
+            document.body.classList.remove("nav-lock");
+            window.removeEventListener("keydown", onKeyDown);
+        };
+    }, [isMenuOpen]);
+
+    useEffect(() => {
+        closeMenu();
+    }, [currentPath]);
+
     return (
         <>
             <div className={`top-scroll-fade ${hasScrolled ? "top-scroll-fade--visible" : ""}`} aria-hidden="true" />
-            <header className={`site-header ${hasScrolled ? "site-header--scrolled" : ""}`}>
+            <header className={`site-header site-header--premium ${hasScrolled ? "site-header--scrolled" : ""}`}>
                 <span className="site-header__sheen" aria-hidden="true" />
                 <a className="brand" href="/" aria-label="فراز چمن" onClick={closeMenu}>
                     <span className="brand__mark" aria-hidden="true">
@@ -116,6 +136,14 @@ export function Header({ currentPath = "/" }) {
                     </button>
                 </div>
             </header>
+            {isMenuOpen ? (
+                <button
+                    type="button"
+                    className="nav-backdrop"
+                    aria-label="بستن منو"
+                    onClick={closeMenu}
+                />
+            ) : null}
         </>
     );
 }
