@@ -31,6 +31,7 @@ export function ProductCategoryPage({ categorySlug }) {
                 primaryLabel="استعلام قیمت"
                 secondaryLabel="بازگشت به محصولات"
                 secondaryHref="/products"
+                seam="wave"
             />
 
             <section className="section page-section">

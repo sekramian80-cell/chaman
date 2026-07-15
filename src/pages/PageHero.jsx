@@ -1,4 +1,5 @@
 import { ArrowLeft } from "lucide-react";
+import { SectionSeam } from "../components/SectionSeam.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
 
 export function PageHero({
@@ -9,6 +10,7 @@ export function PageHero({
     secondaryLabel,
     secondaryHref = "/projects",
     image,
+    seam = "slash",
 }) {
     const heroStyle = image ? { "--page-hero-image": `url(${image})` } : undefined;
 
@@ -35,6 +37,7 @@ export function PageHero({
                     </div>
                 </ScrollReveal>
             </div>
+            <SectionSeam variant={seam} tone="paper" className="page-hero__seam" />
         </section>
     );
 }

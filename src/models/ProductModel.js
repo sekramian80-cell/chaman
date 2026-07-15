@@ -1,6 +1,7 @@
 import defaultProductImage from '../assets/hero-artificial-grass.jpg';
 import { getSubcategoryLabel, mainCategorySlugs } from '../content/productSubcategories.js';
 import { stripHtml } from '../utils/html.js';
+import { toPersianDigits } from '../utils/persianNumber.js';
 
 function extractCategorySlugs(item) {
     const termGroups = item._embedded?.['wp:term'] || [];
@@ -39,7 +40,7 @@ function buildProductMeta(item) {
         parts.push(item.acf.product_price);
     }
 
-    return parts.join(' · ');
+    return toPersianDigits(parts.join(' · '));
 }
 
 /**
@@ -52,18 +53,19 @@ export function mapProductsFromAPI(apiItems = []) {
 
         return {
             id: item.id,
-            title: stripHtml(item.title?.rendered) || '',
-            text:
+            title: toPersianDigits(stripHtml(item.title?.rendered) || ''),
+            text: toPersianDigits(
                 item.acf?.short_description ||
-                stripHtml(item.excerpt?.rendered) ||
-                stripHtml(item.content?.rendered) ||
-                '',
+                    stripHtml(item.excerpt?.rendered) ||
+                    stripHtml(item.content?.rendered) ||
+                    '',
+            ),
             meta: buildProductMeta(item),
-            price: item.acf?.product_price || '',
+            price: toPersianDigits(item.acf?.product_price || ''),
             slug: item.slug || '',
             gallery: item.acf?.gallery || [],
             image: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || defaultProductImage,
-            imageAlt: stripHtml(item.title?.rendered) || 'پروژه چمن مصنوعی',
+            imageAlt: toPersianDigits(stripHtml(item.title?.rendered) || '') || 'پروژه چمن مصنوعی',
             categories: taxonomy.slugs,
             primaryCategory: taxonomy.primaryCategory,
             subcategory: taxonomy.subcategory,
@@ -79,6 +81,7 @@ export function filterProductsByCategory(products = [], categorySlug) {
     );
 }
 
-export function filterProductsBySubcategory(products = [], subcategorySlug) {
-    return products.filter((product) => product.subcategory === subcategorySlug);
+/** @deprecated از mapProductsFromAPI استفاده کنید */
+export function mapProducts(apiItems = []) {
+    return mapProductsFromAPI(apiItems);
 }

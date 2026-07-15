@@ -16,6 +16,7 @@ export function FAQPage() {
                 primaryLabel="پرسیدن سوال"
                 secondaryLabel="دیدن محصولات"
                 secondaryHref="/products"
+                seam="ridge"
             />
             <FAQ />
             <section className="section page-section">

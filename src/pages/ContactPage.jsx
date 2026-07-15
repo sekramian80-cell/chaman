@@ -19,6 +19,7 @@ export function ContactPage() {
                 primaryLabel="تماس تلفنی"
                 secondaryLabel="پیام در واتساپ"
                 secondaryHref="https://wa.me/989123365430"
+                seam="slash"
             />
 
             <section className="section page-section">

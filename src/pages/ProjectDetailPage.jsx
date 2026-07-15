@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, CheckCircle2, Layers, MapPin, Ruler, Sparkles } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
+import { SectionSeam } from '../components/SectionSeam.jsx';
 import { findProjectBySlug } from '../models/ProjectModel.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { toPersianOrdinal } from '../utils/persianNumber.js';
 import { getProjectDetailPath, getProjectSlugFromPath } from '../utils/routing.js';
 
 function categoryLabel(primaryCategory) {
@@ -114,6 +116,7 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                         </div>
                     </ScrollReveal>
                 </div>
+                <SectionSeam variant="slash" tone="paper" className="project-detail-hero__seam" />
             </section>
 
             <section className="section project-detail">
@@ -135,7 +138,7 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                                             className={`project-detail__thumb${index === activeIndex ? ' is-active' : ''}`}
                                             key={`${item.url}-${index}`}
                                             onClick={() => setActiveIndex(index)}
-                                            aria-label={`تصویر ${index + 1}`}
+                                            aria-label={`تصویر ${toPersianOrdinal(index)}`}
                                         >
                                             <img src={item.url} alt="" loading="lazy" decoding="async" />
                                         </button>

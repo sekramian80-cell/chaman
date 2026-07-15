@@ -19,6 +19,7 @@ export function ProductsPage() {
                 primaryLabel="استعلام قیمت"
                 secondaryLabel="مشاهده خدمات"
                 secondaryHref="/services"
+                seam="petal"
             />
             <ProductShowcase />
             {productCategoryList.map((category) => (

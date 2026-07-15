@@ -3,6 +3,7 @@ import { Hero } from '../components/Hero.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import { SubcategorySlider } from '../components/SubcategorySlider.jsx';
 import { TrustStrip } from '../components/TrustStrip.jsx';
+import { toPersianOrdinal } from '../utils/persianNumber.js';
 
 const homeHighlights = [
   'انتخاب مدل بر اساس متراژ، نور و میزان رفت‌وآمد',
@@ -28,7 +29,7 @@ export function HomePage() {
           <div className="demo-list">
             {homeHighlights.map((item, index) => (
               <ScrollReveal className="demo-row" delay={index * 80} key={item}>
-                <span>{String(index + 1).padStart(2, '0')}</span>
+                <span>{toPersianOrdinal(index)}</span>
                 <strong>{item}</strong>
               </ScrollReveal>
             ))}

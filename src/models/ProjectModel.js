@@ -4,6 +4,8 @@
 import defaultProjectImage from '../assets/hero-artificial-grass.jpg';
 import { getSubcategoryLabel, mainCategorySlugs } from '../content/productSubcategories.js';
 import { stripHtml } from '../utils/html.js';
+import { toPersianDigits } from '../utils/persianNumber.js';
+import { getProjectDetailPath, normalizeProjectKey } from '../utils/routing.js';
 
 function extractCategorySlugs(item) {
     const termGroups = item._embedded?.['wp:term'] || [];
@@ -36,7 +38,7 @@ function buildProjectMeta(item) {
     if (item.acf?.project_meta) parts.push(item.acf.project_meta);
     if (item.acf?.project_location) parts.push(item.acf.project_location);
 
-    return parts.join(' · ') || stripHtml(item.excerpt?.rendered) || '';
+    return toPersianDigits(parts.join(' · ') || stripHtml(item.excerpt?.rendered) || '');
 }
 
 function mapGallery(item, fallbackImage, fallbackAlt) {
@@ -87,8 +89,6 @@ export function findProjectBySlug(items = [], slug = '') {
     );
 }
 
-import { getProjectDetailPath, normalizeProjectKey } from '../utils/routing.js';
-
 /**
  * تبدیل داده‌های API به مدل Project
  * @param {Array<Object>} apiItems
@@ -98,26 +98,27 @@ export function mapProjectsFromAPI(apiItems = []) {
 
     return apiItems.map((item) => {
         const taxonomy = resolveProjectTaxonomy(item);
-        const title = stripHtml(item.title?.rendered) || '';
+        const title = toPersianDigits(stripHtml(item.title?.rendered) || '');
         const slug = item.slug || String(item.id);
         const image =
             item._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
             item.acf?.gallery?.[0]?.url ||
             defaultProjectImage;
         const imageAlt = title || 'نمونه کار چمن مصنوعی';
-        const contentHtml = item.content?.rendered || '';
-        const contentText = stripHtml(contentHtml);
-        const description =
+        const contentHtml = toPersianDigits(item.content?.rendered || '');
+        const contentText = toPersianDigits(stripHtml(item.content?.rendered || ''));
+        const description = toPersianDigits(
             item.acf?.short_description ||
-            stripHtml(item.excerpt?.rendered) ||
-            contentText ||
-            '';
+                stripHtml(item.excerpt?.rendered) ||
+                contentText ||
+                '',
+        );
 
         return {
             id: item.id,
             title,
             meta: buildProjectMeta(item),
-            location: item.acf?.project_location || '',
+            location: toPersianDigits(item.acf?.project_location || ''),
             description,
             contentHtml,
             contentText,

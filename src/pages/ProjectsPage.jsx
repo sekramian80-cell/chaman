@@ -3,6 +3,7 @@ import { ProjectGallery } from '../components/ProjectGallery.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import projectsHero from '../assets/hero-projects-football.jpg';
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { toPersianNumber } from '../utils/persianNumber.js';
 import { PageHero } from './PageHero.jsx';
 import { projectStats } from '../content/projects.js';
 
@@ -18,12 +19,13 @@ export function ProjectsPage() {
                 title="اجراهایی که کیفیت فراز چمن را نشان می‌دهند"
                 description={
                     count > 0
-                        ? `${count} نمونه کار واقعی از فضاهای ورزشی و تزیینی؛ انتخاب، نصب و جزئیات پایانی با دقت ثبت شده‌اند.`
+                        ? `${toPersianNumber(count)} نمونه کار واقعی از فضاهای ورزشی و تزیینی؛ انتخاب، نصب و جزئیات پایانی با دقت ثبت شده‌اند.`
                         : 'مجموعه‌ای از پروژه‌های ورزشی و تزیینی که کیفیت اجرا، دقت نصب و نتیجه نهایی را نشان می‌دهد.'
                 }
                 primaryLabel="درخواست بازدید"
                 secondaryLabel="مشاهده محصولات"
                 secondaryHref="/products"
+                seam="petal"
             />
             <ProjectGallery />
             <section className="section section--warm projects-metrics">

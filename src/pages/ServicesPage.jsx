@@ -16,6 +16,7 @@ export function ServicesPage() {
                 description="از مشاوره و انتخاب مدل تا زیرسازی، نصب و نگهداری؛ خدمات ما برای انواع فضاهای مسکونی، تجاری و ورزشی طراحی شده است."
                 primaryLabel="درخواست مشاوره"
                 secondaryLabel="دیدن نمونه اجرا"
+                seam="wave"
             />
             <Services />
             <section className="section page-section">

@@ -1,6 +1,7 @@
 import { ArrowLeft, MessageCircle, PlayCircle } from "lucide-react";
 import heroImage from "../assets/hero-football-field.jpg";
 import { heroContent, heroStats } from "../content/hero.js";
+import { SectionSeam } from "./SectionSeam.jsx";
 
 export function Hero() {
     return (
@@ -34,13 +35,13 @@ export function Hero() {
             <div className="hero__stats" aria-label="آمار کسب‌وکار">
                 {heroStats.map((stat) => (
                     <div key={stat.label}>
-                        <strong>
-                            <bdi dir="ltr">{stat.value}</bdi>
-                        </strong>
+                        <strong>{stat.value}</strong>
                         <span>{stat.label}</span>
                     </div>
                 ))}
             </div>
+
+            <SectionSeam variant="wave" tone="paper" className="hero__seam" />
         </section>
     );
 }

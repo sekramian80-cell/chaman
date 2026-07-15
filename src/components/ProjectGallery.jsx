@@ -3,6 +3,7 @@ import { useMemo, useState, useTransition } from 'react';
 import { productSubcategories } from '../content/productSubcategories.js';
 import { testimonial } from '../content/testimonial.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { toPersianNumber } from '../utils/persianNumber.js';
 import { getProjectDetailPath } from '../utils/routing.js';
 import { ScrollReveal } from './ScrollReveal.jsx';
 
@@ -63,15 +64,15 @@ export function ProjectGallery() {
                     </p>
                     <div className="projects-showcase__stats">
                         <div>
-                            <strong>{items.length || '—'}</strong>
+                            <strong>{items.length ? toPersianNumber(items.length) : '—'}</strong>
                             <span>نمونه کار</span>
                         </div>
                         <div>
-                            <strong>{sportsCount || '—'}</strong>
+                            <strong>{sportsCount ? toPersianNumber(sportsCount) : '—'}</strong>
                             <span>پروژه ورزشی</span>
                         </div>
                         <div>
-                            <strong>{decorativeCount || '—'}</strong>
+                            <strong>{decorativeCount ? toPersianNumber(decorativeCount) : '—'}</strong>
                             <span>پروژه تزیینی</span>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ import { FAQ } from "../components/FAQ.jsx";
 import { Process } from "../components/Process.jsx";
 import { ScrollReveal } from "../components/ScrollReveal.jsx";
 import processHero from "../assets/hero-process-football.jpg";
+import { toPersianOrdinal } from "../utils/persianNumber.js";
 import { PageHero } from "./PageHero.jsx";
 import { processTimeline } from "../content/process.js";
 
@@ -16,6 +17,7 @@ export function ProcessPage() {
                 description="از اولین تماس تا تحویل نهایی؛ هر مرحله شفاف و مشخص است تا با خیال راحت پروژه را پیش ببرید."
                 primaryLabel="شروع پروژه"
                 secondaryLabel="دیدن نمونه اجرا"
+                seam="ridge"
             />
             <Process />
             <section className="section page-section">
@@ -25,7 +27,7 @@ export function ProcessPage() {
 
                         return (
                             <ScrollReveal className="timeline-item" delay={index * 90} key={item.title}>
-                                <span>{String(index + 1).padStart(2, "0")}</span>
+                                <span>{toPersianOrdinal(index)}</span>
                                 <Icon size={26} />
                                 <div>
                                     <h3>{item.title}</h3>

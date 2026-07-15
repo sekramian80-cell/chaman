@@ -1,4 +1,5 @@
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { toPersianOrdinal } from '../utils/persianNumber.js';
 import { ScrollReveal } from './ScrollReveal.jsx';
 import { SectionHeader } from './SectionHeader.jsx';
 
@@ -22,7 +23,7 @@ export function Services() {
                         return (
                             <ScrollReveal className="service-card" delay={index * 80} key={service.id ?? service.title}>
                                 <div className="service-card__media">
-                                    <span className="service-card__index">{String(index + 1).padStart(2, '0')}</span>
+                                    <span className="service-card__index">{toPersianOrdinal(index)}</span>
                                     {service.tag ? <span className="service-card__tag">{service.tag}</span> : null}
                                     <img src={service.image} alt={service.imageAlt} loading="lazy" decoding="async" />
                                     <div className="service-card__icon">
