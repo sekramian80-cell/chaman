@@ -1,18 +1,20 @@
-import { ArrowLeft, MessageCircle, PlayCircle } from "lucide-react";
+import { ArrowLeft, PlayCircle } from "lucide-react";
 import heroImage from "../assets/hero-football-field.jpg";
-import { heroContent, heroStats } from "../content/hero.js";
+import { heroContent } from "../content/hero.js";
 import { SectionSeam } from "./SectionSeam.jsx";
 
 export function Hero() {
     return (
-        <section id="top" className="hero" style={{ "--hero-image": `url(${heroImage})` }}>
+        <section id="top" className="hero hero--premium" style={{ "--hero-image": `url(${heroImage})` }}>
             <div className="hero__overlay" />
+            <div className="hero__veil" aria-hidden="true" />
+
             <div className="hero__content">
                 <div className="hero__copy">
+                    <p className="hero__brand">فراز چمن</p>
                     <span className="eyebrow">{heroContent.eyebrow}</span>
                     <h1>{heroContent.title}</h1>
-                    <div className="hero__fifa-badge">{heroContent.fifaBadge}</div>
-                    <p>{heroContent.description}</p>
+                    <p className="hero__lead">{heroContent.description}</p>
                     <div className="hero__actions">
                         <a className="btn btn--primary" href={heroContent.primaryCta.href}>
                             {heroContent.primaryCta.label}
@@ -23,22 +25,10 @@ export function Hero() {
                             {heroContent.secondaryCta.label}
                         </a>
                     </div>
+                    {heroContent.fifaBadge ? (
+                        <p className="hero__note">{heroContent.fifaBadge}</p>
+                    ) : null}
                 </div>
-
-                <div className="hero__panel" aria-label="ویژگی‌های سریع">
-                    <MessageCircle size={22} />
-                    <strong>{heroContent.panel.title}</strong>
-                    <span>{heroContent.panel.subtitle}</span>
-                </div>
-            </div>
-
-            <div className="hero__stats" aria-label="آمار کسب‌وکار">
-                {heroStats.map((stat) => (
-                    <div key={stat.label}>
-                        <strong>{stat.value}</strong>
-                        <span>{stat.label}</span>
-                    </div>
-                ))}
             </div>
 
             <SectionSeam variant="wave" tone="paper" className="hero__seam" />
