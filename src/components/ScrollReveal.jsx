@@ -1,11 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function ScrollReveal({ children, className = '', delay = 0 }) {
+/**
+ * @param {'up'|'scale'|'left'|'right'} [variant]
+ */
+export function ScrollReveal({ children, className = '', delay = 0, variant = 'up' }) {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const currentElement = ref.current;
+    if (!currentElement) return undefined;
+
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (media.matches) {
+      setIsVisible(true);
+      return undefined;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -14,24 +24,20 @@ export function ScrollReveal({ children, className = '', delay = 0 }) {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.18 },
+      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' },
     );
 
-    if (currentElement) {
-      observer.observe(currentElement);
-    }
+    observer.observe(currentElement);
 
     return () => {
-      if (currentElement) {
-        observer.unobserve(currentElement);
-      }
+      observer.unobserve(currentElement);
     };
   }, []);
 
   return (
     <div
       ref={ref}
-      className={`reveal ${isVisible ? 'reveal--visible' : ''} ${className}`}
+      className={`reveal reveal--${variant} ${isVisible ? 'reveal--visible' : ''} ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}

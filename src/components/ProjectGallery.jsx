@@ -28,7 +28,7 @@ export function ProjectGallery() {
     const { projects } = useSiteContent();
     const items = projects?.items || [];
     const [activeFilter, setActiveFilter] = useState('all');
-    const [, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     const availableSubcategories = useMemo(() => {
         const used = new Set(items.map((item) => item.subcategory).filter(Boolean));
@@ -53,9 +53,9 @@ export function ProjectGallery() {
     }
 
     return (
-        <section id="projects" className="section projects-showcase">
+        <section id="projects" className="section projects-showcase projects-showcase--premium">
             <div className="container">
-                <ScrollReveal className="projects-showcase__intro">
+                <ScrollReveal className="projects-showcase__intro" variant="scale">
                     <span className="eyebrow">گالری اجرا</span>
                     <h2>هر فضا، یک داستان سبز</h2>
                     <p>
@@ -78,35 +78,45 @@ export function ProjectGallery() {
                     </div>
                 </ScrollReveal>
 
-                <div className="project-filters" role="tablist" aria-label="فیلتر نمونه کارها">
-                    {mainFilters.map((tab) => (
-                        <button
-                            type="button"
-                            className={`project-filter${activeFilter === tab.id ? ' is-active' : ''}`}
-                            key={tab.id}
-                            onClick={() => onFilter(tab.id)}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
-                    {availableSubcategories.map((item) => (
-                        <button
-                            type="button"
-                            className={`project-filter project-filter--child${activeFilter === item.slug ? ' is-active' : ''}`}
-                            key={item.slug}
-                            onClick={() => onFilter(item.slug)}
-                        >
-                            {item.label}
-                        </button>
-                    ))}
-                </div>
+                <ScrollReveal className="project-filters" delay={60}>
+                    <div role="tablist" aria-label="فیلتر نمونه کارها" className="project-filters__row">
+                        {mainFilters.map((tab) => (
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected={activeFilter === tab.id}
+                                className={`project-filter${activeFilter === tab.id ? ' is-active' : ''}`}
+                                key={tab.id}
+                                onClick={() => onFilter(tab.id)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                        {availableSubcategories.map((item) => (
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected={activeFilter === item.slug}
+                                className={`project-filter project-filter--child${activeFilter === item.slug ? ' is-active' : ''}`}
+                                key={item.slug}
+                                onClick={() => onFilter(item.slug)}
+                            >
+                                {item.label}
+                            </button>
+                        ))}
+                    </div>
+                </ScrollReveal>
 
                 {filtered.length > 0 ? (
-                    <div className="project-bento">
+                    <div
+                        className={`project-bento${isPending ? ' is-pending' : ''}`}
+                        key={activeFilter}
+                    >
                         {filtered.map((project, index) => (
                             <ScrollReveal
                                 className={tileClass(index)}
-                                delay={Math.min(index, 10) * 55}
+                                delay={Math.min(index, 8) * 70}
+                                variant={index === 0 ? 'scale' : 'up'}
                                 key={project.id ?? `${project.title}-${index}`}
                             >
                                 <a className="project-tile__link" href={projectHref(project)}>
@@ -118,6 +128,7 @@ export function ProjectGallery() {
                                                 loading={index < 3 ? 'eager' : 'lazy'}
                                                 decoding="async"
                                             />
+                                            <span className="project-tile__shine" aria-hidden="true" />
                                         </div>
                                         <div className="project-tile__overlay">
                                             <div className="project-tile__labels">
@@ -150,7 +161,7 @@ export function ProjectGallery() {
                     </ScrollReveal>
                 )}
 
-                <ScrollReveal className="testimonial projects-showcase__testimonial">
+                <ScrollReveal className="testimonial projects-showcase__testimonial" delay={100} variant="left">
                     <Quote size={34} />
                     <p>{testimonial.quote}</p>
                     <div>
