@@ -10,12 +10,12 @@ export function ProjectsPage() {
         <>
             <PageHero
                 image={projectsHero}
-                eyebrow="صفحه نمونه کار"
-                title="نمونه پروژه‌های اجرا شده و کیفیت کار ما"
-                description="مجموعه‌ای از پروژه‌ها، متراژها و کاربردهای مختلف که کیفیت و دقت اجرای ما را نشان می‌دهد."
+                eyebrow="صفحه نمونه کارها"
+                title="نمونه کارهای اجرا شده و کیفیت کار ما"
+                description="مجموعه‌ای از پروژه‌های واقعی در کاربردهای ورزشی و تزیینی که کیفیت و دقت اجرای ما را نشان می‌دهد."
                 primaryLabel="درخواست بازدید"
-                secondaryLabel="مشاهده خدمات"
-                secondaryHref="/services"
+                secondaryLabel="مشاهده محصولات"
+                secondaryHref="/products"
             />
             <ProjectGallery />
             <section className="section section--warm">

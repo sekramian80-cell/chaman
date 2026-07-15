@@ -23,7 +23,7 @@ export const navItems = [
         href: "/process",
         path: "/process",
     },
-    { id: 5, label: "نمونه کار", href: "/projects", path: "/projects" },
+    { id: 5, label: "نمونه کارها", href: "/projects", path: "/projects" },
     { id: 6, label: "تماس با ما", href: "/contact", path: "/contact" },
 ];
 
