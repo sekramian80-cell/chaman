@@ -40,5 +40,34 @@ export function isNavItemActive(item, currentPath) {
  */
 export function mapMenuFromAPI(apiItems = []) {
     const items = mapMenuTree(apiItems);
-    return items.length ? items : navItems;
+    return ensureProjectsNavItem(items.length ? items : navItems);
+}
+
+/**
+ * مطمئن می‌شود آیتم «نمونه کارها» در منو باشد
+ */
+export function ensureProjectsNavItem(items = []) {
+    const list = items.map((item) => {
+        if (item.path === '/projects' || item.label?.includes('نمونه کار')) {
+            return { ...item, label: 'نمونه کارها', href: '/projects', path: '/projects' };
+        }
+        return item;
+    });
+
+    const hasProjects = list.some((item) => item.path === '/projects');
+    if (hasProjects) return list;
+
+    const contactIndex = list.findIndex((item) => item.path === '/contact');
+    const projectsItem = {
+        id: 'nav-projects',
+        label: 'نمونه کارها',
+        href: '/projects',
+        path: '/projects',
+    };
+
+    if (contactIndex >= 0) {
+        return [...list.slice(0, contactIndex), projectsItem, ...list.slice(contactIndex)];
+    }
+
+    return [...list, projectsItem];
 }

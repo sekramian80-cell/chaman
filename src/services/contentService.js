@@ -1,7 +1,7 @@
 /**
  * محتوای محلی (fallback) و دریافت داده از وردپرس
  */
-import { navItems } from '../content/navigation.js';
+import { ensureProjectsNavItem, navItems } from '../content/navigation.js';
 import { heroContent, heroStats } from '../content/hero.js';
 import { services, servicePlans, serviceChecklist } from '../content/services.js';
 import { productCategoryConfig } from '../content/productCategories.js';
@@ -17,13 +17,12 @@ import { mapFaqsFromAPI } from '../models/FaqModel.js';
 import { filterProductsByCategory, mapProductsFromAPI } from '../models/ProductModel.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
-import { mapMenuTree } from '../models/MenuItemModel.js';
 import { fetchNavigationMenu } from './menuService.js';
 import { getCustomPosts } from './wordpress.js';
 
 export function getLocalContent() {
     return {
-        navigation: { items: navItems },
+        navigation: { items: ensureProjectsNavItem(navItems) },
         hero: { content: heroContent, stats: heroStats },
         services: { items: services, plans: servicePlans, checklist: serviceChecklist },
         products: {
@@ -97,7 +96,7 @@ export async function fetchSiteContent() {
     return {
         ...local,
         navigation: {
-            items: menuItems.length ? menuItems : local.navigation.items,
+            items: ensureProjectsNavItem(menuItems.length ? menuItems : local.navigation.items),
         },
         services: {
             ...local.services,
