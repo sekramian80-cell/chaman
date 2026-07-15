@@ -5,26 +5,48 @@
 const PROJECT_DETAIL_RE = /^\/projects\/([^/]+)\/?$/;
 
 /**
+ * decode امن برای بخش اسلاگ URL
+ */
+export function safeDecodeURIComponent(value = '') {
+    if (!value) return '';
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return value;
+    }
+}
+
+/**
+ * نرمال‌سازی اسلاگ برای مقایسه
+ */
+export function normalizeProjectKey(value = '') {
+    return safeDecodeURIComponent(String(value)).trim().toLowerCase();
+}
+
+/**
  * @param {string} pathname
  * @param {Record<string, import('react').ComponentType>} staticRoutes
  * @param {import('react').ComponentType} ProjectDetailPage
  * @param {import('react').ComponentType} HomePage
  */
 export function resolveRoute(pathname, staticRoutes, ProjectDetailPage, HomePage) {
-    if (staticRoutes[pathname]) {
-        return { path: pathname, Page: staticRoutes[pathname], params: {} };
+    const path = pathname || '/';
+
+    if (staticRoutes[path]) {
+        return { path, Page: staticRoutes[path], params: {}, isProjectDetail: false };
     }
 
-    const projectMatch = pathname.match(PROJECT_DETAIL_RE);
+    const projectMatch = path.match(PROJECT_DETAIL_RE);
     if (projectMatch) {
         return {
-            path: pathname,
+            path,
             Page: ProjectDetailPage,
-            params: { slug: decodeURIComponent(projectMatch[1]) },
+            params: { slug: safeDecodeURIComponent(projectMatch[1]) },
+            isProjectDetail: true,
         };
     }
 
-    return { path: '/', Page: HomePage, params: {} };
+    return { path: '/', Page: HomePage, params: {}, isProjectDetail: false };
 }
 
 /**
@@ -35,9 +57,19 @@ export function isProjectDetailPath(pathname = '') {
 }
 
 /**
- * استخراج اسلاگ نمونه کار از مسیر
+ * استخراج اسلاگ/شناسه نمونه کار از مسیر
  */
 export function getProjectSlugFromPath(pathname = '') {
     const match = pathname.match(PROJECT_DETAIL_RE);
-    return match ? decodeURIComponent(match[1]) : '';
+    return match ? safeDecodeURIComponent(match[1]) : '';
+}
+
+/**
+ * ساخت مسیر جزئیات نمونه کار
+ */
+export function getProjectDetailPath(project) {
+    if (!project) return '/projects';
+    const key = project.slug || project.id;
+    if (!key && key !== 0) return '/projects';
+    return `/projects/${encodeURIComponent(String(key))}`;
 }

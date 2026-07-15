@@ -1,6 +1,7 @@
 /**
  * ساخت مسیر بردکرامب بر اساس URL و داده محتوا
  */
+import { findProjectBySlug } from '../models/ProjectModel.js';
 import { getProjectSlugFromPath, isProjectDetailPath } from './routing.js';
 
 const pathLabels = {
@@ -20,21 +21,19 @@ const pathLabels = {
  * @param {{ projects?: { items?: Array<{ slug?: string, id?: number|string, title?: string }> } }} [content]
  */
 export function buildBreadcrumbs(currentPath, content = {}) {
-    const crumbs = [{ label: 'خانه', href: '/' }];
-
     if (!currentPath || currentPath === '/') {
-        return crumbs;
+        return [];
     }
+
+    const crumbs = [{ label: 'خانه', href: '/' }];
 
     if (isProjectDetailPath(currentPath)) {
         const slug = getProjectSlugFromPath(currentPath);
-        const project = (content.projects?.items || []).find(
-            (item) => item.slug === slug || String(item.id) === slug,
-        );
+        const project = findProjectBySlug(content.projects?.items || [], slug);
 
         crumbs.push({ label: 'نمونه کارها', href: '/projects' });
         crumbs.push({
-            label: project?.title || 'جزئیات پروژه',
+            label: project?.title || slug || 'جزئیات پروژه',
             href: currentPath,
         });
         return crumbs;

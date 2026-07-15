@@ -67,15 +67,35 @@ function mapGallery(item, fallbackImage, fallbackAlt) {
  * پیدا کردن پروژه با اسلاگ یا id
  */
 export function findProjectBySlug(items = [], slug = '') {
-    if (!slug) return null;
-    return items.find((item) => item.slug === slug || String(item.id) === slug) || null;
+    if (slug === undefined || slug === null || slug === '') return null;
+
+    const raw = String(slug).trim();
+    const normalized = normalizeProjectKey(raw);
+
+    return (
+        items.find((item) => {
+            const itemSlug = String(item.slug || '').trim();
+            const itemId = String(item.id ?? '');
+
+            return (
+                itemSlug === raw ||
+                itemId === raw ||
+                normalizeProjectKey(itemSlug) === normalized ||
+                normalizeProjectKey(itemId) === normalized
+            );
+        }) || null
+    );
 }
+
+import { getProjectDetailPath, normalizeProjectKey } from '../utils/routing.js';
 
 /**
  * تبدیل داده‌های API به مدل Project
  * @param {Array<Object>} apiItems
  */
 export function mapProjectsFromAPI(apiItems = []) {
+    if (!Array.isArray(apiItems)) return [];
+
     return apiItems.map((item) => {
         const taxonomy = resolveProjectTaxonomy(item);
         const title = stripHtml(item.title?.rendered) || '';
@@ -105,7 +125,7 @@ export function mapProjectsFromAPI(apiItems = []) {
             imageAlt,
             gallery: mapGallery(item, image, imageAlt),
             slug,
-            href: `/projects/${slug}`,
+            href: getProjectDetailPath({ slug, id: item.id }),
             primaryCategory: taxonomy.primaryCategory,
             subcategory: taxonomy.subcategory,
             subcategoryLabel: taxonomy.subcategoryLabel,

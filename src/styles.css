@@ -2025,12 +2025,6 @@ img {
     color: rgba(198, 255, 168, 0.55);
 }
 
-.site-breadcrumb--home .site-breadcrumb__list {
-    background:
-        linear-gradient(155deg, rgba(255, 255, 255, 0.1), rgba(18, 48, 24, 0.28)),
-        rgba(10, 28, 14, 0.4);
-}
-
 .project-detail-hero {
     position: relative;
     min-height: 620px;

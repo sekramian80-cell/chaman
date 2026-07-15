@@ -4,6 +4,7 @@ import { ContactCTA } from '../components/ContactCTA.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import { findProjectBySlug } from '../models/ProjectModel.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { getProjectDetailPath, getProjectSlugFromPath } from '../utils/routing.js';
 
 function categoryLabel(primaryCategory) {
     if (primaryCategory === 'sports') return 'ورزشی';
@@ -28,9 +29,10 @@ function ProjectNotFound() {
     );
 }
 
-export function ProjectDetailPage({ slug = '' }) {
+export function ProjectDetailPage({ slug: slugProp = '' }) {
     const { projects } = useSiteContent();
     const items = projects?.items || [];
+    const slug = slugProp || getProjectSlugFromPath(window.location.pathname);
     const project = findProjectBySlug(items, slug);
 
     const gallery = useMemo(() => {
@@ -208,7 +210,7 @@ export function ProjectDetailPage({ slug = '' }) {
                                     delay={index * 70}
                                     key={item.slug || item.id}
                                 >
-                                    <a href={item.href || `/projects/${item.slug}`}>
+                                    <a href={item.href || getProjectDetailPath(item)}>
                                         <img
                                             src={item.image}
                                             alt={item.imageAlt || item.title}

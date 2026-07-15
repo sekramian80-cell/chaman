@@ -5,10 +5,13 @@ import { useSiteContent } from '../hooks/useSiteContent.js';
 export function Breadcrumbs({ currentPath = '/' }) {
     const content = useSiteContent();
     const crumbs = buildBreadcrumbs(currentPath, content);
-    const isHomeOnly = crumbs.length === 1;
+
+    if (!crumbs.length) {
+        return null;
+    }
 
     return (
-        <nav className={`site-breadcrumb${isHomeOnly ? ' site-breadcrumb--home' : ''}`} aria-label="مسیر صفحه">
+        <nav className="site-breadcrumb" aria-label="مسیر صفحه">
             <div className="container site-breadcrumb__inner">
                 <ol className="site-breadcrumb__list">
                     {crumbs.map((crumb, index) => {

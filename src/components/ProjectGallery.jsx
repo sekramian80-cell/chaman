@@ -3,10 +3,11 @@ import { useMemo, useState, useTransition } from 'react';
 import { productSubcategories } from '../content/productSubcategories.js';
 import { testimonial } from '../content/testimonial.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { getProjectDetailPath } from '../utils/routing.js';
 import { ScrollReveal } from './ScrollReveal.jsx';
 
 function projectHref(project) {
-    return project.href || (project.slug ? `/projects/${project.slug}` : `/projects/${project.id}`);
+    return project.href || getProjectDetailPath(project);
 }
 
 const mainFilters = [

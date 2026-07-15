@@ -4,7 +4,7 @@ import { Footer } from "./components/Footer.jsx";
 import { Header } from "./components/Header.jsx";
 import { LoadingSpinner } from "./components/LoadingSpinner.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
-import { resolveRoute } from "./utils/routing.js";
+import { getProjectSlugFromPath, isProjectDetailPath, resolveRoute } from "./utils/routing.js";
 
 const pageLoaders = {
     "/services": () => import("./pages/ServicesPage.jsx"),
@@ -50,8 +50,18 @@ function resolveCurrentRoute() {
     return resolveRoute(window.location.pathname, staticRoutes, ProjectDetailPage, HomePage);
 }
 
+function toAppPath(href) {
+    try {
+        const url = new URL(href, window.location.origin);
+        if (url.origin !== window.location.origin) return null;
+        return `${url.pathname}${url.search}${url.hash}` || "/";
+    } catch {
+        return null;
+    }
+}
+
 export default function App() {
-    const [route, setRoute] = useState(resolveCurrentRoute);
+    const [route, setRoute] = useState(() => resolveCurrentRoute());
 
     useEffect(() => {
         const handleRouteChange = () => {
@@ -77,8 +87,11 @@ export default function App() {
 
             if (link.target === "_blank") return;
 
+            const nextPath = toAppPath(href);
+            if (!nextPath) return;
+
             e.preventDefault();
-            history.pushState(null, "", href);
+            history.pushState(null, "", nextPath);
             handleRouteChange();
         };
 
@@ -93,7 +106,7 @@ export default function App() {
                 return;
             }
 
-            if (/^\/projects\/[^/]+\/?$/.test(pathname)) {
+            if (isProjectDetailPath(pathname)) {
                 void pageLoaders["/projects/:slug"]().catch(() => {});
             }
         };
@@ -111,19 +124,25 @@ export default function App() {
         };
     }, []);
 
-    const { path: currentPath, Page, params } = route;
+    const { path: currentPath, Page, params, isProjectDetail } = route;
+    const projectSlug = params?.slug || (isProjectDetail ? getProjectSlugFromPath(currentPath) : "");
     const pageKey = useMemo(
-        () => (params.slug ? `${currentPath}:${params.slug}` : currentPath),
-        [currentPath, params.slug],
+        () => (projectSlug ? `project:${projectSlug}` : currentPath),
+        [currentPath, projectSlug],
     );
+    const showBreadcrumbs = currentPath !== "/";
 
     return (
         <>
             <Header currentPath={currentPath} />
-            <Breadcrumbs currentPath={currentPath} />
+            {showBreadcrumbs ? <Breadcrumbs currentPath={currentPath} /> : null}
             <main className="page-router" key={pageKey}>
                 <Suspense fallback={<LoadingSpinner />}>
-                    <Page {...params} />
+                    {isProjectDetail ? (
+                        <ProjectDetailPage slug={projectSlug} />
+                    ) : (
+                        <Page />
+                    )}
                 </Suspense>
             </main>
             <Footer />
