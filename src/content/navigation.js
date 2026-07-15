@@ -32,7 +32,24 @@ export const navItems = [
  */
 export function isNavItemActive(item, currentPath) {
     if (currentPath === item.path) return true;
-    return item.children?.some((child) => child.path === currentPath) ?? false;
+    if (item.path && item.path !== '/' && currentPath.startsWith(`${item.path}/`)) return true;
+    return (
+        item.children?.some(
+            (child) =>
+                child.path === currentPath ||
+                (child.path && currentPath.startsWith(`${child.path}/`)),
+        ) ?? false
+    );
+}
+
+/**
+ * آیا لینک منو برای مسیر فعلی فعال است؟
+ */
+export function isNavLinkActive(path, currentPath) {
+    if (!path) return false;
+    if (currentPath === path) return true;
+    if (path !== '/' && currentPath.startsWith(`${path}/`)) return true;
+    return false;
 }
 
 /**

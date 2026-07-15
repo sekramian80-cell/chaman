@@ -1,8 +1,10 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { Breadcrumbs } from "./components/Breadcrumbs.jsx";
 import { Footer } from "./components/Footer.jsx";
 import { Header } from "./components/Header.jsx";
 import { LoadingSpinner } from "./components/LoadingSpinner.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
+import { resolveRoute } from "./utils/routing.js";
 
 const pageLoaders = {
     "/services": () => import("./pages/ServicesPage.jsx"),
@@ -11,6 +13,7 @@ const pageLoaders = {
     "/products/decorative": () => import("./pages/ProductCategoryPage.jsx"),
     "/process": () => import("./pages/ProcessPage.jsx"),
     "/projects": () => import("./pages/ProjectsPage.jsx"),
+    "/projects/:slug": () => import("./pages/ProjectDetailPage.jsx"),
     "/faq": () => import("./pages/FAQPage.jsx"),
     "/contact": () => import("./pages/ContactPage.jsx"),
 };
@@ -25,10 +28,13 @@ const ProductDecorativePage = lazy(() =>
 );
 const ProcessPage = lazy(() => pageLoaders["/process"]().then((m) => ({ default: m.ProcessPage })));
 const ProjectsPage = lazy(() => pageLoaders["/projects"]().then((m) => ({ default: m.ProjectsPage })));
+const ProjectDetailPage = lazy(() =>
+    pageLoaders["/projects/:slug"]().then((m) => ({ default: m.ProjectDetailPage })),
+);
 const FAQPage = lazy(() => pageLoaders["/faq"]().then((m) => ({ default: m.FAQPage })));
 const ContactPage = lazy(() => pageLoaders["/contact"]().then((m) => ({ default: m.ContactPage })));
 
-const routes = {
+const staticRoutes = {
     "/": HomePage,
     "/services": ServicesPage,
     "/products": ProductsPage,
@@ -40,16 +46,16 @@ const routes = {
     "/contact": ContactPage,
 };
 
-function getCurrentPath() {
-    return routes[window.location.pathname] ? window.location.pathname : "/";
+function resolveCurrentRoute() {
+    return resolveRoute(window.location.pathname, staticRoutes, ProjectDetailPage, HomePage);
 }
 
 export default function App() {
-    const [currentPath, setCurrentPath] = useState(getCurrentPath);
+    const [route, setRoute] = useState(resolveCurrentRoute);
 
     useEffect(() => {
         const handleRouteChange = () => {
-            setCurrentPath(getCurrentPath());
+            setRoute(resolveCurrentRoute());
             window.scrollTo({ top: 0, behavior: "auto" });
         };
 
@@ -82,8 +88,14 @@ export default function App() {
             if (!href?.startsWith("/")) return;
 
             const pathname = new URL(href, window.location.origin).pathname;
-            const preloadPage = pageLoaders[pathname];
-            if (preloadPage) void preloadPage().catch(() => {});
+            if (pageLoaders[pathname]) {
+                void pageLoaders[pathname]().catch(() => {});
+                return;
+            }
+
+            if (/^\/projects\/[^/]+\/?$/.test(pathname)) {
+                void pageLoaders["/projects/:slug"]().catch(() => {});
+            }
         };
 
         document.addEventListener("click", handleLinkClick);
@@ -99,14 +111,19 @@ export default function App() {
         };
     }, []);
 
-    const Page = useMemo(() => routes[currentPath] ?? HomePage, [currentPath]);
+    const { path: currentPath, Page, params } = route;
+    const pageKey = useMemo(
+        () => (params.slug ? `${currentPath}:${params.slug}` : currentPath),
+        [currentPath, params.slug],
+    );
 
     return (
         <>
             <Header currentPath={currentPath} />
-            <main className="page-router" key={currentPath}>
+            <Breadcrumbs currentPath={currentPath} />
+            <main className="page-router" key={pageKey}>
                 <Suspense fallback={<LoadingSpinner />}>
-                    <Page />
+                    <Page {...params} />
                 </Suspense>
             </main>
             <Footer />

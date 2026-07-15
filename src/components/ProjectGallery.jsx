@@ -5,6 +5,10 @@ import { testimonial } from '../content/testimonial.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
 import { ScrollReveal } from './ScrollReveal.jsx';
 
+function projectHref(project) {
+    return project.href || (project.slug ? `/projects/${project.slug}` : `/projects/${project.id}`);
+}
+
 const mainFilters = [
     { id: 'all', label: 'همه' },
     { id: 'sports', label: 'ورزشی' },
@@ -103,31 +107,37 @@ export function ProjectGallery() {
                                 delay={Math.min(index, 10) * 55}
                                 key={project.id ?? `${project.title}-${index}`}
                             >
-                                <article className="project-tile__inner">
-                                    <div className="project-tile__media">
-                                        <img
-                                            src={project.image}
-                                            alt={project.imageAlt || project.title}
-                                            loading={index < 3 ? 'eager' : 'lazy'}
-                                            decoding="async"
-                                        />
-                                    </div>
-                                    <div className="project-tile__overlay">
-                                        <div className="project-tile__labels">
-                                            {project.subcategoryLabel ? (
-                                                <span>{project.subcategoryLabel}</span>
-                                            ) : null}
-                                            {project.primaryCategory === 'sports' ? (
-                                                <span className="project-tile__chip">ورزشی</span>
-                                            ) : project.primaryCategory === 'decorative' ? (
-                                                <span className="project-tile__chip">تزیینی</span>
-                                            ) : null}
+                                <a className="project-tile__link" href={projectHref(project)}>
+                                    <article className="project-tile__inner">
+                                        <div className="project-tile__media">
+                                            <img
+                                                src={project.image}
+                                                alt={project.imageAlt || project.title}
+                                                loading={index < 3 ? 'eager' : 'lazy'}
+                                                decoding="async"
+                                            />
                                         </div>
-                                        <h3>{project.title}</h3>
-                                        {project.meta ? <small>{project.meta}</small> : null}
-                                        {project.description ? <p>{project.description}</p> : null}
-                                    </div>
-                                </article>
+                                        <div className="project-tile__overlay">
+                                            <div className="project-tile__labels">
+                                                {project.subcategoryLabel ? (
+                                                    <span>{project.subcategoryLabel}</span>
+                                                ) : null}
+                                                {project.primaryCategory === 'sports' ? (
+                                                    <span className="project-tile__chip">ورزشی</span>
+                                                ) : project.primaryCategory === 'decorative' ? (
+                                                    <span className="project-tile__chip">تزیینی</span>
+                                                ) : null}
+                                            </div>
+                                            <h3>{project.title}</h3>
+                                            {project.meta ? <small>{project.meta}</small> : null}
+                                            {project.description ? <p>{project.description}</p> : null}
+                                            <span className="project-tile__cta">
+                                                مشاهده جزئیات
+                                                <ArrowLeft size={15} />
+                                            </span>
+                                        </div>
+                                    </article>
+                                </a>
                             </ScrollReveal>
                         ))}
                     </div>

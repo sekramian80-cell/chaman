@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import logoUrl from "../assets/logo-faraz-mark.png";
-import { isNavItemActive } from "../content/navigation.js";
+import { isNavItemActive, isNavLinkActive } from "../content/navigation.js";
 import { useSiteContent } from "../hooks/useSiteContent.js";
 
 function NavItem({ item, currentPath, closeMenu }) {
@@ -16,7 +16,7 @@ function NavItem({ item, currentPath, closeMenu }) {
     if (!hasChildren) {
         return (
             <a
-                className={currentPath === item.path ? "main-nav__link--active" : ""}
+                className={isNavLinkActive(item.path, currentPath) ? "main-nav__link--active" : ""}
                 href={item.href}
                 onClick={closeMenu}
             >
@@ -48,7 +48,7 @@ function NavItem({ item, currentPath, closeMenu }) {
             <div className="main-nav__submenu">
                 {item.children.map((child) => (
                     <a
-                        className={currentPath === child.path ? "main-nav__link--active" : ""}
+                        className={isNavLinkActive(child.path, currentPath) ? "main-nav__link--active" : ""}
                         key={child.href}
                         href={child.href}
                         onClick={closeMenu}

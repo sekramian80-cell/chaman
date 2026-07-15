@@ -39,6 +39,38 @@ function buildProjectMeta(item) {
     return parts.join(' · ') || stripHtml(item.excerpt?.rendered) || '';
 }
 
+function mapGallery(item, fallbackImage, fallbackAlt) {
+    const raw = item.acf?.gallery;
+
+    if (Array.isArray(raw) && raw.length) {
+        return raw
+            .map((entry) => {
+                if (typeof entry === 'string') {
+                    return { url: entry, alt: fallbackAlt };
+                }
+                if (entry?.url) {
+                    return { url: entry.url, alt: entry.alt || fallbackAlt };
+                }
+                return null;
+            })
+            .filter(Boolean);
+    }
+
+    if (fallbackImage) {
+        return [{ url: fallbackImage, alt: fallbackAlt }];
+    }
+
+    return [];
+}
+
+/**
+ * پیدا کردن پروژه با اسلاگ یا id
+ */
+export function findProjectBySlug(items = [], slug = '') {
+    if (!slug) return null;
+    return items.find((item) => item.slug === slug || String(item.id) === slug) || null;
+}
+
 /**
  * تبدیل داده‌های API به مدل Project
  * @param {Array<Object>} apiItems
@@ -46,23 +78,34 @@ function buildProjectMeta(item) {
 export function mapProjectsFromAPI(apiItems = []) {
     return apiItems.map((item) => {
         const taxonomy = resolveProjectTaxonomy(item);
+        const title = stripHtml(item.title?.rendered) || '';
+        const slug = item.slug || String(item.id);
+        const image =
+            item._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+            item.acf?.gallery?.[0]?.url ||
+            defaultProjectImage;
+        const imageAlt = title || 'نمونه کار چمن مصنوعی';
+        const contentHtml = item.content?.rendered || '';
+        const contentText = stripHtml(contentHtml);
+        const description =
+            item.acf?.short_description ||
+            stripHtml(item.excerpt?.rendered) ||
+            contentText ||
+            '';
 
         return {
             id: item.id,
-            title: stripHtml(item.title?.rendered) || '',
+            title,
             meta: buildProjectMeta(item),
-            description:
-                item.acf?.short_description ||
-                stripHtml(item.excerpt?.rendered) ||
-                stripHtml(item.content?.rendered) ||
-                '',
-            image:
-                item._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-                item.acf?.gallery?.[0]?.url ||
-                defaultProjectImage,
-            imageAlt: stripHtml(item.title?.rendered) || 'نمونه کار چمن مصنوعی',
-            gallery: item.acf?.gallery || [],
-            slug: item.slug || '',
+            location: item.acf?.project_location || '',
+            description,
+            contentHtml,
+            contentText,
+            image,
+            imageAlt,
+            gallery: mapGallery(item, image, imageAlt),
+            slug,
+            href: `/projects/${slug}`,
             primaryCategory: taxonomy.primaryCategory,
             subcategory: taxonomy.subcategory,
             subcategoryLabel: taxonomy.subcategoryLabel,
