@@ -4,15 +4,15 @@ import afterImage from '../assets/hero-artificial-grass.jpg';
 import { ExperienceShell } from '../components/experience/ExperienceShell.jsx';
 import { ExperienceHero } from '../components/experience/ExperienceHero.jsx';
 import { PulseRibbon } from '../components/experience/PulseRibbon.jsx';
-import { LiquidMorph } from '../components/experience/LiquidMorph.jsx';
+import { TerrainBridge } from '../components/experience/TerrainBridge.jsx';
 import { FloatingIslands } from '../components/experience/FloatingIslands.jsx';
 import { PinnedNarrative } from '../components/experience/PinnedNarrative.jsx';
 import { DramaticStats } from '../components/experience/DramaticStats.jsx';
 import { ImageStack } from '../components/experience/ImageStack.jsx';
+import { MorphReveal } from '../components/experience/MorphReveal.jsx';
+import { FinaleDissolve } from '../components/experience/FinaleDissolve.jsx';
 import { OrbitCTA } from '../components/experience/OrbitCTA.jsx';
 import { ElasticButton } from '../components/experience/ElasticButton.jsx';
-import { BeforeAfter } from '../components/luxury/BeforeAfter.jsx';
-import { LineReveal } from '../components/experience/TextChoreography.jsx';
 import { heroContent, heroStats } from '../content/hero.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
 import { ArrowLeft } from 'lucide-react';
@@ -43,14 +43,16 @@ export function HomePage() {
 
     return (
         <ExperienceShell>
-            <div className="exp-home">
+            <div className="exp-home exp-continuum">
                 <ExperienceHero />
 
+                <TerrainBridge variant="ridge" />
                 <PulseRibbon items={pulseItems} />
-                <LiquidMorph />
 
+                <TerrainBridge variant="dune" invert />
                 <FloatingIslands items={trustList} />
 
+                <TerrainBridge variant="canyon" />
                 <PinnedNarrative
                     image={villaImage}
                     imageAlt="حیاط ویلایی با چمن مصنوعی"
@@ -58,13 +60,12 @@ export function HomePage() {
                     panel={heroContent.panel}
                 />
 
+                <TerrainBridge variant="mist" invert />
                 <DramaticStats stats={heroStats} />
 
-                <section className="exp-gallery">
-                    <div className="container exp-gallery__head">
-                        <span className="exp-kicker">۰۵ — گالری</span>
-                        <h2>پروژه‌هایی که فضا را دوباره می‌نویسند</h2>
-                        <p>هر کارت یک لحظه — با اسکرول، تصاویر روی هم می‌نشینند.</p>
+                <div className="exp-gallery">
+                    <div className="exp-gallery__whisper container">
+                        <p>هر پروژه، یک لایه از معماری بیرونی</p>
                     </div>
                     <ImageStack items={projectItems} />
                     <div className="container exp-gallery__cta">
@@ -73,44 +74,18 @@ export function HomePage() {
                             <ArrowLeft size={17} />
                         </ElasticButton>
                     </div>
-                </section>
+                </div>
 
-                <section className="exp-transform">
-                    <div className="container exp-transform__grid">
-                        <LineReveal>
-                            <span className="exp-kicker">۰۶ — تحول</span>
-                            <h2>قبل و بعد را لمس کنید</h2>
-                            <p>اسلایدر را بکشید — تفاوت سطح خام با اجرای نهایی را ببینید.</p>
-                        </LineReveal>
-                        <div className="exp-transform__compare">
-                            <BeforeAfter
-                                beforeSrc={beforeImage}
-                                afterSrc={afterImage}
-                                beforeLabel="قبل"
-                                afterLabel="بعد"
-                                className="exp-compare"
-                            />
-                        </div>
-                    </div>
-                </section>
+                <TerrainBridge variant="ridge" invert />
+                <MorphReveal
+                    beforeSrc={beforeImage}
+                    afterSrc={afterImage}
+                    beforeLabel="قبل"
+                    afterLabel="بعد"
+                />
 
-                <section className="exp-finale">
-                    <div className="exp-finale__aurora" aria-hidden="true" />
-                    <LineReveal className="exp-finale__panel container">
-                        <span className="exp-kicker">۰۷ — شروع</span>
-                        <h2>فضای شما آماده یک سطح سبز ماندگار است؟</h2>
-                        <p>متراژ و چند عکس بفرستید تا پیشنهاد مدل و بازه قیمت دقیق‌تری دریافت کنید.</p>
-                        <div className="exp-finale__actions">
-                            <ElasticButton className="exp-btn exp-btn--primary" href="tel:+989123365430">
-                                تماس مستقیم
-                                <ArrowLeft size={17} />
-                            </ElasticButton>
-                            <ElasticButton className="exp-btn exp-btn--ghost" href="https://wa.me/989123365430" glow={false}>
-                                پیام در واتساپ
-                            </ElasticButton>
-                        </div>
-                    </LineReveal>
-                </section>
+                <TerrainBridge variant="dune" />
+                <FinaleDissolve />
 
                 <OrbitCTA />
             </div>

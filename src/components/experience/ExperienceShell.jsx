@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { AuroraMesh } from './AuroraMesh.jsx';
 import { CustomCursor } from './CustomCursor.jsx';
+import { JourneyProgress } from './JourneyProgress.jsx';
+import { ScrollAtmosphere } from './ScrollAtmosphere.jsx';
 
 export function ExperienceShell({ children }) {
     useEffect(() => {
@@ -10,7 +12,9 @@ export function ExperienceShell({ children }) {
 
     return (
         <div className="exp-root">
+            <ScrollAtmosphere />
             <AuroraMesh className="exp-aurora--global" />
+            <JourneyProgress />
             <CustomCursor />
             {children}
         </div>

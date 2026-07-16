@@ -5,6 +5,9 @@ import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion.js'
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Magnitude — oversized numbers that bloom with scroll, not a stats row
+ */
 export function DramaticStats({ stats = [] }) {
     const rootRef = useRef(null);
     const reduced = usePrefersReducedMotion();
@@ -13,24 +16,65 @@ export function DramaticStats({ stats = [] }) {
         if (reduced || !rootRef.current) return undefined;
 
         const ctx = gsap.context(() => {
+            gsap.fromTo(
+                '.exp-stats__horizon',
+                { scaleX: 0 },
+                {
+                    scaleX: 1,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: rootRef.current,
+                        start: 'top 80%',
+                        end: 'top 35%',
+                        scrub: true,
+                    },
+                },
+            );
+
             gsap.utils.toArray('.exp-stat').forEach((stat, index) => {
                 gsap.fromTo(
                     stat,
-                    { y: 80, opacity: 0, scale: 0.88 },
+                    { y: 120, opacity: 0, rotateX: -28 },
                     {
                         y: 0,
                         opacity: 1,
-                        scale: 1,
-                        duration: 1,
-                        delay: index * 0.12,
-                        ease: 'power3.out',
+                        rotateX: 0,
+                        ease: 'none',
                         scrollTrigger: {
                             trigger: stat,
-                            start: 'top 88%',
-                            toggleActions: 'play none none reverse',
+                            start: 'top 92%',
+                            end: 'top 55%',
+                            scrub: 0.7,
                         },
                     },
                 );
+
+                gsap.fromTo(
+                    stat.querySelector('strong'),
+                    { letterSpacing: '0.18em', scale: 0.88 },
+                    {
+                        letterSpacing: '-0.04em',
+                        scale: 1,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: stat,
+                            start: 'top 85%',
+                            end: 'top 45%',
+                            scrub: true,
+                        },
+                    },
+                );
+
+                gsap.to(stat, {
+                    y: (index - 1) * -24,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: rootRef.current,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true,
+                    },
+                });
             });
         }, rootRef);
 
@@ -39,14 +83,11 @@ export function DramaticStats({ stats = [] }) {
 
     return (
         <section className="exp-stats" ref={rootRef}>
-            <div className="container">
-                <span className="exp-kicker">۰۴ — اعداد</span>
-                <h2>نتیجه‌ای که قابل لمس است</h2>
-            </div>
-            <div className="exp-stats__row">
+            <div className="exp-stats__horizon" aria-hidden="true" />
+            <div className="exp-stats__constellation">
                 {stats.map((stat) => (
                     <article className="exp-stat" key={stat.id}>
-                        <strong data-value={stat.value}>{stat.value}</strong>
+                        <strong>{stat.value}</strong>
                         <span>{stat.label}</span>
                     </article>
                 ))}

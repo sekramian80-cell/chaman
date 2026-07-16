@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion, useSpring, useMotionValue } from 'framer-motion';
 
-export function TiltSurface({ children, className = '', intensity = 14, float = true }) {
+export function TiltSurface({ children, className = '', intensity = 14, float = true, style = {} }) {
     const ref = useRef(null);
     const reduced = useReducedMotion();
     const rotateX = useMotionValue(0);
@@ -10,7 +10,7 @@ export function TiltSurface({ children, className = '', intensity = 14, float = 
     const springY = useSpring(rotateY, { stiffness: 180, damping: 22 });
 
     if (reduced) {
-        return <div className={`exp-tilt ${className}`.trim()}>{children}</div>;
+        return <div className={`exp-tilt ${className}`.trim()} style={style}>{children}</div>;
     }
 
     return (
@@ -23,6 +23,7 @@ export function TiltSurface({ children, className = '', intensity = 14, float = 
                 rotateY: springY,
                 transformPerspective: 900,
                 transformStyle: 'preserve-3d',
+                ...style,
             }}
             onMouseMove={(event) => {
                 const node = ref.current;
