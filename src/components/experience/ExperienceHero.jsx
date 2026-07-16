@@ -8,7 +8,6 @@ import { heroContent } from '../../content/hero.js';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion.js';
 import { AuroraMesh } from './AuroraMesh.jsx';
 import { ElasticButton } from './ElasticButton.jsx';
-import { TextChoreography } from './TextChoreography.jsx';
 import { TiltSurface } from './TiltSurface.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -59,6 +58,18 @@ export function ExperienceHero() {
                 { opacity: 0.2, scale: 0.8 },
                 { opacity: 1, scale: 1.15, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1 },
             );
+
+            gsap.fromTo(
+                '.exp-hero__title',
+                { opacity: 0, y: 32 },
+                { opacity: 1, y: 0, duration: 1.1, delay: 0.2, ease: 'power3.out' },
+            );
+
+            gsap.fromTo(
+                '.exp-hero__fifa',
+                { opacity: 0, y: 20, scale: 0.96 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.9, delay: 0.55, ease: 'power3.out' },
+            );
         }, rootRef);
 
         return () => ctx.revert();
@@ -99,16 +110,14 @@ export function ExperienceHero() {
             </div>
 
             <div className="container exp-hero__content">
-                <p className="exp-hero__brand">فراز چمن</p>
-                <span className="exp-hero__eyebrow">{heroContent.eyebrow}</span>
+                <h1 className="exp-hero__title">{heroContent.title}</h1>
 
-                <TextChoreography
-                    as="h1"
-                    className="exp-hero__title"
-                    text={heroContent.title}
-                    delay={0.25}
-                    stagger={0.02}
-                />
+                {heroContent.fifaBadge ? (
+                    <div className="exp-hero__fifa">
+                        <span className="exp-hero__fifa-shine" aria-hidden="true" />
+                        <span className="exp-hero__fifa-text">{heroContent.fifaBadge}</span>
+                    </div>
+                ) : null}
 
                 <p className="exp-hero__lead">{heroContent.description}</p>
 
@@ -123,7 +132,6 @@ export function ExperienceHero() {
                     </ElasticButton>
                 </div>
 
-                {heroContent.fifaBadge ? <p className="exp-hero__badge">{heroContent.fifaBadge}</p> : null}
             </div>
 
             <div className="exp-hero__floats">
