@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, CheckCircle2, Layers, MapPin, Ruler, Sparkles } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, Layers, MapPin, Ruler, Sparkles } from 'lucide-react';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import { SectionSeam } from '../components/SectionSeam.jsx';
@@ -18,7 +18,7 @@ function ProjectNotFound() {
     return (
         <section className="section project-detail project-detail--empty">
             <div className="container">
-                <ScrollReveal className="empty-state">
+                <ScrollReveal className="empty-state" variant="scale">
                     <strong>این نمونه کار پیدا نشد.</strong>
                     <p>ممکن است لینک اشتباه باشد یا پروژه حذف شده باشد.</p>
                     <a className="btn btn--primary" href="/projects">
@@ -46,10 +46,17 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
     }, [project]);
 
     const [activeIndex, setActiveIndex] = useState(0);
+    const [imageVisible, setImageVisible] = useState(true);
 
     useEffect(() => {
         setActiveIndex(0);
     }, [project?.slug]);
+
+    useEffect(() => {
+        setImageVisible(false);
+        const id = requestAnimationFrame(() => setImageVisible(true));
+        return () => cancelAnimationFrame(id);
+    }, [activeIndex]);
 
     const related = useMemo(() => {
         if (!project) return [];
@@ -62,6 +69,22 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
             )
             .slice(0, 3);
     }, [items, project]);
+
+    useEffect(() => {
+        if (gallery.length < 2) return undefined;
+
+        const onKeyDown = (event) => {
+            if (event.key === 'ArrowLeft') {
+                setActiveIndex((current) => (current + 1) % gallery.length);
+            }
+            if (event.key === 'ArrowRight') {
+                setActiveIndex((current) => (current - 1 + gallery.length) % gallery.length);
+            }
+        };
+
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [gallery.length]);
 
     if (!project) {
         return <ProjectNotFound />;
@@ -90,19 +113,29 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
         'نتیجه نهایی قابل بازدید و قابل استعلام',
     ];
 
+    function goPrev() {
+        setActiveIndex((current) => (current - 1 + gallery.length) % gallery.length);
+    }
+
+    function goNext() {
+        setActiveIndex((current) => (current + 1) % gallery.length);
+    }
+
     return (
-        <>
+        <div className="project-detail-page">
             <section
-                className="project-detail-hero"
+                className="project-detail-hero project-detail-hero--premium"
                 style={{ '--project-hero-image': `url(${project.image})` }}
             >
                 <div className="project-detail-hero__veil" />
+                <div className="project-detail-hero__orbit" aria-hidden="true" />
                 <div className="container project-detail-hero__inner">
-                    <ScrollReveal className="project-detail-hero__copy">
+                    <ScrollReveal className="project-detail-hero__copy" variant="scale">
                         <div className="project-detail-hero__tags">
                             {typeLabel ? <span>{typeLabel}</span> : null}
                             {project.subcategoryLabel ? <span>{project.subcategoryLabel}</span> : null}
                         </div>
+                        <p className="project-detail-hero__brand">فراز چمن</p>
                         <h1>{project.title}</h1>
                         {project.description ? <p>{project.description}</p> : null}
                         <div className="project-detail-hero__actions">
@@ -119,16 +152,36 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                 <SectionSeam variant="slash" tone="paper" className="project-detail-hero__seam" />
             </section>
 
-            <section className="section project-detail">
+            <section className="section project-detail project-detail--premium">
                 <div className="container project-detail__layout">
                     <div className="project-detail__main">
-                        <ScrollReveal className="project-detail__gallery">
-                            <div className="project-detail__stage">
+                        <ScrollReveal className="project-detail__gallery" variant="scale">
+                            <div className={`project-detail__stage${imageVisible ? ' is-ready' : ''}`}>
                                 <img
                                     src={activeImage.url}
                                     alt={activeImage.alt || project.title}
                                     key={activeImage.url}
                                 />
+                                {gallery.length > 1 ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="project-detail__nav project-detail__nav--prev"
+                                            aria-label="تصویر قبلی"
+                                            onClick={goPrev}
+                                        >
+                                            <ChevronRight size={18} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="project-detail__nav project-detail__nav--next"
+                                            aria-label="تصویر بعدی"
+                                            onClick={goNext}
+                                        >
+                                            <ChevronLeft size={18} />
+                                        </button>
+                                    </>
+                                ) : null}
                             </div>
                             {gallery.length > 1 ? (
                                 <div className="project-detail__thumbs" role="list">
@@ -147,7 +200,7 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                             ) : null}
                         </ScrollReveal>
 
-                        <ScrollReveal className="project-detail__story" delay={80}>
+                        <ScrollReveal className="project-detail__story" delay={90} variant="up">
                             <span className="eyebrow">معرفی پروژه</span>
                             <h2>داستان اجرا و جزئیات کار</h2>
                             {storyHtml ? (
@@ -160,11 +213,11 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                             )}
                         </ScrollReveal>
 
-                        <ScrollReveal className="project-detail__highlights" delay={120}>
+                        <ScrollReveal className="project-detail__highlights" delay={140}>
                             <h3>آنچه در این اجرا رعایت شد</h3>
                             <ul>
-                                {highlights.map((item) => (
-                                    <li key={item}>
+                                {highlights.map((item, index) => (
+                                    <li key={item} style={{ transitionDelay: `${index * 70}ms` }}>
                                         <CheckCircle2 size={18} />
                                         <span>{item}</span>
                                     </li>
@@ -174,7 +227,7 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                     </div>
 
                     <aside className="project-detail__side">
-                        <ScrollReveal className="project-detail__panel" delay={60}>
+                        <ScrollReveal className="project-detail__panel" delay={80} variant="left">
                             <h3>شناسنامه پروژه</h3>
                             <dl>
                                 {facts.map((fact) => {
@@ -200,9 +253,9 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
             </section>
 
             {related.length > 0 ? (
-                <section className="section project-detail-related">
+                <section className="section project-detail-related project-detail-related--premium">
                     <div className="container">
-                        <ScrollReveal className="project-detail-related__head">
+                        <ScrollReveal className="project-detail-related__head" variant="scale">
                             <span className="eyebrow">پروژه‌های مرتبط</span>
                             <h2>نمونه‌های مشابه این فضا</h2>
                         </ScrollReveal>
@@ -210,7 +263,8 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
                             {related.map((item, index) => (
                                 <ScrollReveal
                                     className="project-detail-related__card"
-                                    delay={index * 70}
+                                    delay={index * 90}
+                                    variant="up"
                                     key={item.slug || item.id}
                                 >
                                     <a href={item.href || getProjectDetailPath(item)}>
@@ -238,6 +292,6 @@ export function ProjectDetailPage({ slug: slugProp = '' }) {
             ) : null}
 
             <ContactCTA />
-        </>
+        </div>
     );
 }

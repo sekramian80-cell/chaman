@@ -1,29 +1,29 @@
 import { ArrowLeft, MessageCircle, Phone } from 'lucide-react';
+import { contactCTA } from '../content/contact.js';
+import { ScrollReveal } from './ScrollReveal.jsx';
 
 export function ContactCTA() {
   return (
-    <section id="contact" className="contact-cta">
+    <section id="contact" className="contact-cta contact-cta--premium">
+      <div className="contact-cta__glow" aria-hidden="true" />
       <div className="container contact-cta__inner">
-        <div>
-          <span className="eyebrow">شروع پروژه</span>
-          <h2>برای فضای شما چه مدل چمنی مناسب‌تر است؟</h2>
-          <p>
-            متراژ، محل اجرا و چند عکس از فضا را بفرستید تا پیشنهاد اولیه و بازه قیمت
-            دقیق‌تری دریافت کنید.
-          </p>
-        </div>
+        <ScrollReveal>
+          <span className="eyebrow">{contactCTA.eyebrow}</span>
+          <h2>{contactCTA.title}</h2>
+          <p>{contactCTA.description}</p>
+        </ScrollReveal>
 
-        <div className="contact-cta__actions">
-          <a className="btn btn--primary" href="tel:+989123365430">
+        <ScrollReveal className="contact-cta__actions" delay={80}>
+          <a className="btn btn--primary" href={contactCTA.primaryCta.href}>
             <Phone size={18} />
-            تماس مستقیم
+            {contactCTA.primaryCta.label}
           </a>
-          <a className="btn btn--light" href="https://wa.me/989123365430">
+          <a className="btn btn--light" href={contactCTA.secondaryCta.href}>
             <MessageCircle size={18} />
-            پیام در واتساپ
+            {contactCTA.secondaryCta.label}
             <ArrowLeft size={17} />
           </a>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

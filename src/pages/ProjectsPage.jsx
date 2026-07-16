@@ -12,7 +12,7 @@ export function ProjectsPage() {
     const count = projects?.items?.length || 0;
 
     return (
-        <>
+        <div className="projects-page">
             <PageHero
                 image={projectsHero}
                 eyebrow="نمونه کارها"
@@ -28,13 +28,18 @@ export function ProjectsPage() {
                 seam="petal"
             />
             <ProjectGallery />
-            <section className="section section--warm projects-metrics">
+            <section className="section section--warm projects-metrics projects-metrics--premium">
                 <div className="container metric-row">
                     {projectStats.map((stat, index) => {
                         const Icon = stat.icon;
 
                         return (
-                            <ScrollReveal className="metric-card" delay={index * 90} key={stat.label}>
+                            <ScrollReveal
+                                className="metric-card"
+                                delay={index * 110}
+                                variant="scale"
+                                key={stat.label}
+                            >
                                 <Icon size={25} />
                                 <strong>{stat.value}</strong>
                                 <span>{stat.label}</span>
@@ -44,6 +49,6 @@ export function ProjectsPage() {
                 </div>
             </section>
             <ContactCTA />
-        </>
+        </div>
     );
 }

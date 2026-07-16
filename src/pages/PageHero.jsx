@@ -15,10 +15,12 @@ export function PageHero({
     const heroStyle = image ? { "--page-hero-image": `url(${image})` } : undefined;
 
     return (
-        <section className="page-hero" style={heroStyle}>
+        <section className="page-hero page-hero--premium" style={heroStyle}>
             <div className="page-hero__glow" />
+            <div className="page-hero__veil" aria-hidden="true" />
             <div className="container page-hero__inner">
                 <ScrollReveal className="page-hero__copy">
+                    <p className="page-hero__brand">فراز چمن</p>
                     <span className="eyebrow">{eyebrow}</span>
                     <h1>{title}</h1>
                     <p>{description}</p>

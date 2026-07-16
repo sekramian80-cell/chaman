@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { subcategorySliderItems } from '../content/subcategorySlider.js';
 
@@ -7,13 +7,22 @@ const AUTOPLAY_MS = 4200;
 export function SubcategorySlider() {
     const items = subcategorySliderItems;
     const trackRef = useRef(null);
-    const pausedRef = useRef(false);
     const [index, setIndex] = useState(0);
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
+    const [paused, setPaused] = useState(false);
+    const [reduceMotion, setReduceMotion] = useState(false);
 
     const cloneCount = Math.min(items.length, 8);
     const rendered = [...items, ...items.slice(0, cloneCount)];
+
+    useEffect(() => {
+        const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const sync = () => setReduceMotion(media.matches);
+        sync();
+        media.addEventListener('change', sync);
+        return () => media.removeEventListener('change', sync);
+    }, []);
 
     useEffect(() => {
         function measure() {
@@ -31,13 +40,14 @@ export function SubcategorySlider() {
     }, []);
 
     useEffect(() => {
+        if (reduceMotion || paused) return undefined;
+
         const id = setInterval(() => {
-            if (pausedRef.current) return;
             setIndex((current) => current + 1);
         }, AUTOPLAY_MS);
 
         return () => clearInterval(id);
-    }, []);
+    }, [paused, reduceMotion]);
 
     useEffect(() => {
         if (animate) return;
@@ -69,7 +79,7 @@ export function SubcategorySlider() {
     const offset = -(index * step);
 
     return (
-        <section className="section subcategory-slider-section" aria-label="کاربردهای چمن مصنوعی">
+        <section className="section subcategory-slider-section subcategory-slider-section--premium" aria-label="کاربردهای چمن مصنوعی">
             <div className="container">
                 <div className="subcategory-slider-section__header">
                     <span className="eyebrow">کاربردهای مختلف</span>
@@ -81,11 +91,13 @@ export function SubcategorySlider() {
             <div
                 className="subcategory-slider"
                 dir="ltr"
-                onMouseEnter={() => {
-                    pausedRef.current = true;
-                }}
-                onMouseLeave={() => {
-                    pausedRef.current = false;
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+                onFocusCapture={() => setPaused(true)}
+                onBlurCapture={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                        setPaused(false);
+                    }
                 }}
             >
                 <button
@@ -104,6 +116,16 @@ export function SubcategorySlider() {
                 >
                     <ChevronRight size={22} />
                 </button>
+                {!reduceMotion ? (
+                    <button
+                        type="button"
+                        className="subcategory-slider__pause"
+                        aria-label={paused ? 'ادامه حرکت خودکار' : 'توقف حرکت خودکار'}
+                        onClick={() => setPaused((value) => !value)}
+                    >
+                        {paused ? <Play size={16} /> : <Pause size={16} />}
+                    </button>
+                ) : null}
 
                 <div
                     className="subcategory-slider__track"
@@ -111,7 +133,10 @@ export function SubcategorySlider() {
                     onTransitionEnd={handleTransitionEnd}
                     style={{
                         transform: `translate3d(${offset}px, 0, 0)`,
-                        transition: animate ? 'transform 900ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+                        transition:
+                            animate && !reduceMotion
+                                ? 'transform 900ms cubic-bezier(0.22, 1, 0.36, 1)'
+                                : 'none',
                     }}
                 >
                     {rendered.map((item, position) => (
@@ -126,6 +151,7 @@ export function SubcategorySlider() {
                             </div>
                             <div className="subcategory-slider__body">
                                 <h3>{item.title}</h3>
+                                <span>مشاهده دسته‌بندی</span>
                             </div>
                         </a>
                     ))}

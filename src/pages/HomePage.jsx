@@ -3,6 +3,7 @@ import { Hero } from '../components/Hero.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import { SubcategorySlider } from '../components/SubcategorySlider.jsx';
 import { TrustStrip } from '../components/TrustStrip.jsx';
+import { heroContent } from '../content/hero.js';
 import { toPersianOrdinal } from '../utils/persianNumber.js';
 
 const homeHighlights = [
@@ -13,31 +14,47 @@ const homeHighlights = [
 
 export function HomePage() {
   return (
-    <>
+    <div className="home-page">
       <Hero />
       <TrustStrip />
-      <section className="section home-overview">
-        <div className="container split-panel">
-          <ScrollReveal>
-            <span className="eyebrow">نمای کلی</span>
-            <h2>مسیر سریع برای رسیدن به یک فضای همیشه سبز</h2>
+
+      <section className="section home-value">
+        <div className="container home-value__grid">
+          <ScrollReveal className="home-value__intro">
+            <span className="eyebrow">چرا فراز چمن</span>
+            <h2>کیفیت اجرا، زیبایی ماندگار و نتیجه قابل لمس</h2>
             <p>
-              این صفحه فقط شروع کار است. از منوی بالا وارد هر بخش شوید تا خدمات، محصولات، روند اجرا،
-              نمونه پروژه‌ها و پاسخ سوالات را در صفحه اختصاصی خودش ببینید.
+              از انتخاب مدل تا نصب نهایی، مسیر پروژه شفاف است؛ برای فضای شما مدل مناسب پیشنهاد
+              می‌شود و اجرا با جزئیات تمیز تحویل داده می‌شود.
             </p>
+            <a className="home-value__link" href="/process">
+              مشاهده روند اجرا
+            </a>
           </ScrollReveal>
-          <div className="demo-list">
+
+          <div className="home-value__list" role="list">
             {homeHighlights.map((item, index) => (
-              <ScrollReveal className="demo-row" delay={index * 80} key={item}>
-                <span>{toPersianOrdinal(index)}</span>
+              <ScrollReveal className="home-value__card" delay={index * 90} key={item}>
+                <span className="home-value__index" aria-hidden>
+                  {toPersianOrdinal(index)}
+                </span>
                 <strong>{item}</strong>
               </ScrollReveal>
             ))}
           </div>
+
+          <ScrollReveal className="home-value__aside" delay={120}>
+            <strong>{heroContent.panel.title}</strong>
+            <span>{heroContent.panel.subtitle}</span>
+            <a className="btn btn--ghost" href="/products">
+              مشاهده محصولات
+            </a>
+          </ScrollReveal>
         </div>
       </section>
+
       <SubcategorySlider />
       <ContactCTA />
-    </>
+    </div>
   );
 }
