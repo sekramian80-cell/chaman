@@ -1,10 +1,6 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion.js';
+import { useInView } from '../../hooks/useInView.js';
+import { useLiteExperience } from '../../hooks/useLiteExperience.js';
 import { TiltSurface } from './TiltSurface.jsx';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const orbits = [
     { x: '72%', y: '18%', rot: -6 },
@@ -15,61 +11,16 @@ const orbits = [
     { x: '48%', y: '28%', rot: -8 },
 ];
 
-/**
- * Constellation of trust signals — free-floating, not a card grid
- */
 export function FloatingIslands({ items = [] }) {
-    const rootRef = useRef(null);
-    const reduced = usePrefersReducedMotion();
-
-    useEffect(() => {
-        if (reduced || !rootRef.current) return undefined;
-
-        const ctx = gsap.context(() => {
-            gsap.utils.toArray('.exp-island').forEach((node, index) => {
-                gsap.fromTo(
-                    node,
-                    {
-                        opacity: 0,
-                        y: 80 + index * 12,
-                        scale: 0.86,
-                        rotate: orbits[index % orbits.length].rot * 2,
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        rotate: orbits[index % orbits.length].rot,
-                        ease: 'power3.out',
-                        scrollTrigger: {
-                            trigger: node,
-                            start: 'top 92%',
-                            end: 'top 55%',
-                            scrub: 0.8,
-                        },
-                    },
-                );
-
-                gsap.to(node, {
-                    y: (index % 2 === 0 ? -1 : 1) * (18 + index * 4),
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: rootRef.current,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true,
-                    },
-                });
-            });
-        }, rootRef);
-
-        return () => ctx.revert();
-    }, [reduced, items.length]);
+    const lite = useLiteExperience();
+    const { ref, visible } = useInView();
 
     return (
-        <section className="exp-islands" ref={rootRef}>
-            <div className="exp-islands__aura" aria-hidden="true" />
-            <div className="container exp-islands__whisper">
+        <section
+            className={`exp-islands ${visible ? 'exp-islands--visible' : ''} ${lite ? 'exp-islands--lite' : ''}`.trim()}
+            ref={ref}
+        >
+            <div className="exp-islands__whisper container">
                 <p>فضایی که پیش از حرف زدن، اعتماد می‌سازد</p>
             </div>
             <div className="exp-islands__field">
@@ -80,12 +31,17 @@ export function FloatingIslands({ items = [] }) {
                         <TiltSurface
                             key={item.id ?? item.label}
                             className="exp-island"
-                            intensity={12}
-                            style={{
-                                left: orbit.x,
-                                top: orbit.y,
-                                '--island-rot': `${orbit.rot}deg`,
-                            }}
+                            float={false}
+                            style={
+                                lite
+                                    ? undefined
+                                    : {
+                                          left: orbit.x,
+                                          top: orbit.y,
+                                          '--island-rot': `${orbit.rot}deg`,
+                                          '--island-delay': `${index * 70}ms`,
+                                      }
+                            }
                         >
                             {Icon ? <Icon size={22} /> : <span className="exp-island__dot" />}
                             <span>{item.label}</span>

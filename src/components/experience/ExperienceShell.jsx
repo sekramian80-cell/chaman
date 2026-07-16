@@ -1,21 +1,21 @@
 import { useEffect } from 'react';
-import { AuroraMesh } from './AuroraMesh.jsx';
-import { CustomCursor } from './CustomCursor.jsx';
-import { JourneyProgress } from './JourneyProgress.jsx';
-import { ScrollAtmosphere } from './ScrollAtmosphere.jsx';
+import { useLiteExperience } from '../../hooks/useLiteExperience.js';
 
 export function ExperienceShell({ children }) {
+    const lite = useLiteExperience();
+
     useEffect(() => {
         document.body.classList.add('exp-mode');
-        return () => document.body.classList.remove('exp-mode');
-    }, []);
+        document.documentElement.classList.toggle('exp-lite', lite);
+        return () => {
+            document.body.classList.remove('exp-mode');
+            document.documentElement.classList.remove('exp-lite');
+        };
+    }, [lite]);
 
     return (
         <div className="exp-root">
-            <ScrollAtmosphere />
-            <AuroraMesh className="exp-aurora--global" />
-            <JourneyProgress />
-            <CustomCursor />
+            {!lite ? <div className="exp-atmosphere exp-atmosphere--static" aria-hidden="true" /> : null}
             {children}
         </div>
     );

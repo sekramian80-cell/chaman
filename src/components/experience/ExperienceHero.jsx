@@ -1,16 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { ArrowLeft, PlayCircle } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 import heroImage from '../../assets/hero-football-field.jpg';
 import { heroContent } from '../../content/hero.js';
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion.js';
-import { AuroraMesh } from './AuroraMesh.jsx';
+import { useLiteExperience } from '../../hooks/useLiteExperience.js';
 import { ElasticButton } from './ElasticButton.jsx';
 import { TiltSurface } from './TiltSurface.jsx';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const floatCards = [
     { title: 'همیشه سبز', sub: 'بدون فصل زرد', offset: 'a' },
@@ -18,95 +12,58 @@ const floatCards = [
     { title: 'فیفا‌کوالیتی', sub: 'زمین ورزشی', offset: 'c' },
 ];
 
-/**
- * Arrival moment — cinematic hero that dissolves into the landscape as you scroll
- */
 export function ExperienceHero() {
     const rootRef = useRef(null);
-    const reduced = usePrefersReducedMotion();
-    const motionReduced = useReducedMotion();
-    const mx = useMotionValue(0);
-    const my = useMotionValue(0);
-    const sx = useSpring(mx, { stiffness: 48, damping: 22 });
-    const sy = useSpring(my, { stiffness: 48, damping: 22 });
-    const layer2x = useSpring(mx, { stiffness: 30, damping: 18 });
-    const layer2y = useSpring(my, { stiffness: 30, damping: 18 });
+    const lite = useLiteExperience();
 
     useEffect(() => {
-        if (reduced || !rootRef.current) return undefined;
+        if (lite || !rootRef.current) return undefined;
 
-        const ctx = gsap.context(() => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: rootRef.current,
-                    start: 'top top',
-                    end: '+=120%',
-                    scrub: 0.9,
-                    pin: true,
-                    anticipatePin: 1,
-                },
-            });
+        let cancelled = false;
+        let ctx;
 
-            tl.to('.exp-hero__bg', { scale: 1.22, yPercent: 8, ease: 'none' }, 0)
-                .to('.exp-hero__content', { yPercent: -28, opacity: 0, filter: 'blur(8px)', ease: 'power1.in' }, 0)
-                .to('.exp-hero__floats', { yPercent: 40, opacity: 0, ease: 'power1.in' }, 0)
-                .to('.exp-hero__veil', { opacity: 1, ease: 'none' }, 0.15)
-                .to('.exp-hero__scroll', { opacity: 0 }, 0);
+        Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([gsapModule, stModule]) => {
+            if (cancelled) return;
 
-            gsap.fromTo(
-                '.exp-hero__light',
-                { opacity: 0.2, scale: 0.8 },
-                { opacity: 1, scale: 1.15, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1 },
-            );
+            const gsap = gsapModule.default;
+            const { ScrollTrigger } = stModule;
+            gsap.registerPlugin(ScrollTrigger);
+            ScrollTrigger.config({ limitCallbacks: true, ignoreMobileResize: true });
 
-            gsap.fromTo(
-                '.exp-hero__title',
-                { opacity: 0, y: 32 },
-                { opacity: 1, y: 0, duration: 1.1, delay: 0.2, ease: 'power3.out' },
-            );
+            ctx = gsap.context(() => {
+                gsap.to('.exp-hero__bg', {
+                    scale: 1.06,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: rootRef.current,
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: 0.5,
+                    },
+                });
+            }, rootRef);
+        });
 
-            gsap.fromTo(
-                '.exp-hero__fifa',
-                { opacity: 0, y: 20, scale: 0.96 },
-                { opacity: 1, y: 0, scale: 1, duration: 0.9, delay: 0.55, ease: 'power3.out' },
-            );
-        }, rootRef);
-
-        return () => ctx.revert();
-    }, [reduced]);
+        return () => {
+            cancelled = true;
+            ctx?.revert();
+        };
+    }, [lite]);
 
     return (
-        <section
-            id="top"
-            className="exp-hero"
-            ref={rootRef}
-            onMouseMove={(event) => {
-                if (motionReduced) return;
-                const rect = event.currentTarget.getBoundingClientRect();
-                mx.set((event.clientX - rect.width / 2) / 28);
-                my.set((event.clientY - rect.height / 2) / 28);
-            }}
-            onMouseLeave={() => {
-                mx.set(0);
-                my.set(0);
-            }}
-        >
+        <section id="top" className="exp-hero" ref={rootRef}>
             <div className="exp-hero__stage">
-                <motion.div
+                <div
                     className="exp-hero__bg"
                     style={{
-                        x: sx,
-                        y: sy,
                         backgroundImage: `linear-gradient(195deg, rgba(2,8,5,0.15) 0%, rgba(2,8,5,0.55) 45%, rgba(2,8,5,0.96) 88%), url(${heroImage})`,
                     }}
                 />
-                <span className="exp-hero__light" aria-hidden="true" />
-                <motion.div className="exp-hero__layer exp-hero__layer--mid" style={{ x: layer2x, y: layer2y }} />
-                <motion.div className="exp-hero__layer exp-hero__layer--front" style={{ x: sx, y: sy }} />
-                <AuroraMesh className="exp-aurora--hero" />
+                {!lite ? <span className="exp-hero__light" aria-hidden="true" /> : null}
+                <div className="exp-hero__layer exp-hero__layer--mid" aria-hidden="true" />
+                <div className="exp-hero__layer exp-hero__layer--front" aria-hidden="true" />
                 <div className="exp-hero__vignette" aria-hidden="true" />
-                <div className="exp-hero__grain" aria-hidden="true" />
-                <div className="exp-hero__veil" aria-hidden="true" />
+                {!lite ? <div className="exp-hero__grain" aria-hidden="true" /> : null}
             </div>
 
             <div className="container exp-hero__content">
@@ -131,17 +88,18 @@ export function ExperienceHero() {
                         {heroContent.secondaryCta.label}
                     </ElasticButton>
                 </div>
-
             </div>
 
-            <div className="exp-hero__floats">
-                {floatCards.map((card) => (
-                    <TiltSurface key={card.title} className={`exp-hero__float exp-hero__float--${card.offset}`}>
-                        <strong>{card.title}</strong>
-                        <span>{card.sub}</span>
-                    </TiltSurface>
-                ))}
-            </div>
+            {!lite ? (
+                <div className="exp-hero__floats">
+                    {floatCards.map((card) => (
+                        <TiltSurface key={card.title} className={`exp-hero__float exp-hero__float--${card.offset}`} float={false}>
+                            <strong>{card.title}</strong>
+                            <span>{card.sub}</span>
+                        </TiltSurface>
+                    ))}
+                </div>
+            ) : null}
 
             <div className="exp-hero__scroll" aria-hidden="true">
                 <span>ورود به فضا</span>
