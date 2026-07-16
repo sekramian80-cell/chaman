@@ -18,6 +18,7 @@ function NavItem({ item, currentPath, closeMenu }) {
             <a
                 className={isNavLinkActive(item.path, currentPath) ? "main-nav__link--active" : ""}
                 href={item.href}
+                aria-current={isNavLinkActive(item.path, currentPath) ? "page" : undefined}
                 onClick={closeMenu}
             >
                 {item.label}
@@ -31,6 +32,7 @@ function NavItem({ item, currentPath, closeMenu }) {
                 <a
                     className={isActive ? "main-nav__link--active" : ""}
                     href={item.href}
+                    aria-current={isNavLinkActive(item.path, currentPath) ? "page" : undefined}
                     onClick={closeMenu}
                 >
                     {item.label}
@@ -51,6 +53,7 @@ function NavItem({ item, currentPath, closeMenu }) {
                         className={isNavLinkActive(child.path, currentPath) ? "main-nav__link--active" : ""}
                         key={child.href}
                         href={child.href}
+                        aria-current={isNavLinkActive(child.path, currentPath) ? "page" : undefined}
                         onClick={closeMenu}
                     >
                         {child.label}

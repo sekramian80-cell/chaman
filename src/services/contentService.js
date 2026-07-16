@@ -113,25 +113,33 @@ function buildContentFromApiBundle(bundle, local) {
 }
 
 /**
- * اگر کش تازه باشد، محتوای ترکیب‌شده را برمی‌گرداند (بدون شبکه)
- * @returns {object|null}
+ * اگر کش موجود باشد، محتوای ترکیب‌شده را برمی‌گرداند
+ * @param {{ allowStale?: boolean }} [options]
+ * @returns {{ content: object, fresh: boolean } | null}
  */
-export function getCachedSiteContent() {
-    const cached = getCachedApiBundle();
+export function getCachedSiteContent(options = {}) {
+    const cached = getCachedApiBundle({ allowStale: Boolean(options.allowStale) });
     if (!cached?.payload) return null;
-    return buildContentFromApiBundle(cached.payload, getLocalContent());
+
+    return {
+        content: buildContentFromApiBundle(cached.payload, getLocalContent()),
+        fresh: Boolean(cached.fresh),
+    };
 }
 
 /**
  * دریافت محتوای سایت از وردپرس و ترکیب با fallback محلی
- * در صورت فعال بودن CACHE، پاسخ خام API تا TTL در session نگه داشته می‌شود.
+ * @param {{ force?: boolean }} [options] force=true همیشه شبکه می‌زند (برای SWR)
  */
-export async function fetchSiteContent() {
+export async function fetchSiteContent(options = {}) {
     const local = getLocalContent();
-    const cached = getCachedApiBundle();
+    const force = Boolean(options.force);
 
-    if (cached?.payload) {
-        return buildContentFromApiBundle(cached.payload, local);
+    if (!force) {
+        const cached = getCachedApiBundle();
+        if (cached?.payload) {
+            return buildContentFromApiBundle(cached.payload, local);
+        }
     }
 
     const [serviceItems, productItems, projectItems, faqItems, menuItems] = await Promise.all([
