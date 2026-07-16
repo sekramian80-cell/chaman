@@ -1,60 +1,94 @@
-import { ContactCTA } from '../components/ContactCTA.jsx';
-import { Hero } from '../components/Hero.jsx';
-import { ScrollReveal } from '../components/ScrollReveal.jsx';
-import { SubcategorySlider } from '../components/SubcategorySlider.jsx';
-import { TrustStrip } from '../components/TrustStrip.jsx';
-import { heroContent } from '../content/hero.js';
-import { toPersianOrdinal } from '../utils/persianNumber.js';
+import villaImage from '../assets/services/villa-yard.jpg';
+import beforeImage from '../assets/services/residential-balcony.jpg';
+import afterImage from '../assets/hero-artificial-grass.jpg';
+import { ExperienceShell } from '../components/experience/ExperienceShell.jsx';
+import { ExperienceHero } from '../components/experience/ExperienceHero.jsx';
+import { PulseRibbon } from '../components/experience/PulseRibbon.jsx';
+import { TerrainBridge } from '../components/experience/TerrainBridge.jsx';
+import { FloatingIslands } from '../components/experience/FloatingIslands.jsx';
+import { PinnedNarrative } from '../components/experience/PinnedNarrative.jsx';
+import { DramaticStats } from '../components/experience/DramaticStats.jsx';
+import { ImageStack } from '../components/experience/ImageStack.jsx';
+import { MorphReveal } from '../components/experience/MorphReveal.jsx';
+import { FinaleDissolve } from '../components/experience/FinaleDissolve.jsx';
+import { OrbitCTA } from '../components/experience/OrbitCTA.jsx';
+import { ElasticButton } from '../components/experience/ElasticButton.jsx';
+import { heroContent, heroStats } from '../content/hero.js';
+import { useSiteContent } from '../hooks/useSiteContent.js';
+import { ArrowLeft } from 'lucide-react';
+import '../styles/experience.css';
 
 const homeHighlights = [
-  'انتخاب مدل بر اساس متراژ، نور و میزان رفت‌وآمد',
-  'اجرای تمیز برای تراس، ویلا، روف گاردن و فضای تجاری',
-  'تحویل سریع همراه با آموزش نگهداری و شستشو',
+    'انتخاب مدل بر اساس متراژ، نور و میزان رفت‌وآمد',
+    'اجرای تمیز برای تراس، ویلا، روف گاردن و فضای تجاری',
+    'تحویل سریع همراه با آموزش نگهداری و شستشو',
+];
+
+const pulseItems = [
+    'چمن ورزشی استاندارد',
+    'روف گاردن لوکس',
+    'ویلا و محوطه',
+    'تراس و بالکن',
+    'نصب سریع',
+    'زهکشی حرفه‌ای',
+    'الیاف UV-stable',
+    'ظاهر طبیعی',
+    'معماری فضای سبز',
 ];
 
 export function HomePage() {
-  return (
-    <div className="home-page">
-      <Hero />
-      <TrustStrip />
+    const { projects, trust } = useSiteContent();
+    const projectItems = (projects?.items || []).slice(0, 8);
+    const trustList = trust?.items || [];
 
-      <section className="section home-value">
-        <div className="container home-value__grid">
-          <ScrollReveal className="home-value__intro">
-            <span className="eyebrow">چرا فراز چمن</span>
-            <h2>کیفیت اجرا، زیبایی ماندگار و نتیجه قابل لمس</h2>
-            <p>
-              از انتخاب مدل تا نصب نهایی، مسیر پروژه شفاف است؛ برای فضای شما مدل مناسب پیشنهاد
-              می‌شود و اجرا با جزئیات تمیز تحویل داده می‌شود.
-            </p>
-            <a className="home-value__link" href="/process">
-              مشاهده روند اجرا
-            </a>
-          </ScrollReveal>
+    return (
+        <ExperienceShell>
+            <div className="exp-home exp-continuum">
+                <ExperienceHero />
 
-          <div className="home-value__list" role="list">
-            {homeHighlights.map((item, index) => (
-              <ScrollReveal className="home-value__card" delay={index * 90} key={item}>
-                <span className="home-value__index" aria-hidden>
-                  {toPersianOrdinal(index)}
-                </span>
-                <strong>{item}</strong>
-              </ScrollReveal>
-            ))}
-          </div>
+                <TerrainBridge variant="ridge" />
+                <PulseRibbon items={pulseItems} />
 
-          <ScrollReveal className="home-value__aside" delay={120}>
-            <strong>{heroContent.panel.title}</strong>
-            <span>{heroContent.panel.subtitle}</span>
-            <a className="btn btn--ghost" href="/products">
-              مشاهده محصولات
-            </a>
-          </ScrollReveal>
-        </div>
-      </section>
+                <TerrainBridge variant="dune" invert />
+                <FloatingIslands items={trustList} />
 
-      <SubcategorySlider />
-      <ContactCTA />
-    </div>
-  );
+                <TerrainBridge variant="canyon" />
+                <PinnedNarrative
+                    image={villaImage}
+                    imageAlt="حیاط ویلایی با چمن مصنوعی"
+                    highlights={homeHighlights}
+                    panel={heroContent.panel}
+                />
+
+                <TerrainBridge variant="mist" invert />
+                <DramaticStats stats={heroStats} />
+
+                <div className="exp-gallery">
+                    <div className="exp-gallery__whisper container">
+                        <p>هر پروژه، یک لایه از معماری بیرونی</p>
+                    </div>
+                    <ImageStack items={projectItems} />
+                    <div className="container exp-gallery__cta">
+                        <ElasticButton className="exp-btn exp-btn--primary" href="/projects">
+                            همه نمونه‌کارها
+                            <ArrowLeft size={17} />
+                        </ElasticButton>
+                    </div>
+                </div>
+
+                <TerrainBridge variant="ridge" invert />
+                <MorphReveal
+                    beforeSrc={beforeImage}
+                    afterSrc={afterImage}
+                    beforeLabel="قبل"
+                    afterLabel="بعد"
+                />
+
+                <TerrainBridge variant="dune" />
+                <FinaleDissolve />
+
+                <OrbitCTA />
+            </div>
+        </ExperienceShell>
+    );
 }
