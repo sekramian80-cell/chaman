@@ -964,20 +964,17 @@ body.nav-lock {
 
 .btn {
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
+    gap: 10px;
     min-height: 54px;
-    padding: 13px 24px;
+    padding: 0 26px;
     font-weight: 850;
+    font-size: 0.95rem;
     border: 1px solid transparent;
-    border-radius: 16px;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.24),
-        0 18px 48px rgba(0, 0, 0, 0.28);
+    border-radius: 999px;
+    text-decoration: none;
     transition:
         transform 180ms ease,
         box-shadow 180ms ease,
@@ -985,68 +982,42 @@ body.nav-lock {
         background-color 180ms ease;
 }
 
-.btn::before {
-    position: absolute;
-    inset: 3px;
-    z-index: -1;
-    content: "";
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: inherit;
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 42%),
-        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.2), transparent 26%);
-    opacity: 0.9;
-    pointer-events: none;
-}
-
-.btn::after {
-    position: absolute;
-    top: 0;
-    right: -80%;
-    width: 54%;
-    height: 100%;
-    content: "";
-    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.36), transparent);
-    transform: skew(-20deg);
-    animation: btnShine 3.8s ease-in-out infinite;
-}
-
 .btn:hover {
-    box-shadow:
-        0 24px 64px rgba(42, 157, 143, 0.22),
-        0 0 0 1px rgba(126, 217, 87, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32);
     transform: translateY(-2px);
 }
 
 .btn--primary {
-    color: #fafff0;
-    background:
-        radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.42), transparent 18%),
-        linear-gradient(135deg, #8ee35e, #2a9d8f 42%, #1c6f37 72%, #c9a84c);
-    background-size: 190% 190%;
-    border-color: rgba(183, 241, 125, 0.55);
+    color: #061408;
+    background: linear-gradient(135deg, #e8ffb0 0%, #d4e4c8 42%, #6ee07a 100%);
     box-shadow:
-        0 18px 52px rgba(42, 157, 143, 0.34),
-        0 0 28px rgba(126, 217, 87, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.46);
-    text-shadow: 0 1px 16px rgba(7, 21, 10, 0.46);
-    animation:
-        gradientBreath 5.8s ease infinite,
-        buttonGlow 3.2s ease-in-out infinite;
+        0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+        0 20px 50px rgba(110, 224, 122, 0.25),
+        0 0 80px rgba(196, 255, 106, 0.12);
+}
+
+.btn--primary:hover {
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.18) inset,
+        0 24px 56px rgba(110, 224, 122, 0.32),
+        0 0 90px rgba(196, 255, 106, 0.18);
 }
 
 .btn--ghost {
-    color: #ffffff;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.045)), rgba(7, 21, 10, 0.52);
-    border-color: rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(16px) saturate(150%);
+    color: #f0f2ee;
+    border-color: rgba(242, 255, 244, 0.22);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(14px);
+}
+
+.btn--ghost:hover {
+    border-color: rgba(242, 255, 244, 0.34);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .btn--light {
-    color: #fafff0;
-    background: linear-gradient(135deg, rgba(126, 217, 87, 0.3), rgba(42, 157, 143, 0.22)), rgba(10, 26, 13, 0.78);
-    border-color: rgba(126, 217, 87, 0.34);
+    color: #061408;
+    background: linear-gradient(135deg, #e8ffb0 0%, #d4e4c8 42%, #6ee07a 100%);
+    border-color: rgba(183, 241, 125, 0.35);
 }
 
 .hero__panel {
@@ -1425,6 +1396,53 @@ body.nav-lock {
     opacity: 0;
     cursor: ew-resize;
     z-index: 3;
+}
+
+.home-page .exp-pulse {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    margin-top: -1px;
+    padding: 28px 0;
+    border-block: 1px solid rgba(198, 255, 168, 0.1);
+    background: rgba(5, 15, 9, 0.94);
+    transform: rotate(-0.4deg);
+}
+
+.home-page .exp-pulse__track {
+    display: flex;
+    width: max-content;
+    gap: 56px;
+    direction: ltr;
+    animation: homePulseMove 42s linear infinite;
+}
+
+.home-page .exp-pulse__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 48px;
+    color: rgba(242, 255, 244, 0.65);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 850;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+}
+
+.home-page .exp-pulse__item i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    box-shadow: 0 0 10px rgba(201, 184, 150, 0.5);
+}
+
+@keyframes homePulseMove {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(50%, 0, 0);
+    }
 }
 
 .subcategory-slider__pause {

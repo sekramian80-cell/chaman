@@ -2,6 +2,7 @@ import beforeImage from '../assets/services/residential-balcony.jpg';
 import afterImage from '../assets/hero-artificial-grass.jpg';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { Hero } from '../components/Hero.jsx';
+import { PulseRibbon } from '../components/experience/PulseRibbon.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import { SubcategorySlider } from '../components/SubcategorySlider.jsx';
 import { TrustStrip } from '../components/TrustStrip.jsx';
@@ -15,10 +16,23 @@ const homeHighlights = [
     'تحویل سریع همراه با آموزش نگهداری و شستشو',
 ];
 
+const pulseItems = [
+    'چمن ورزشی استاندارد',
+    'روف گاردن لوکس',
+    'ویلا و محوطه',
+    'تراس و بالکن',
+    'نصب سریع',
+    'زهکشی حرفه‌ای',
+    'الیاف UV-stable',
+    'ظاهر طبیعی',
+    'معماری فضای سبز',
+];
+
 export function HomePage() {
     return (
         <div className="home-page">
             <Hero />
+            <PulseRibbon items={pulseItems} />
             <TrustStrip />
 
             <section className="section home-value">
