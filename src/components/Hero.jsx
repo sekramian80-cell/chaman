@@ -26,7 +26,7 @@ export function Hero() {
                         </a>
                     </div>
                     {heroContent.fifaBadge ? (
-                        <p className="hero__note">{heroContent.fifaBadge}</p>
+                        <div className="hero__fifa">{heroContent.fifaBadge}</div>
                     ) : null}
                 </div>
             </div>
