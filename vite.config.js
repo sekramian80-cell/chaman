@@ -18,12 +18,19 @@ export default defineConfig({
         manualChunks(id) {
           if (!id.includes('node_modules')) return undefined;
 
-          if (id.includes('react-dom') || id.includes('/react/')) {
-            return 'react-vendor';
-          }
-
           if (id.includes('lucide-react')) {
             return 'icons';
+          }
+
+          // Keep React + motion libs together to avoid vendor <-> react-vendor cycles.
+          if (
+            id.includes('react-dom') ||
+            id.includes('/react/') ||
+            id.includes('scheduler') ||
+            id.includes('framer-motion') ||
+            id.includes('gsap')
+          ) {
+            return 'react-vendor';
           }
 
           return 'vendor';
