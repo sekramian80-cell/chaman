@@ -4,11 +4,12 @@
  *
  * وقتی CONFIG.USE_API = false باشد، مستقیماً از داده‌های محلی استفاده می‌شود.
  * وقتی API فعال است، محتوای محلی فوراً نمایش داده می‌شود و در پس‌زمینه hydrate می‌شود.
+ * اگر کش session تازه باشد، همان دادهٔ API بدون درخواست شبکه استفاده می‌شود.
  */
 import { useEffect, useState } from 'react';
 import { ContentContext } from './ContentContext.jsx';
 import { CONFIG } from '../config/index.js';
-import { fetchSiteContent, getLocalContent } from '../services/contentService.js';
+import { fetchSiteContent, getCachedSiteContent, getLocalContent } from '../services/contentService.js';
 
 function ContentSyncBar({ visible }) {
     if (!visible) return null;
@@ -20,16 +21,34 @@ function ContentSyncBar({ visible }) {
     );
 }
 
-export function ContentProvider({ children }) {
-    const [value, setValue] = useState(() => ({
+function getInitialValue() {
+    const cached = CONFIG.USE_API ? getCachedSiteContent() : null;
+
+    if (cached) {
+        return {
+            ...cached,
+            loading: false,
+            error: null,
+            isFromAPI: true,
+        };
+    }
+
+    return {
         ...getLocalContent(),
         loading: CONFIG.USE_API,
         error: null,
         isFromAPI: false,
-    }));
+    };
+}
+
+export function ContentProvider({ children }) {
+    const [value, setValue] = useState(getInitialValue);
 
     useEffect(() => {
         if (!CONFIG.USE_API) return undefined;
+
+        // کش تازه → نیازی به شبکه نیست
+        if (!value.loading && value.isFromAPI) return undefined;
 
         let isMounted = true;
 
@@ -58,6 +77,8 @@ export function ContentProvider({ children }) {
         return () => {
             isMounted = false;
         };
+        // فقط یک‌بار در mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

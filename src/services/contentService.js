@@ -18,6 +18,7 @@ import { filterProductsByCategory, mapProductsFromAPI } from '../models/ProductM
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
 import { fetchNavigationMenu } from './menuService.js';
+import { getCachedApiBundle, setCachedApiBundle } from '../utils/contentCache.js';
 import { getCustomPosts } from './wordpress.js';
 
 export function getLocalContent() {
@@ -75,23 +76,19 @@ function buildProductsState(apiItems, localProducts) {
             sports: sports.length ? sports : localProducts.byCategory.sports,
             decorative: decorative.length ? decorative : localProducts.byCategory.decorative,
         },
-        cards: [...(sports.length ? sports : localProducts.byCategory.sports), ...(decorative.length ? decorative : localProducts.byCategory.decorative)],
+        cards: [
+            ...(sports.length ? sports : localProducts.byCategory.sports),
+            ...(decorative.length ? decorative : localProducts.byCategory.decorative),
+        ],
     };
 }
 
-/**
- * دریافت محتوای سایت از وردپرس و ترکیب با fallback محلی
- */
-export async function fetchSiteContent() {
-    const local = getLocalContent();
-
-    const [serviceItems, productItems, projectItems, faqItems, menuItems] = await Promise.all([
-        getCustomPosts('service'),
-        getCustomPosts('product'),
-        getCustomPosts('project'),
-        getCustomPosts('faq'),
-        fetchNavigationMenu(),
-    ]);
+function buildContentFromApiBundle(bundle, local) {
+    const serviceItems = bundle.serviceItems || [];
+    const productItems = bundle.productItems || [];
+    const projectItems = bundle.projectItems || [];
+    const faqItems = bundle.faqItems || [];
+    const menuItems = bundle.menuItems || [];
 
     return {
         ...local,
@@ -111,6 +108,49 @@ export async function fetchSiteContent() {
             ...local.faq,
             items: useApiSection(mapFaqsFromAPI(faqItems), local.faq.items),
         },
-        isFromAPI: CONFIG.USE_API,
+        isFromAPI: true,
     };
+}
+
+/**
+ * اگر کش تازه باشد، محتوای ترکیب‌شده را برمی‌گرداند (بدون شبکه)
+ * @returns {object|null}
+ */
+export function getCachedSiteContent() {
+    const cached = getCachedApiBundle();
+    if (!cached?.payload) return null;
+    return buildContentFromApiBundle(cached.payload, getLocalContent());
+}
+
+/**
+ * دریافت محتوای سایت از وردپرس و ترکیب با fallback محلی
+ * در صورت فعال بودن CACHE، پاسخ خام API تا TTL در session نگه داشته می‌شود.
+ */
+export async function fetchSiteContent() {
+    const local = getLocalContent();
+    const cached = getCachedApiBundle();
+
+    if (cached?.payload) {
+        return buildContentFromApiBundle(cached.payload, local);
+    }
+
+    const [serviceItems, productItems, projectItems, faqItems, menuItems] = await Promise.all([
+        getCustomPosts('service'),
+        getCustomPosts('product'),
+        getCustomPosts('project'),
+        getCustomPosts('faq'),
+        fetchNavigationMenu(),
+    ]);
+
+    const payload = {
+        serviceItems,
+        productItems,
+        projectItems,
+        faqItems,
+        menuItems,
+    };
+
+    setCachedApiBundle(payload);
+
+    return buildContentFromApiBundle(payload, local);
 }
