@@ -489,6 +489,165 @@ img {
     border: 0;
 }
 
+.contact-channels__intro,
+.contact-map-block__intro,
+.faq-showcase__intro,
+.faq-support__intro {
+    max-width: 680px;
+    margin-bottom: 32px;
+}
+
+.contact-channels__intro h2,
+.contact-map-block__intro h2,
+.faq-showcase__intro h2,
+.faq-support__intro h2 {
+    margin: 10px 0 0;
+    background: linear-gradient(120deg, #f3ffe9 30%, var(--color-lime) 70%, var(--color-teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.contact-channels__intro p,
+.contact-map-block__intro p,
+.faq-showcase__intro p,
+.faq-support__intro p {
+    margin: 14px 0 0;
+    color: var(--color-muted);
+}
+
+.contact-page-grid--premium > .contact-card {
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.contact-card__inner {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 280px;
+    height: 100%;
+    padding: 28px 24px;
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 168, 0.22);
+    border-radius: 24px;
+    background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(236, 255, 229, 0.05)),
+        rgba(24, 54, 30, 0.42);
+    box-shadow: 0 20px 54px rgba(6, 20, 10, 0.34);
+    transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.contact-card__inner:hover {
+    border-color: rgba(198, 255, 168, 0.5);
+    box-shadow: 0 32px 80px rgba(6, 20, 10, 0.48);
+    transform: translateY(-8px);
+}
+
+.contact-card__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(126, 217, 87, 0.96), rgba(42, 157, 143, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-card__inner:hover .contact-card__icon {
+    transform: rotate(-8deg) scale(1.06);
+}
+
+.contact-card--premium h2 {
+    color: #f3ffe9;
+    font-size: 1.28rem;
+}
+
+.contact-card--premium p,
+.contact-card--premium address {
+    color: rgba(226, 245, 219, 0.82);
+}
+
+.contact-card__cta {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+    color: var(--color-lime) !important;
+    font-size: 0.95rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: gap 0.3s ease;
+}
+
+.contact-card__inner:hover .contact-card__cta {
+    gap: 12px;
+}
+
+.contact-card__shine,
+.faq-support-card__shine {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.16), transparent 68%);
+    transform: translateX(120%);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-card__inner:hover .contact-card__shine,
+.faq-support-card__inner:hover .faq-support-card__shine {
+    transform: translateX(-120%);
+}
+
+.contact-map--premium .contact-map-block {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: center;
+    gap: 36px;
+}
+
+.contact-map-block__link {
+    margin-top: 18px;
+    gap: 8px;
+}
+
+.contact-map--premium .contact-map-block__canvas {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border: 1px solid rgba(198, 255, 168, 0.22);
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(6, 20, 10, 0.36);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
+}
+
+.contact-map--premium .contact-map-block__canvas:hover {
+    box-shadow: 0 32px 80px rgba(6, 20, 10, 0.46);
+    transform: translateY(-4px);
+}
+
+.contact-map-block__frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 24px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
 .header-actions {
     position: relative;
     z-index: 1;
@@ -3173,6 +3332,159 @@ body.nav-lock {
     animation: faqDrop 260ms ease both;
 }
 
+.faq-showcase__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 140px));
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.faq-showcase__stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    background: rgba(236, 255, 229, 0.08);
+    border: 1px solid rgba(198, 255, 168, 0.2);
+    border-radius: 16px;
+    transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+.faq-showcase__stats div:hover {
+    border-color: rgba(150, 230, 99, 0.42);
+    transform: translateY(-3px);
+}
+
+.faq-showcase__stats strong {
+    color: var(--color-lime);
+    font-size: 1.2rem;
+}
+
+.faq-showcase__stats span {
+    color: rgba(226, 245, 219, 0.72);
+    font-size: 0.82rem;
+}
+
+.faq-item--premium {
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 168, 0.2);
+    border-radius: 18px;
+    background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(236, 255, 229, 0.04)),
+        rgba(24, 54, 30, 0.38);
+    box-shadow: 0 16px 44px rgba(6, 20, 10, 0.28);
+    transition:
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item--premium:hover,
+.faq-item--premium[open] {
+    border-color: rgba(198, 255, 168, 0.48);
+    box-shadow: 0 24px 60px rgba(6, 20, 10, 0.4);
+    transform: translateY(-4px);
+}
+
+.faq-item--premium summary {
+    gap: 14px;
+    color: #f3ffe9;
+}
+
+.faq-item__index {
+    display: grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    color: var(--color-lime);
+    font-size: 0.82rem;
+    font-weight: 800;
+    background: rgba(150, 230, 99, 0.12);
+    border: 1px solid rgba(150, 230, 99, 0.28);
+    border-radius: 999px;
+}
+
+.faq-item__question {
+    flex: 1;
+    text-align: right;
+}
+
+.faq-item--premium summary svg {
+    color: var(--color-lime);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item--premium p {
+    color: rgba(226, 245, 219, 0.84);
+    line-height: 1.9;
+}
+
+.faq-support-card {
+    min-height: 0;
+}
+
+.faq-support-card__inner {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 220px;
+    height: 100%;
+    padding: 26px 24px;
+    overflow: hidden;
+    border: 1px solid rgba(198, 255, 168, 0.22);
+    border-radius: 24px;
+    background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(236, 255, 229, 0.04)),
+        rgba(24, 54, 30, 0.4);
+    box-shadow: 0 18px 48px rgba(6, 20, 10, 0.3);
+    transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.faq-support-card__inner:hover {
+    border-color: rgba(198, 255, 168, 0.48);
+    box-shadow: 0 28px 70px rgba(6, 20, 10, 0.44);
+    transform: translateY(-8px);
+}
+
+.faq-support-card__icon {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(126, 217, 87, 0.96), rgba(42, 157, 143, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 14px;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-support-card__inner:hover .faq-support-card__icon {
+    transform: rotate(-8deg) scale(1.06);
+}
+
+.faq-support-card__inner h3 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: #f3ffe9;
+    font-size: 1.18rem;
+}
+
+.faq-support-card__inner p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: rgba(226, 245, 219, 0.82);
+    line-height: 1.85;
+}
+
 .contact-cta {
     position: relative;
     padding: 84px 0;
@@ -4306,7 +4618,9 @@ body.nav-lock {
     .service-card__shine,
     .service-plan-card__shine,
     .process-step__shine,
-    .timeline-item__shine {
+    .timeline-item__shine,
+    .contact-card__shine,
+    .faq-support-card__shine {
         animation: none !important;
         display: none;
     }
@@ -4519,6 +4833,10 @@ body.nav-lock {
     }
 
     .contact-page-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-map--premium .contact-map-block {
         grid-template-columns: 1fr;
     }
 
@@ -4834,7 +5152,8 @@ body.nav-lock {
     .checklist-band--premium,
     .services-showcase__stats,
     .process-line--premium,
-    .process-showcase__stats {
+    .process-showcase__stats,
+    .faq-showcase__stats {
         grid-template-columns: 1fr;
     }
 
