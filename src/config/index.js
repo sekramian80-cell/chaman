@@ -26,7 +26,14 @@ export const CONFIG = {
     /** تنظیمات کش */
     CACHE: {
         ENABLED: true,
-        TTL: 5 * 60 * 1000, // 5 دقیقه
+        TTL: 5 * 60 * 1000, // 5 دقیقه — بعد از TTL با SWR در پس‌زمینه تازه می‌شود
+    },
+
+    /** مانیتورینگ سبک کلاینت */
+    MONITORING: {
+        /** اگر خالی باشد فقط در console/session ذخیره می‌شود */
+        ENDPOINT: '',
+        LOG_TO_CONSOLE: true,
     },
 
     /** تنظیمات تصاویر */

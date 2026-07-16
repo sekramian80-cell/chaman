@@ -39,9 +39,11 @@ export function FAQ() {
                             >
                                 <details className="faq-item faq-item--premium">
                                     <summary>
-                                        <span className="faq-item__index">{toPersianOrdinal(index)}</span>
+                                        <span className="faq-item__index" aria-hidden="true">
+                                            {toPersianOrdinal(index)}
+                                        </span>
                                         <span className="faq-item__question">{item.question}</span>
-                                        <ChevronDown size={20} />
+                                        <ChevronDown size={20} aria-hidden="true" />
                                     </summary>
                                     <p>{item.answer}</p>
                                 </details>

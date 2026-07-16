@@ -1,15 +1,12 @@
 /**
  * ContentProvider
- * Provider که داده‌ها را از طریق Context در اختیار کل اپلیکیشن قرار می‌دهد
- *
- * وقتی CONFIG.USE_API = false باشد، مستقیماً از داده‌های محلی استفاده می‌شود.
- * وقتی API فعال است، محتوای محلی فوراً نمایش داده می‌شود و در پس‌زمینه hydrate می‌شود.
- * اگر کش session تازه باشد، همان دادهٔ API بدون درخواست شبکه استفاده می‌شود.
+ * Stale-While-Revalidate: کش فوری نمایش داده می‌شود و در پس‌زمینه تازه می‌شود.
  */
 import { useEffect, useState } from 'react';
 import { ContentContext } from './ContentContext.jsx';
 import { CONFIG } from '../config/index.js';
 import { fetchSiteContent, getCachedSiteContent, getLocalContent } from '../services/contentService.js';
+import { reportError } from '../utils/monitoring.js';
 
 function ContentSyncBar({ visible }) {
     if (!visible) return null;
@@ -22,11 +19,20 @@ function ContentSyncBar({ visible }) {
 }
 
 function getInitialValue() {
-    const cached = CONFIG.USE_API ? getCachedSiteContent() : null;
-
-    if (cached) {
+    if (!CONFIG.USE_API) {
         return {
-            ...cached,
+            ...getLocalContent(),
+            loading: false,
+            error: null,
+            isFromAPI: false,
+        };
+    }
+
+    const cached = getCachedSiteContent({ allowStale: true });
+
+    if (cached?.content) {
+        return {
+            ...cached.content,
             loading: false,
             error: null,
             isFromAPI: true,
@@ -35,7 +41,7 @@ function getInitialValue() {
 
     return {
         ...getLocalContent(),
-        loading: CONFIG.USE_API,
+        loading: true,
         error: null,
         isFromAPI: false,
     };
@@ -47,12 +53,14 @@ export function ContentProvider({ children }) {
     useEffect(() => {
         if (!CONFIG.USE_API) return undefined;
 
-        // کش تازه → نیازی به شبکه نیست
-        if (!value.loading && value.isFromAPI) return undefined;
-
         let isMounted = true;
+        const hadCache = Boolean(getCachedSiteContent({ allowStale: true }));
 
-        fetchSiteContent()
+        if (!hadCache) {
+            setValue((prev) => ({ ...prev, loading: true }));
+        }
+
+        fetchSiteContent({ force: true })
             .then((content) => {
                 if (!isMounted) return;
 
@@ -66,19 +74,19 @@ export function ContentProvider({ children }) {
             .catch((error) => {
                 if (!isMounted) return;
 
+                reportError(error, { source: 'ContentProvider.fetchSiteContent' });
+
                 setValue((prev) => ({
                     ...prev,
                     loading: false,
                     error: error.message || 'خطا در دریافت اطلاعات',
-                    isFromAPI: false,
+                    isFromAPI: prev.isFromAPI,
                 }));
             });
 
         return () => {
             isMounted = false;
         };
-        // فقط یک‌بار در mount
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

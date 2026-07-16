@@ -39,24 +39,34 @@ function writeSession(entry) {
     }
 }
 
-/**
- * خواندن کش خام پاسخ‌های API (قابل serialize)
- * @returns {{ savedAt: number, payload: object } | null}
- */
-export function getCachedApiBundle() {
-    if (!isEnabled()) return null;
-
-    if (isFresh(memory.entry)) {
-        return memory.entry;
-    }
+function resolveEntry() {
+    if (memory.entry) return memory.entry;
 
     const sessionEntry = readSession();
-    if (isFresh(sessionEntry)) {
+    if (sessionEntry) {
         memory.entry = sessionEntry;
         return sessionEntry;
     }
 
     return null;
+}
+
+/**
+ * خواندن کش خام پاسخ‌های API
+ * @param {{ allowStale?: boolean }} [options]
+ * @returns {{ savedAt: number, payload: object, fresh: boolean } | null}
+ */
+export function getCachedApiBundle(options = {}) {
+    if (!isEnabled()) return null;
+
+    const allowStale = Boolean(options.allowStale);
+    const entry = resolveEntry();
+    if (!entry?.payload) return null;
+
+    const fresh = isFresh(entry);
+    if (!fresh && !allowStale) return null;
+
+    return { ...entry, fresh };
 }
 
 /**

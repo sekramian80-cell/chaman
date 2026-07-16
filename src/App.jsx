@@ -134,9 +134,12 @@ export default function App() {
 
     return (
         <>
+            <a className="skip-link" href="#main-content">
+                پرش به محتوای اصلی
+            </a>
             <Header currentPath={currentPath} />
             {showBreadcrumbs ? <Breadcrumbs currentPath={currentPath} /> : null}
-            <main className="page-router" key={pageKey}>
+            <main id="main-content" className="page-router" key={pageKey} tabIndex={-1}>
                 <Suspense fallback={<LoadingSpinner />}>
                     {isProjectDetail ? (
                         <ProjectDetailPage slug={projectSlug} />
