@@ -6327,3 +6327,343 @@ body.nav-lock {
         transform: none;
     }
 }
+
+/* ===== WooCommerce: سبد خرید، قیمت کارت و صفحهٔ محصول ===== */
+
+/* آیکن سبد در هدر */
+.header-cart {
+    position: relative;
+}
+
+.header-cart__badge {
+    position: absolute;
+    top: -6px;
+    inset-inline-end: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--color-lime);
+    color: #0d2412;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* قیمت و دکمهٔ افزودن روی کارت محصول */
+.product-project-card__price {
+    display: inline-block;
+    margin-top: 6px;
+    color: var(--color-lime);
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.product-project-card__actions {
+    padding: 0 18px 18px;
+}
+
+.product-project-card__add {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+}
+
+.product-project-card__add:hover {
+    background: var(--gradient-brand);
+    border-color: transparent;
+    color: #0d2412;
+}
+
+.product-project-card__add:active {
+    transform: translateY(1px);
+}
+
+/* پنل خرید در صفحهٔ جزئیات محصول */
+.product-detail__hero-price {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-lime);
+}
+
+.product-detail__panel h3 {
+    margin: 0 0 6px;
+}
+
+.product-detail__price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-lime);
+    margin: 0 0 16px;
+}
+
+.product-detail__price--inquiry {
+    color: var(--color-muted);
+    font-size: 18px;
+}
+
+.product-detail__facts {
+    margin: 0 0 18px;
+    display: grid;
+    gap: 10px;
+}
+
+.product-detail__facts div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--color-line);
+}
+
+.product-detail__facts dt {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--color-muted);
+    font-size: 14px;
+}
+
+.product-detail__facts dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* استپر تعداد */
+.product-detail__qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 14px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 4px;
+    background: var(--color-surface);
+}
+
+.product-detail__qty button {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.product-detail__qty button:hover {
+    background: var(--color-mist);
+}
+
+.product-detail__qty span {
+    min-width: 34px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.product-detail__add {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.product-detail__inquiry {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ===== صفحهٔ سبد خرید ===== */
+.cart-page__empty {
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.cart-page__head {
+    margin-bottom: 28px;
+}
+
+.cart-page__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 26px;
+    align-items: start;
+}
+
+.cart-page__items {
+    display: grid;
+    gap: 14px;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+}
+
+.cart-item__media {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--color-green-dark);
+    display: block;
+}
+
+.cart-item__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cart-item__body {
+    display: grid;
+    gap: 8px;
+}
+
+.cart-item__title {
+    color: var(--color-ink);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.cart-item__title:hover {
+    color: var(--color-lime);
+}
+
+.cart-item__unit {
+    color: var(--color-muted);
+    font-size: 14px;
+}
+
+.cart-item__controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.cart-item__remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    color: var(--color-coral);
+    font: inherit;
+    cursor: pointer;
+    padding: 6px 4px;
+}
+
+.cart-item__remove:hover {
+    text-decoration: underline;
+}
+
+.cart-item__total {
+    font-weight: 800;
+    color: var(--color-ink);
+    white-space: nowrap;
+}
+
+.cart-summary {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    padding: 20px;
+    position: sticky;
+    top: 96px;
+    display: grid;
+    gap: 12px;
+}
+
+.cart-summary h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+.cart-summary__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-muted);
+}
+
+.cart-summary__row--total {
+    padding-top: 12px;
+    margin-top: 4px;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-ink);
+}
+
+.cart-summary__row--total strong {
+    font-size: 18px;
+    color: var(--color-lime);
+}
+
+.cart-summary__checkout {
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.cart-summary__note {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-muted);
+    text-align: center;
+}
+
+.cart-summary__continue {
+    width: 100%;
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .cart-page__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+        position: static;
+    }
+
+    .cart-item {
+        grid-template-columns: 76px minmax(0, 1fr);
+    }
+
+    .cart-item__media {
+        width: 76px;
+        height: 76px;
+    }
+
+    .cart-item__total {
+        grid-column: 2;
+    }
+}

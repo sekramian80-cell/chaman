@@ -4,18 +4,26 @@ import { Footer } from "./components/Footer.jsx";
 import { Header } from "./components/Header.jsx";
 import { LoadingSpinner } from "./components/LoadingSpinner.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
-import { getProjectSlugFromPath, isProjectDetailPath, resolveRoute } from "./utils/routing.js";
+import {
+    getProductSlugFromPath,
+    getProjectSlugFromPath,
+    isProductDetailPath,
+    isProjectDetailPath,
+    resolveRoute,
+} from "./utils/routing.js";
 
 const pageLoaders = {
     "/services": () => import("./pages/ServicesPage.jsx"),
     "/products": () => import("./pages/ProductsPage.jsx"),
     "/products/sports": () => import("./pages/ProductCategoryPage.jsx"),
     "/products/decorative": () => import("./pages/ProductCategoryPage.jsx"),
+    "/product/:slug": () => import("./pages/ProductDetailPage.jsx"),
     "/process": () => import("./pages/ProcessPage.jsx"),
     "/projects": () => import("./pages/ProjectsPage.jsx"),
     "/projects/:slug": () => import("./pages/ProjectDetailPage.jsx"),
     "/faq": () => import("./pages/FAQPage.jsx"),
     "/contact": () => import("./pages/ContactPage.jsx"),
+    "/cart": () => import("./pages/CartPage.jsx"),
 };
 
 const ServicesPage = lazy(() => pageLoaders["/services"]().then((m) => ({ default: m.ServicesPage })));
@@ -31,8 +39,12 @@ const ProjectsPage = lazy(() => pageLoaders["/projects"]().then((m) => ({ defaul
 const ProjectDetailPage = lazy(() =>
     pageLoaders["/projects/:slug"]().then((m) => ({ default: m.ProjectDetailPage })),
 );
+const ProductDetailPage = lazy(() =>
+    pageLoaders["/product/:slug"]().then((m) => ({ default: m.ProductDetailPage })),
+);
 const FAQPage = lazy(() => pageLoaders["/faq"]().then((m) => ({ default: m.FAQPage })));
 const ContactPage = lazy(() => pageLoaders["/contact"]().then((m) => ({ default: m.ContactPage })));
+const CartPage = lazy(() => pageLoaders["/cart"]().then((m) => ({ default: m.CartPage })));
 
 const staticRoutes = {
     "/": HomePage,
@@ -44,10 +56,17 @@ const staticRoutes = {
     "/projects": ProjectsPage,
     "/faq": FAQPage,
     "/contact": ContactPage,
+    "/cart": CartPage,
 };
 
 function resolveCurrentRoute() {
-    return resolveRoute(window.location.pathname, staticRoutes, ProjectDetailPage, HomePage);
+    return resolveRoute(
+        window.location.pathname,
+        staticRoutes,
+        ProjectDetailPage,
+        HomePage,
+        ProductDetailPage,
+    );
 }
 
 function toAppPath(href) {
@@ -108,6 +127,11 @@ export default function App() {
 
             if (isProjectDetailPath(pathname)) {
                 void pageLoaders["/projects/:slug"]().catch(() => {});
+                return;
+            }
+
+            if (isProductDetailPath(pathname)) {
+                void pageLoaders["/product/:slug"]().catch(() => {});
             }
         };
 
@@ -124,12 +148,14 @@ export default function App() {
         };
     }, []);
 
-    const { path: currentPath, Page, params, isProjectDetail } = route;
+    const { path: currentPath, Page, params, isProjectDetail, isProductDetail } = route;
     const projectSlug = params?.slug || (isProjectDetail ? getProjectSlugFromPath(currentPath) : "");
-    const pageKey = useMemo(
-        () => (projectSlug ? `project:${projectSlug}` : currentPath),
-        [currentPath, projectSlug],
-    );
+    const productSlug = params?.slug || (isProductDetail ? getProductSlugFromPath(currentPath) : "");
+    const pageKey = useMemo(() => {
+        if (projectSlug && isProjectDetail) return `project:${projectSlug}`;
+        if (productSlug && isProductDetail) return `product:${productSlug}`;
+        return currentPath;
+    }, [currentPath, projectSlug, productSlug, isProjectDetail, isProductDetail]);
     const showBreadcrumbs = currentPath !== "/";
 
     return (
@@ -143,6 +169,8 @@ export default function App() {
                 <Suspense fallback={<LoadingSpinner />}>
                     {isProjectDetail ? (
                         <ProjectDetailPage slug={projectSlug} />
+                    ) : isProductDetail ? (
+                        <ProductDetailPage slug={productSlug} />
                     ) : (
                         <Page />
                     )}

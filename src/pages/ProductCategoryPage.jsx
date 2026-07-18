@@ -7,6 +7,7 @@ import sportsHero from '../assets/services/sports-field.jpg';
 import { productCategoryConfig } from '../content/productCategories.js';
 import { productSubcategories } from '../content/productSubcategories.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
+import { getProductDetailPath } from '../utils/routing.js';
 import { toPersianNumber } from '../utils/persianNumber.js';
 import { PageHero } from './PageHero.jsx';
 
@@ -129,6 +130,8 @@ export function ProductCategoryPage({ categorySlug }) {
                                     project={project}
                                     revealVariant={index === 0 ? 'scale' : index % 3 === 0 ? 'left' : 'up'}
                                     variant={index === 0 ? 'featured' : 'default'}
+                                    href={project.slug ? getProductDetailPath(project) : undefined}
+                                    enableCart
                                 />
                             ))}
                         </div>

@@ -7,6 +7,18 @@ export const CONFIG = {
     /** آدرس پایه API وردپرس */
     API_BASE_URL: "https://api.farazchaman.ir/wp-json/wp/v2",
 
+    /** تنظیمات WooCommerce (Store API عمومی + انتقال سبد به checkout) */
+    WC: {
+        /** فعال‌سازی خواندن محصولات از WooCommerce Store API */
+        ENABLED: true,
+        /** پایهٔ Store API عمومی ووکامرس (بدون consumer key) */
+        STORE_URL: "https://api.farazchaman.ir/wp-json/wc/store/v1",
+        /** اوریجین سایت ووکامرس (برای لینک‌ها و checkout) */
+        SHOP_ORIGIN: "https://api.farazchaman.ir",
+        /** endpoint انتقال سبد از React به سشن first-party ووکامرس و ریدایرکت به پرداخت */
+        HANDOFF_URL: "https://api.farazchaman.ir/wp-json/faraz/v1/checkout-handoff",
+    },
+
     /** تنظیمات درخواست‌ها */
     REQUEST: {
         TIMEOUT: 10000, // 10 ثانیه

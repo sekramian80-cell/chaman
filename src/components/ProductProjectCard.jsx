@@ -1,6 +1,37 @@
-import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, Check, ShoppingCart } from 'lucide-react';
 import { toPersianNumber } from '../utils/persianNumber.js';
+import { useCart } from '../hooks/useCart.js';
 import { ScrollReveal } from './ScrollReveal.jsx';
+
+function AddToCartButton({ product }) {
+    const { add } = useCart();
+    const [added, setAdded] = useState(false);
+
+    function onClick(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        add(product, 1);
+        setAdded(true);
+        window.setTimeout(() => setAdded(false), 1600);
+    }
+
+    return (
+        <button type="button" className="product-project-card__add" onClick={onClick}>
+            {added ? (
+                <>
+                    اضافه شد
+                    <Check size={16} />
+                </>
+            ) : (
+                <>
+                    افزودن به سبد
+                    <ShoppingCart size={16} />
+                </>
+            )}
+        </button>
+    );
+}
 
 /**
  * @param {object} props
@@ -11,6 +42,7 @@ import { ScrollReveal } from './ScrollReveal.jsx';
  * @param {'default'|'featured'|'compact'} [props.variant]
  * @param {'up'|'scale'|'left'|'right'} [props.revealVariant]
  * @param {string} [props.href]
+ * @param {boolean} [props.enableCart] نمایش دکمهٔ افزودن به سبد
  */
 export function ProductProjectCard({
     project,
@@ -20,9 +52,12 @@ export function ProductProjectCard({
     variant = 'default',
     revealVariant = 'up',
     href,
+    enableCart = false,
 }) {
     const indexLabel =
         typeof index === 'number' ? toPersianNumber(String(index + 1).padStart(2, '0')) : null;
+
+    const showCart = enableCart && project?.priceAmount > 0;
 
     const body = (
         <article className="product-project-card__inner">
@@ -46,7 +81,11 @@ export function ProductProjectCard({
                     ) : null}
                 </div>
                 <h3>{project.title}</h3>
-                {project.meta ? <small>{project.meta}</small> : null}
+                {project.priceLabel ? (
+                    <span className="product-project-card__price">{project.priceLabel}</span>
+                ) : project.meta ? (
+                    <small>{project.meta}</small>
+                ) : null}
                 {project.text ? <p>{project.text}</p> : null}
                 {href ? (
                     <span className="product-project-card__cta">
@@ -71,6 +110,11 @@ export function ProductProjectCard({
             ) : (
                 body
             )}
+            {showCart ? (
+                <div className="product-project-card__actions">
+                    <AddToCartButton product={project} />
+                </div>
+            ) : null}
         </ScrollReveal>
     );
 }

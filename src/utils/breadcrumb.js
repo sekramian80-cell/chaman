@@ -2,7 +2,12 @@
  * ساخت مسیر بردکرامب بر اساس URL و داده محتوا
  */
 import { findProjectBySlug } from '../models/ProjectModel.js';
-import { getProjectSlugFromPath, isProjectDetailPath } from './routing.js';
+import {
+    getProductSlugFromPath,
+    getProjectSlugFromPath,
+    isProductDetailPath,
+    isProjectDetailPath,
+} from './routing.js';
 
 const pathLabels = {
     '/': 'خانه',
@@ -14,6 +19,7 @@ const pathLabels = {
     '/projects': 'نمونه کارها',
     '/faq': 'سوالات پرتکرار',
     '/contact': 'تماس با ما',
+    '/cart': 'سبد خرید',
 };
 
 /**
@@ -34,6 +40,18 @@ export function buildBreadcrumbs(currentPath, content = {}) {
         crumbs.push({ label: 'نمونه کارها', href: '/projects' });
         crumbs.push({
             label: project?.title || slug || 'جزئیات پروژه',
+            href: currentPath,
+        });
+        return crumbs;
+    }
+
+    if (isProductDetailPath(currentPath)) {
+        const slug = getProductSlugFromPath(currentPath);
+        const product = (content.products?.cards || []).find((item) => item.slug === slug);
+
+        crumbs.push({ label: 'محصولات', href: '/products' });
+        crumbs.push({
+            label: product?.title || slug || 'جزئیات محصول',
             href: currentPath,
         });
         return crumbs;

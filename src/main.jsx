@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import { ContentProvider } from "./context/ContentProvider.jsx";
+import { CartProvider } from "./context/CartProvider.jsx";
 import { initClientMonitoring } from "./utils/monitoring.js";
 import "./styles.css";
 
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")).render(
     <StrictMode>
         <ErrorBoundary>
             <ContentProvider>
-                <App />
+                <CartProvider>
+                    <App />
+                </CartProvider>
             </ContentProvider>
         </ErrorBoundary>
     </StrictMode>,

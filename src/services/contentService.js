@@ -14,12 +14,14 @@ import { trustItems } from '../content/trust.js';
 import { testimonial } from '../content/testimonial.js';
 import { CONFIG } from '../config/index.js';
 import { mapFaqsFromAPI } from '../models/FaqModel.js';
-import { filterProductsByCategory, mapProductsFromAPI } from '../models/ProductModel.js';
+import { filterProductsByCategory } from '../models/ProductModel.js';
+import { buildWooCategoryMap, mapWooProductsFromAPI } from '../models/WooProductModel.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
 import { fetchNavigationMenu } from './menuService.js';
 import { getCachedApiBundle, setCachedApiBundle } from '../utils/contentCache.js';
 import { getCustomPosts } from './wordpress.js';
+import { getWooCategories, getWooProducts } from './woocommerce.js';
 
 export function getLocalContent() {
     return {
@@ -58,8 +60,8 @@ function useApiSection(apiItems, localItems) {
     return apiItems.length > 0 ? apiItems : localItems;
 }
 
-function buildProductsState(apiItems, localProducts) {
-    const mapped = mapProductsFromAPI(apiItems);
+function buildProductsState(apiItems, localProducts, categoryMap) {
+    const mapped = mapWooProductsFromAPI(apiItems, categoryMap);
     const hasApiProducts = mapped.length > 0;
 
     const sports = hasApiProducts
@@ -86,9 +88,11 @@ function buildProductsState(apiItems, localProducts) {
 function buildContentFromApiBundle(bundle, local) {
     const serviceItems = bundle.serviceItems || [];
     const productItems = bundle.productItems || [];
+    const wooCategories = bundle.wooCategories || [];
     const projectItems = bundle.projectItems || [];
     const faqItems = bundle.faqItems || [];
     const menuItems = bundle.menuItems || [];
+    const categoryMap = buildWooCategoryMap(wooCategories);
 
     return {
         ...local,
@@ -99,7 +103,7 @@ function buildContentFromApiBundle(bundle, local) {
             ...local.services,
             items: mergeServices(serviceItems, local.services.items),
         },
-        products: buildProductsState(productItems, local.products),
+        products: buildProductsState(productItems, local.products, categoryMap),
         projects: {
             ...local.projects,
             items: useApiSection(mapProjectsFromAPI(projectItems), local.projects.items),
@@ -142,17 +146,22 @@ export async function fetchSiteContent(options = {}) {
         }
     }
 
-    const [serviceItems, productItems, projectItems, faqItems, menuItems] = await Promise.all([
-        getCustomPosts('service'),
-        getCustomPosts('product'),
-        getCustomPosts('project'),
-        getCustomPosts('faq'),
-        fetchNavigationMenu(),
-    ]);
+    const useWoo = Boolean(CONFIG.WC?.ENABLED);
+
+    const [serviceItems, productItems, wooCategories, projectItems, faqItems, menuItems] =
+        await Promise.all([
+            getCustomPosts('service'),
+            useWoo ? getWooProducts().catch(() => []) : Promise.resolve([]),
+            useWoo ? getWooCategories().catch(() => []) : Promise.resolve([]),
+            getCustomPosts('project'),
+            getCustomPosts('faq'),
+            fetchNavigationMenu(),
+        ]);
 
     const payload = {
         serviceItems,
         productItems,
+        wooCategories,
         projectItems,
         faqItems,
         menuItems,

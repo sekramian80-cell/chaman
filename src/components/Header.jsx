@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, Menu, Phone, X } from "lucide-react";
+import { ChevronDown, Menu, Phone, ShoppingCart, X } from "lucide-react";
 import logoUrl from "../assets/logo-faraz-mark.png";
 import { isNavItemActive, isNavLinkActive } from "../content/navigation.js";
 import { useSiteContent } from "../hooks/useSiteContent.js";
+import { useCart } from "../hooks/useCart.js";
+import { toPersianNumber } from "../utils/persianNumber.js";
 
 function NavItem({ item, currentPath, closeMenu }) {
     const hasChildren = item.children?.length > 0;
@@ -66,6 +68,7 @@ function NavItem({ item, currentPath, closeMenu }) {
 
 export function Header({ currentPath = "/" }) {
     const { navigation } = useSiteContent();
+    const { count: cartCount } = useCart();
     const menuItems = navigation?.items?.length ? navigation.items : [];
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hasScrolled, setHasScrolled] = useState(false);
@@ -124,6 +127,17 @@ export function Header({ currentPath = "/" }) {
                 </nav>
 
                 <div className="header-actions">
+                    <a
+                        className="icon-link header-cart"
+                        href="/cart"
+                        aria-label={`سبد خرید${cartCount ? ` (${toPersianNumber(cartCount)} کالا)` : ""}`}
+                        onClick={closeMenu}
+                    >
+                        <ShoppingCart size={19} />
+                        {cartCount > 0 ? (
+                            <span className="header-cart__badge">{toPersianNumber(cartCount)}</span>
+                        ) : null}
+                    </a>
                     <a className="icon-link header-cta" href="tel:+989123365430" aria-label="تماس تلفنی">
                         <Phone size={19} />
                         <span>تماس سریع</span>

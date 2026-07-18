@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { toPersianNumber } from '../utils/persianNumber.js';
+import { getProductDetailPath } from '../utils/routing.js';
 import { ProductProjectCard } from './ProductProjectCard.jsx';
 import { ScrollReveal } from './ScrollReveal.jsx';
 
@@ -35,7 +36,8 @@ export function ProductCategoryPreview({ category, items = [] }) {
                                 project={project}
                                 revealVariant={index === 0 ? 'scale' : 'up'}
                                 variant={index === 0 ? 'featured' : 'default'}
-                                href={category.path}
+                                href={project.slug ? getProductDetailPath(project) : category.path}
+                                enableCart
                             />
                         ))}
                     </div>
