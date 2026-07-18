@@ -20,7 +20,7 @@ import { buildWooCategoryMap, mapWooProductsFromAPI } from '../models/WooProduct
 import { buildCategoryTree, groupProductsByCategory } from '../models/categoryTree.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
-import { fetchNavigationMenu } from './menuService.js';
+import { fetchNavigationMenu, fetchSiteMenu } from './menuService.js';
 import { getCachedApiBundle, setCachedApiBundle } from '../utils/contentCache.js';
 import { getCategoryPath } from '../utils/routing.js';
 import { getCustomPosts } from './wordpress.js';
@@ -127,9 +127,12 @@ function injectCategoriesIntoNav(navItems = [], tree = []) {
         path: getCategoryPath(node.slug),
     }));
 
-    return navItems.map((item) =>
-        item.path === '/products' || item.href === '/products' ? { ...item, children } : item,
-    );
+    return navItems.map((item) => {
+        const isProducts = item.path === '/products' || item.href === '/products';
+        // اگر کاربر خودش زیرمنو تعریف کرده باشد، به آن دست نمی‌زنیم؛ وگرنه دسته‌ها را می‌گذاریم.
+        if (isProducts && !item.children?.length) return { ...item, children };
+        return item;
+    });
 }
 
 function buildContentFromApiBundle(bundle, local) {
@@ -142,7 +145,8 @@ function buildContentFromApiBundle(bundle, local) {
     const categoryMap = buildWooCategoryMap(wooCategories);
 
     const productsState = buildProductsState(productItems, wooCategories, categoryMap, local.products);
-    const navBase = ensureProjectsNavItem(menuItems.length ? menuItems : local.navigation.items);
+    // اگر فهرست وردپرس آمده، دقیقاً همان نمایش داده می‌شود؛ وگرنه fallback محلی.
+    const navBase = menuItems.length ? menuItems : ensureProjectsNavItem(local.navigation.items);
 
     return {
         ...local,
@@ -201,15 +205,19 @@ export async function fetchSiteContent(options = {}) {
 
     // مرحلهٔ ۱ (بحرانی): محصولات و دسته‌ها را در «یک درخواست واحد» می‌گیریم تا با
     // endpointهای کندِ دیگر رقابت نکنند (روی هاست کند، درخواست همزمان = timeout).
+    // منوی سبک و مستقل را اول و سریع می‌گیریم تا نوار ناوبری فوری با فهرست وردپرس درست شود.
+    let menuItems = await fetchSiteMenu().catch(() => []);
+    if (onPartial && menuItems.length) {
+        onPartial(buildContentFromApiBundle({ menuItems }, local));
+    }
+
+    // کاتالوگ: محصولات + دسته‌ها (+ منو به‌عنوان fallback در صورت نبودِ site-menu)
     const catalog = useWoo ? await getWooCatalog() : { products: [], categories: [], menu: [] };
     const productItems = catalog.products;
     const wooCategories = catalog.categories;
 
-    // منو از همان درخواست سریعِ catalog می‌آید (قابل‌اعتماد)؛ اگر نبود، fallback به endpoint جدا.
-    let menuItems = mapMenuTree(catalog.menu || []);
-    if (!menuItems.length) {
-        menuItems = await fetchNavigationMenu().catch(() => []);
-    }
+    if (!menuItems.length) menuItems = mapMenuTree(catalog.menu || []);
+    if (!menuItems.length) menuItems = await fetchNavigationMenu().catch(() => []);
 
     // آپدیت زودهنگام: محصولات + منو را فوری نمایش بده؛ بقیه بخش‌ها فعلاً محلی می‌مانند تا برسند.
     if (onPartial) {

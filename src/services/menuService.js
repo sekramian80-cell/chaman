@@ -41,6 +41,21 @@ async function tryPluginMenuEndpoint(slug) {
 }
 
 /**
+ * دریافت منو از endpoint سبک و مستقل faraz/v1/site-menu (سریع و مطمئن)
+ */
+export async function fetchSiteMenu() {
+    const base = CONFIG.WC?.FAST_URL;
+    if (!base) return [];
+
+    try {
+        const data = await fetchJson(`${base.replace(/\/$/, '')}/site-menu`);
+        return mapMenuTree(Array.isArray(data) ? data : []);
+    } catch {
+        return [];
+    }
+}
+
+/**
  * دریافت منوی اصلی از وردپرس
  */
 export async function fetchNavigationMenu() {

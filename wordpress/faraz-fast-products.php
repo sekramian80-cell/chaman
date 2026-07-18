@@ -41,6 +41,15 @@ add_action('rest_api_init', function () {
         'callback' => 'faraz_fast_get_catalog',
         'permission_callback' => '__return_true',
     ]);
+
+    // منوی سایت به‌صورت سبک و مستقل (سریع و مطمئن برای نوار ناوبری)
+    register_rest_route('faraz/v1', '/site-menu', [
+        'methods' => 'GET',
+        'callback' => function () {
+            return rest_ensure_response(faraz_fast_get_menu_tree());
+        },
+        'permission_callback' => '__return_true',
+    ]);
 });
 
 function faraz_fast_get_catalog($request)
@@ -66,6 +75,13 @@ function faraz_fast_get_menu_tree()
     }
     if (!$menu) {
         $menu = wp_get_nav_menu_object('منوی اصلی سایت');
+    }
+    if (!$menu) {
+        // در نهایت اولین منوی موجود را بردار تا هر منویی که کاربر ساخته نمایش داده شود
+        $all = wp_get_nav_menus();
+        if (!empty($all)) {
+            $menu = $all[0];
+        }
     }
     if (!$menu) {
         return [];
