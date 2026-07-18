@@ -7,6 +7,22 @@ import { CONFIG } from '../config/index.js';
 
 const STORE_URL = CONFIG.WC.STORE_URL.replace(/\/$/, '');
 
+// فقط فیلدهای مورد نیاز فرانت را می‌خواهیم تا پاسخ سبک‌تر و سریع‌تر شود
+// (حذف price_html, add_to_cart, _links, review, dimensions و ... که استفاده نمی‌شوند)
+const PRODUCT_FIELDS = [
+    'id',
+    'name',
+    'slug',
+    'permalink',
+    'sku',
+    'short_description',
+    'description',
+    'prices',
+    'images',
+    'categories',
+    'is_in_stock',
+].join(',');
+
 /**
  * درخواست GET به Store API و برگرداندن { data, totalPages }
  * @param {string} path مسیر نسبی مثل 'products'
@@ -75,13 +91,13 @@ export async function getWooCategories() {
 export async function getWooProducts(options = {}) {
     const perPage = Math.min(options.perPage ?? 100, 100);
 
-    const first = await storeGet('products', { per_page: perPage, page: 1 });
+    const first = await storeGet('products', { per_page: perPage, page: 1, _fields: PRODUCT_FIELDS });
     const items = [...first.data];
 
     for (let page = 2; page <= first.totalPages; page += 1) {
         // برای جلوگیری از حلقهٔ طولانی، سقف منطقی صفحات رعایت می‌شود
         if (page > 20) break;
-        const next = await storeGet('products', { per_page: perPage, page });
+        const next = await storeGet('products', { per_page: perPage, page, _fields: PRODUCT_FIELDS });
         items.push(...next.data);
     }
 
@@ -97,7 +113,7 @@ export async function getWooProductBySlug(slug) {
     if (!slug) return null;
 
     // Store API از فیلتر slug پشتیبانی می‌کند
-    const { data } = await storeGet('products', { slug, per_page: 1 });
+    const { data } = await storeGet('products', { slug, per_page: 1, _fields: PRODUCT_FIELDS });
     if (data.length) return data[0];
 
     // fallback: واکشی همه و find (اگر فیلتر slug پشتیبانی نشد)
