@@ -22,6 +22,7 @@ import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
 import { fetchNavigationMenu } from './menuService.js';
 import { getCachedApiBundle, setCachedApiBundle } from '../utils/contentCache.js';
+import { getCategoryPath } from '../utils/routing.js';
 import { getCustomPosts } from './wordpress.js';
 import { getWooCatalog } from './woocommerce.js';
 
@@ -40,11 +41,14 @@ function buildLocalProducts() {
 }
 
 export function getLocalContent() {
+    const products = buildLocalProducts();
     return {
-        navigation: { items: ensureProjectsNavItem(navItems) },
+        navigation: {
+            items: injectCategoriesIntoNav(ensureProjectsNavItem(navItems), products.tree),
+        },
         hero: { content: heroContent, stats: heroStats },
         services: { items: services, plans: servicePlans, checklist: serviceChecklist },
-        products: buildLocalProducts(),
+        products,
         process: { steps: processSteps, timeline: processTimeline },
         projects: { items: projects, stats: projectStats },
         faq: { items: faqs, support: supportItems },
@@ -109,6 +113,25 @@ function buildProductsState(apiItems, wooCategories, categoryMap, localProducts)
     };
 }
 
+/**
+ * کشوی «محصولات» در منو را همیشه با دسته‌های ووکامرس پر می‌کند
+ * تا کاربر لازم نباشد دسته‌ها را دستی زیر «محصولات» تودرتو کند.
+ */
+function injectCategoriesIntoNav(navItems = [], tree = []) {
+    if (!tree.length) return navItems;
+
+    const children = tree.map((node) => ({
+        id: `cat-${node.slug}`,
+        label: node.title,
+        href: getCategoryPath(node.slug),
+        path: getCategoryPath(node.slug),
+    }));
+
+    return navItems.map((item) =>
+        item.path === '/products' || item.href === '/products' ? { ...item, children } : item,
+    );
+}
+
 function buildContentFromApiBundle(bundle, local) {
     const serviceItems = bundle.serviceItems || [];
     const productItems = bundle.productItems || [];
@@ -118,16 +141,19 @@ function buildContentFromApiBundle(bundle, local) {
     const menuItems = bundle.menuItems || [];
     const categoryMap = buildWooCategoryMap(wooCategories);
 
+    const productsState = buildProductsState(productItems, wooCategories, categoryMap, local.products);
+    const navBase = ensureProjectsNavItem(menuItems.length ? menuItems : local.navigation.items);
+
     return {
         ...local,
         navigation: {
-            items: ensureProjectsNavItem(menuItems.length ? menuItems : local.navigation.items),
+            items: injectCategoriesIntoNav(navBase, productsState.tree),
         },
         services: {
             ...local.services,
             items: mergeServices(serviceItems, local.services.items),
         },
-        products: buildProductsState(productItems, wooCategories, categoryMap, local.products),
+        products: productsState,
         projects: {
             ...local.projects,
             items: useApiSection(mapProjectsFromAPI(projectItems), local.projects.items),
