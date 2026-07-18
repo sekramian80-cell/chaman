@@ -60,7 +60,14 @@ export function ContentProvider({ children }) {
             setValue((prev) => ({ ...prev, loading: true }));
         }
 
-        fetchSiteContent({ force: true })
+        fetchSiteContent({
+            force: true,
+            // آپدیت زودهنگام محصولات (بدون انتظار برای بخش‌های کند)
+            onPartial: (partial) => {
+                if (!isMounted) return;
+                setValue({ ...partial, loading: true, error: null, isFromAPI: true });
+            },
+        })
             .then((content) => {
                 if (!isMounted) return;
 

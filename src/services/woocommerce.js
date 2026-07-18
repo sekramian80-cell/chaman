@@ -62,9 +62,9 @@ async function httpGet(baseUrl, path, params = {}) {
         }
 
         const totalPages = Number(response.headers.get('X-WP-TotalPages') || '1') || 1;
-        const data = await response.json();
+        const raw = await response.json();
 
-        return { data: Array.isArray(data) ? data : [], totalPages };
+        return { data: Array.isArray(raw) ? raw : [], raw, totalPages };
     } catch (error) {
         clearTimeout(timeoutId);
 
@@ -95,6 +95,33 @@ async function fetchProductsFromStoreApi(perPage) {
     }
 
     return items;
+}
+
+/**
+ * دریافت محصولات + دسته‌ها در «یک درخواست واحد» (faraz/v1/catalog).
+ * روی هاست‌های کند، چند درخواست همزمان همدیگر را timeout می‌کنند؛ پس مسیر بحرانی
+ * را به یک درخواست کاهش می‌دهیم. اگر endpoint نبود، به‌صورت «ترتیبی» (نه موازی) fallback می‌کنیم.
+ * @returns {Promise<{ products: Array, categories: Array }>}
+ */
+export async function getWooCatalog() {
+    if (USE_FAST) {
+        try {
+            const { raw } = await httpGet(FAST_URL, 'catalog');
+            if (raw && Array.isArray(raw.products)) {
+                return {
+                    products: raw.products,
+                    categories: Array.isArray(raw.categories) ? raw.categories : [],
+                };
+            }
+        } catch {
+            // fallback در ادامه
+        }
+    }
+
+    // fallback ترتیبی: اول دسته‌ها، بعد محصولات (بدون رقابت همزمان)
+    const categories = await getWooCategories().catch(() => []);
+    const products = await getWooProducts().catch(() => []);
+    return { products, categories };
 }
 
 /**

@@ -34,7 +34,22 @@ add_action('rest_api_init', function () {
         'callback' => 'faraz_fast_get_product_categories',
         'permission_callback' => '__return_true',
     ]);
+
+    // محصولات + دسته‌ها در یک درخواست واحد (سرورهای کند با درخواست همزمان مشکل دارند)
+    register_rest_route('faraz/v1', '/catalog', [
+        'methods' => 'GET',
+        'callback' => 'faraz_fast_get_catalog',
+        'permission_callback' => '__return_true',
+    ]);
 });
+
+function faraz_fast_get_catalog($request)
+{
+    return rest_ensure_response([
+        'products' => faraz_fast_get_products($request)->get_data(),
+        'categories' => faraz_fast_get_product_categories($request)->get_data(),
+    ]);
+}
 
 function faraz_fast_get_products($request)
 {
