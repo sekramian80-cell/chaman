@@ -1,14 +1,19 @@
 /**
- * سرویس WooCommerce Store API
- * خواندن عمومی محصولات و دسته‌بندی‌ها (بدون consumer key)
- * الگوی fetch مطابق api.js و menuService.js
+ * سرویس دادهٔ محصولات ووکامرس
+ *
+ * دو منبع:
+ *   1) endpoint سریع سفارشی faraz/v1 (اسنیپت faraz-fast-products.php) — پیش‌فرض
+ *   2) WooCommerce Store API (wc/store/v1) — fallback در صورت نبودِ endpoint سریع
+ *
+ * خروجی هر دو هم‌شکل است، پس mapWooProductsFromAPI بدون تغییر روی هر دو کار می‌کند.
  */
 import { CONFIG } from '../config/index.js';
 
 const STORE_URL = CONFIG.WC.STORE_URL.replace(/\/$/, '');
+const FAST_URL = (CONFIG.WC.FAST_URL || '').replace(/\/$/, '');
+const USE_FAST = Boolean(CONFIG.WC.FAST_API && FAST_URL);
 
-// فقط فیلدهای مورد نیاز فرانت را می‌خواهیم تا پاسخ سبک‌تر و سریع‌تر شود
-// (حذف price_html, add_to_cart, _links, review, dimensions و ... که استفاده نمی‌شوند)
+// فیلدهای موردنیاز از Store API (برای سبک‌کردن پاسخ کند)
 const PRODUCT_FIELDS = [
     'id',
     'name',
@@ -24,12 +29,10 @@ const PRODUCT_FIELDS = [
 ].join(',');
 
 /**
- * درخواست GET به Store API و برگرداندن { data, totalPages }
- * @param {string} path مسیر نسبی مثل 'products'
- * @param {Object} params پارامترهای query
+ * GET عمومی به یک URL کامل و برگرداندن { data, totalPages }
  */
-async function storeGet(path, params = {}) {
-    const url = new URL(`${STORE_URL}/${path}`);
+async function httpGet(baseUrl, path, params = {}) {
+    const url = new URL(`${baseUrl}/${path}`);
 
     Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
@@ -37,7 +40,6 @@ async function storeGet(path, params = {}) {
         }
     });
 
-    // جلوگیری از کش تا تازه‌ترین داده ووکامرس دریافت شود
     url.searchParams.set('_', Date.now().toString());
 
     const controller = new AbortController();
@@ -67,37 +69,28 @@ async function storeGet(path, params = {}) {
         clearTimeout(timeoutId);
 
         if (error.name === 'AbortError') {
-            throw new Error('درخواست به ووکامرس با خطای تایم‌اوت مواجه شد');
+            throw new Error('درخواست محصولات با خطای تایم‌اوت مواجه شد');
         }
 
         throw error;
     }
 }
 
-/**
- * دریافت همهٔ دسته‌بندی‌های محصول از ووکامرس
- * @returns {Promise<Array<{id:number,name:string,slug:string,parent:number,count:number}>>}
- */
-export async function getWooCategories() {
-    const { data } = await storeGet('products/categories', { per_page: 100 });
-    return data;
-}
-
-/**
- * دریافت همهٔ محصولات (با پیمایش صفحات)
- * @param {{ perPage?: number }} [options]
- * @returns {Promise<Array<Object>>}
- */
-export async function getWooProducts(options = {}) {
-    const perPage = Math.min(options.perPage ?? 100, 100);
-
-    const first = await storeGet('products', { per_page: perPage, page: 1, _fields: PRODUCT_FIELDS });
+async function fetchProductsFromStoreApi(perPage) {
+    const first = await httpGet(STORE_URL, 'products', {
+        per_page: perPage,
+        page: 1,
+        _fields: PRODUCT_FIELDS,
+    });
     const items = [...first.data];
 
     for (let page = 2; page <= first.totalPages; page += 1) {
-        // برای جلوگیری از حلقهٔ طولانی، سقف منطقی صفحات رعایت می‌شود
         if (page > 20) break;
-        const next = await storeGet('products', { per_page: perPage, page, _fields: PRODUCT_FIELDS });
+        const next = await httpGet(STORE_URL, 'products', {
+            per_page: perPage,
+            page,
+            _fields: PRODUCT_FIELDS,
+        });
         items.push(...next.data);
     }
 
@@ -105,18 +98,66 @@ export async function getWooProducts(options = {}) {
 }
 
 /**
- * دریافت یک محصول با اسلاگ (برای صفحهٔ جزئیات و دیپ‌لینک)
- * @param {string} slug
- * @returns {Promise<Object|null>}
+ * دریافت دسته‌بندی‌های محصول (اسلاگ‌ها برای تشخیص ورزشی/تزیینی)
+ */
+export async function getWooCategories() {
+    if (USE_FAST) {
+        try {
+            const { data } = await httpGet(FAST_URL, 'product-categories');
+            if (data.length) return data;
+        } catch {
+            // fallback به Store API
+        }
+    }
+
+    const { data } = await httpGet(STORE_URL, 'products/categories', { per_page: 100 });
+    return data;
+}
+
+/**
+ * دریافت همهٔ محصولات
+ */
+export async function getWooProducts(options = {}) {
+    const perPage = Math.min(options.perPage ?? 100, 100);
+
+    if (USE_FAST) {
+        try {
+            const { data } = await httpGet(FAST_URL, 'products', { per_page: perPage });
+            return data;
+        } catch {
+            // fallback به Store API
+        }
+    }
+
+    return fetchProductsFromStoreApi(perPage);
+}
+
+/**
+ * دریافت یک محصول با اسلاگ
  */
 export async function getWooProductBySlug(slug) {
     if (!slug) return null;
 
-    // Store API از فیلتر slug پشتیبانی می‌کند
-    const { data } = await storeGet('products', { slug, per_page: 1, _fields: PRODUCT_FIELDS });
-    if (data.length) return data[0];
+    if (USE_FAST) {
+        try {
+            const { data } = await httpGet(FAST_URL, 'products', { slug });
+            if (data.length) return data[0];
+        } catch {
+            // fallback در ادامه
+        }
+    }
 
-    // fallback: واکشی همه و find (اگر فیلتر slug پشتیبانی نشد)
+    try {
+        const { data } = await httpGet(STORE_URL, 'products', {
+            slug,
+            per_page: 1,
+            _fields: PRODUCT_FIELDS,
+        });
+        if (data.length) return data[0];
+    } catch {
+        // در نهایت از لیست کامل پیدا می‌کنیم
+    }
+
     const all = await getWooProducts();
     return all.find((item) => item.slug === slug) || null;
 }

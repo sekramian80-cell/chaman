@@ -11,7 +11,14 @@ export const CONFIG = {
     WC: {
         /** فعال‌سازی خواندن محصولات از WooCommerce Store API */
         ENABLED: true,
-        /** پایهٔ Store API عمومی ووکامرس (بدون consumer key) */
+        /**
+         * استفاده از endpoint سریع سفارشی (اسنیپت faraz-fast-products.php) به‌جای Store API کند.
+         * اگر endpoint نصب نباشد، خودکار به Store API برمی‌گردد.
+         */
+        FAST_API: true,
+        /** پایهٔ endpoint سریع سفارشی */
+        FAST_URL: "https://api.farazchaman.ir/wp-json/faraz/v1",
+        /** پایهٔ Store API عمومی ووکامرس (بدون consumer key) — fallback */
         STORE_URL: "https://api.farazchaman.ir/wp-json/wc/store/v1",
         /** اوریجین سایت ووکامرس (برای لینک‌ها و checkout) */
         SHOP_ORIGIN: "https://api.farazchaman.ir",
