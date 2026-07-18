@@ -48,7 +48,74 @@ function faraz_fast_get_catalog($request)
     return rest_ensure_response([
         'products' => faraz_fast_get_products($request)->get_data(),
         'categories' => faraz_fast_get_product_categories($request)->get_data(),
+        'menu' => faraz_fast_get_menu_tree(),
     ]);
+}
+
+/**
+ * منوی جایگاه primary را به‌صورت درختِ نرمال‌شده (فقط path) برمی‌گرداند.
+ * این‌طور فرانت منو را در همان درخواست سریع می‌گیرد و به endpoint جدا وابسته نیست.
+ */
+function faraz_fast_get_menu_tree()
+{
+    $menu = null;
+    $locations = get_nav_menu_locations();
+
+    if (!empty($locations['primary'])) {
+        $menu = wp_get_nav_menu_object($locations['primary']);
+    }
+    if (!$menu) {
+        $menu = wp_get_nav_menu_object('منوی اصلی سایت');
+    }
+    if (!$menu) {
+        return [];
+    }
+
+    $items = wp_get_nav_menu_items($menu->term_id);
+    if (!$items) {
+        return [];
+    }
+
+    return faraz_fast_build_menu_branch($items, 0);
+}
+
+function faraz_fast_menu_path($item)
+{
+    $url = $item->url ?? '/';
+    $path = wp_parse_url($url, PHP_URL_PATH);
+    return $path ?: '/';
+}
+
+function faraz_fast_build_menu_branch($items, $parent)
+{
+    $branch = [];
+
+    foreach ($items as $item) {
+        if ((int) $item->menu_item_parent !== (int) $parent) {
+            continue;
+        }
+
+        $children = faraz_fast_build_menu_branch($items, $item->ID);
+        $node = [
+            'id' => (int) $item->ID,
+            'label' => $item->title,
+            'url' => faraz_fast_menu_path($item),
+            'order' => (int) $item->menu_order,
+            'parent' => (int) $item->menu_item_parent,
+        ];
+
+        if ($children) {
+            $node['children'] = $children;
+        }
+
+        $branch[] = $node;
+    }
+
+    usort($branch, function ($a, $b) {
+        return $a['order'] <=> $b['order'];
+    });
+
+    return $branch;
 }
 
 function faraz_fast_get_products($request)

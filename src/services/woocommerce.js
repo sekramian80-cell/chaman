@@ -111,6 +111,7 @@ export async function getWooCatalog() {
                 return {
                     products: raw.products,
                     categories: Array.isArray(raw.categories) ? raw.categories : [],
+                    menu: Array.isArray(raw.menu) ? raw.menu : [],
                 };
             }
         } catch {
@@ -121,7 +122,7 @@ export async function getWooCatalog() {
     // fallback ترتیبی: اول دسته‌ها، بعد محصولات (بدون رقابت همزمان)
     const categories = await getWooCategories().catch(() => []);
     const products = await getWooProducts().catch(() => []);
-    return { products, categories };
+    return { products, categories, menu: [] };
 }
 
 /**

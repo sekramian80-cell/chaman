@@ -15,6 +15,7 @@ import { trustItems } from '../content/trust.js';
 import { testimonial } from '../content/testimonial.js';
 import { CONFIG } from '../config/index.js';
 import { mapFaqsFromAPI } from '../models/FaqModel.js';
+import { mapMenuTree } from '../models/MenuItemModel.js';
 import { buildWooCategoryMap, mapWooProductsFromAPI } from '../models/WooProductModel.js';
 import { buildCategoryTree, groupProductsByCategory } from '../models/categoryTree.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
@@ -174,21 +175,26 @@ export async function fetchSiteContent(options = {}) {
 
     // مرحلهٔ ۱ (بحرانی): محصولات و دسته‌ها را در «یک درخواست واحد» می‌گیریم تا با
     // endpointهای کندِ دیگر رقابت نکنند (روی هاست کند، درخواست همزمان = timeout).
-    const catalog = useWoo ? await getWooCatalog() : { products: [], categories: [] };
+    const catalog = useWoo ? await getWooCatalog() : { products: [], categories: [], menu: [] };
     const productItems = catalog.products;
     const wooCategories = catalog.categories;
 
-    // آپدیت زودهنگام: محصولات را فوری نمایش بده؛ بقیه بخش‌ها فعلاً محلی می‌مانند تا برسند.
-    if (onPartial) {
-        onPartial(buildContentFromApiBundle({ productItems, wooCategories }, local));
+    // منو از همان درخواست سریعِ catalog می‌آید (قابل‌اعتماد)؛ اگر نبود، fallback به endpoint جدا.
+    let menuItems = mapMenuTree(catalog.menu || []);
+    if (!menuItems.length) {
+        menuItems = await fetchNavigationMenu().catch(() => []);
     }
 
-    // مرحلهٔ ۲: بقیهٔ بخش‌ها؛ خطا/۴۰۴/تایم‌اوت هرکدام نباید بقیه را از کار بیندازد.
-    const [serviceItems, projectItems, faqItems, menuItems] = await Promise.all([
+    // آپدیت زودهنگام: محصولات + منو را فوری نمایش بده؛ بقیه بخش‌ها فعلاً محلی می‌مانند تا برسند.
+    if (onPartial) {
+        onPartial(buildContentFromApiBundle({ productItems, wooCategories, menuItems }, local));
+    }
+
+    // مرحلهٔ ۲: بخش‌های کندتر؛ خطا/۴۰۴/تایم‌اوت هرکدام نباید بقیه را از کار بیندازد.
+    const [serviceItems, projectItems, faqItems] = await Promise.all([
         getCustomPosts('service').catch(() => []),
         getCustomPosts('project').catch(() => []),
         getCustomPosts('faq').catch(() => []),
-        fetchNavigationMenu().catch(() => []),
     ]);
 
     const payload = {
