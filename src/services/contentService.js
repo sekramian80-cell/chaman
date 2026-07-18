@@ -210,10 +210,15 @@ export async function fetchSiteContent(options = {}) {
 
     // مرحلهٔ ۱ (بحرانی): محصولات و دسته‌ها را در «یک درخواست واحد» می‌گیریم تا با
     // endpointهای کندِ دیگر رقابت نکنند (روی هاست کند، درخواست همزمان = timeout).
-    // منوی سبک و مستقل را اول و سریع می‌گیریم تا نوار ناوبری فوری با فهرست وردپرس درست شود.
-    let menuItems = await fetchSiteMenu().catch(() => []);
-    if (onPartial && menuItems.length) {
-        onPartial(buildContentFromApiBundle({ menuItems }, local));
+    const useWpMenu = Boolean(CONFIG.MENU?.USE_WORDPRESS);
+
+    // اگر خواندنِ منو از وردپرس فعال باشد، منوی سبک را اول و سریع می‌گیریم.
+    let menuItems = [];
+    if (useWpMenu) {
+        menuItems = await fetchSiteMenu().catch(() => []);
+        if (onPartial && menuItems.length) {
+            onPartial(buildContentFromApiBundle({ menuItems }, local));
+        }
     }
 
     // کاتالوگ: محصولات + دسته‌ها (+ منو به‌عنوان fallback در صورت نبودِ site-menu)
@@ -221,8 +226,8 @@ export async function fetchSiteContent(options = {}) {
     const productItems = catalog.products;
     const wooCategories = catalog.categories;
 
-    if (!menuItems.length) menuItems = mapMenuTree(catalog.menu || []);
-    if (!menuItems.length) menuItems = await fetchNavigationMenu().catch(() => []);
+    if (useWpMenu && !menuItems.length) menuItems = mapMenuTree(catalog.menu || []);
+    if (useWpMenu && !menuItems.length) menuItems = await fetchNavigationMenu().catch(() => []);
 
     // آپدیت زودهنگام: محصولات + منو را فوری نمایش بده؛ بقیه بخش‌ها فعلاً محلی می‌مانند تا برسند.
     if (onPartial) {
