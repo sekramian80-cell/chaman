@@ -117,20 +117,25 @@ function buildProductsState(apiItems, wooCategories, categoryMap, localProducts)
  * کشوی «محصولات» در منو را همیشه با دسته‌های ووکامرس پر می‌کند
  * تا کاربر لازم نباشد دسته‌ها را دستی زیر «محصولات» تودرتو کند.
  */
-function injectCategoriesIntoNav(navItems = [], tree = []) {
-    if (!tree.length) return navItems;
-
-    const children = tree.map((node) => ({
+function categoryTreeToNav(nodes = []) {
+    return nodes.map((node) => ({
         id: `cat-${node.slug}`,
         label: node.title,
         href: getCategoryPath(node.slug),
         path: getCategoryPath(node.slug),
+        children: node.children?.length ? categoryTreeToNav(node.children) : undefined,
     }));
+}
+
+function injectCategoriesIntoNav(navItems = [], tree = []) {
+    if (!tree.length) return navItems;
+
+    const children = categoryTreeToNav(tree);
 
     return navItems.map((item) => {
         const isProducts = item.path === '/products' || item.href === '/products';
-        // اگر کاربر خودش زیرمنو تعریف کرده باشد، به آن دست نمی‌زنیم؛ وگرنه دسته‌ها را می‌گذاریم.
-        if (isProducts && !item.children?.length) return { ...item, children };
+        // کشوی «محصولات» همیشه درختِ کاملِ دسته‌ها (با زیردسته‌ها) را نشان می‌دهد.
+        if (isProducts) return { ...item, children };
         return item;
     });
 }

@@ -6,7 +6,7 @@ import { useSiteContent } from "../hooks/useSiteContent.js";
 import { useCart } from "../hooks/useCart.js";
 import { toPersianNumber } from "../utils/persianNumber.js";
 
-function NavItem({ item, currentPath, closeMenu }) {
+function NavItem({ item, currentPath, closeMenu, depth = 0 }) {
     const hasChildren = item.children?.length > 0;
     const isActive = isNavItemActive(item, currentPath);
     const [isOpen, setIsOpen] = useState(isActive);
@@ -29,7 +29,7 @@ function NavItem({ item, currentPath, closeMenu }) {
     }
 
     return (
-        <div className={`main-nav__group ${isOpen ? "main-nav__group--open" : ""}`}>
+        <div className={`main-nav__group main-nav__group--depth${depth} ${isOpen ? "main-nav__group--open" : ""}`}>
             <div className="main-nav__parent">
                 <a
                     className={isActive ? "main-nav__link--active" : ""}
@@ -51,15 +51,13 @@ function NavItem({ item, currentPath, closeMenu }) {
             </div>
             <div className="main-nav__submenu">
                 {item.children.map((child) => (
-                    <a
-                        className={isNavLinkActive(child.path, currentPath) ? "main-nav__link--active" : ""}
-                        key={child.href}
-                        href={child.href}
-                        aria-current={isNavLinkActive(child.path, currentPath) ? "page" : undefined}
-                        onClick={closeMenu}
-                    >
-                        {child.label}
-                    </a>
+                    <NavItem
+                        key={child.id ?? child.href}
+                        item={child}
+                        currentPath={currentPath}
+                        closeMenu={closeMenu}
+                        depth={depth + 1}
+                    />
                 ))}
             </div>
         </div>

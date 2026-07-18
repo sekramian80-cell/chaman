@@ -455,8 +455,8 @@ img {
     content: "";
 }
 
-.main-nav__group:hover .main-nav__submenu,
-.main-nav__group:focus-within .main-nav__submenu {
+.main-nav__group:hover > .main-nav__submenu,
+.main-nav__group:focus-within > .main-nav__submenu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -4946,6 +4946,48 @@ body.nav-lock {
     .main-nav__toggle {
         display: none;
     }
+
+    /* زیرمنوی تودرتو (سطح ۲ به بعد) روی دسکتاپ کنارِ آیتم باز می‌شود (RTL → سمت چپ) */
+    .main-nav__submenu .main-nav__submenu {
+        top: -9px;
+        right: calc(100% + 6px);
+        left: auto;
+    }
+
+    /* آیتمِ دارای زیرمنو داخل زیرمنو: چیدمان دو ستونه با فلش کناری */
+    .main-nav__submenu .main-nav__group > .main-nav__parent {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+
+    .main-nav__submenu .main-nav__group > .main-nav__parent > a {
+        min-height: 42px;
+        padding: 10px 14px;
+        border-radius: 12px;
+    }
+
+    /* فلشِ آیتمِ دارای زیرمنو در حالت flyout به‌سمت باز شدن اشاره کند */
+    .main-nav__submenu .main-nav__toggle {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        pointer-events: none;
+    }
+
+    .main-nav__submenu .main-nav__toggle svg {
+        transform: rotate(90deg);
+    }
+
+    /* پلِ نامرئی تا حرکت ماوس به flyout کناری، منو را نبندد */
+    .main-nav__submenu .main-nav__submenu::before {
+        top: 0;
+        bottom: 0;
+        right: -16px;
+        left: auto;
+        width: 16px;
+        height: auto;
+    }
 }
 
 @media (max-width: 1020px) {
@@ -5004,9 +5046,14 @@ body.nav-lock {
         backdrop-filter: none;
     }
 
-    .main-nav__group--open .main-nav__submenu {
+    .main-nav__group--open > .main-nav__submenu {
         display: grid;
         padding-inline: 8px;
+    }
+
+    /* تورفتگی زیرمنوهای تودرتو روی موبایل */
+    .main-nav__submenu .main-nav__submenu {
+        padding-inline-start: 12px;
     }
 
     .main-nav__submenu a {
