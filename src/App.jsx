@@ -5,8 +5,10 @@ import { Header } from "./components/Header.jsx";
 import { LoadingSpinner } from "./components/LoadingSpinner.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import {
+    getCategorySlugFromPath,
     getProductSlugFromPath,
     getProjectSlugFromPath,
+    isProductCategoryPath,
     isProductDetailPath,
     isProjectDetailPath,
     resolveRoute,
@@ -15,8 +17,7 @@ import {
 const pageLoaders = {
     "/services": () => import("./pages/ServicesPage.jsx"),
     "/products": () => import("./pages/ProductsPage.jsx"),
-    "/products/sports": () => import("./pages/ProductCategoryPage.jsx"),
-    "/products/decorative": () => import("./pages/ProductCategoryPage.jsx"),
+    "/products/:category": () => import("./pages/ProductCategoryPage.jsx"),
     "/product/:slug": () => import("./pages/ProductDetailPage.jsx"),
     "/process": () => import("./pages/ProcessPage.jsx"),
     "/projects": () => import("./pages/ProjectsPage.jsx"),
@@ -28,11 +29,8 @@ const pageLoaders = {
 
 const ServicesPage = lazy(() => pageLoaders["/services"]().then((m) => ({ default: m.ServicesPage })));
 const ProductsPage = lazy(() => pageLoaders["/products"]().then((m) => ({ default: m.ProductsPage })));
-const ProductSportsPage = lazy(() =>
-    pageLoaders["/products/sports"]().then((m) => ({ default: m.ProductSportsPage })),
-);
-const ProductDecorativePage = lazy(() =>
-    pageLoaders["/products/decorative"]().then((m) => ({ default: m.ProductDecorativePage })),
+const ProductCategoryPage = lazy(() =>
+    pageLoaders["/products/:category"]().then((m) => ({ default: m.ProductCategoryPage })),
 );
 const ProcessPage = lazy(() => pageLoaders["/process"]().then((m) => ({ default: m.ProcessPage })));
 const ProjectsPage = lazy(() => pageLoaders["/projects"]().then((m) => ({ default: m.ProjectsPage })));
@@ -50,8 +48,6 @@ const staticRoutes = {
     "/": HomePage,
     "/services": ServicesPage,
     "/products": ProductsPage,
-    "/products/sports": ProductSportsPage,
-    "/products/decorative": ProductDecorativePage,
     "/process": ProcessPage,
     "/projects": ProjectsPage,
     "/faq": FAQPage,
@@ -66,6 +62,7 @@ function resolveCurrentRoute() {
         ProjectDetailPage,
         HomePage,
         ProductDetailPage,
+        ProductCategoryPage,
     );
 }
 
@@ -132,6 +129,11 @@ export default function App() {
 
             if (isProductDetailPath(pathname)) {
                 void pageLoaders["/product/:slug"]().catch(() => {});
+                return;
+            }
+
+            if (isProductCategoryPath(pathname)) {
+                void pageLoaders["/products/:category"]().catch(() => {});
             }
         };
 
@@ -148,14 +150,16 @@ export default function App() {
         };
     }, []);
 
-    const { path: currentPath, Page, params, isProjectDetail, isProductDetail } = route;
+    const { path: currentPath, Page, params, isProjectDetail, isProductDetail, isProductCategory } = route;
     const projectSlug = params?.slug || (isProjectDetail ? getProjectSlugFromPath(currentPath) : "");
     const productSlug = params?.slug || (isProductDetail ? getProductSlugFromPath(currentPath) : "");
+    const categorySlug = params?.slug || (isProductCategory ? getCategorySlugFromPath(currentPath) : "");
     const pageKey = useMemo(() => {
         if (projectSlug && isProjectDetail) return `project:${projectSlug}`;
         if (productSlug && isProductDetail) return `product:${productSlug}`;
+        if (categorySlug && isProductCategory) return `category:${categorySlug}`;
         return currentPath;
-    }, [currentPath, projectSlug, productSlug, isProjectDetail, isProductDetail]);
+    }, [currentPath, projectSlug, productSlug, categorySlug, isProjectDetail, isProductDetail, isProductCategory]);
     const showBreadcrumbs = currentPath !== "/";
 
     return (
@@ -171,6 +175,8 @@ export default function App() {
                         <ProjectDetailPage slug={projectSlug} />
                     ) : isProductDetail ? (
                         <ProductDetailPage slug={productSlug} />
+                    ) : isProductCategory ? (
+                        <ProductCategoryPage categorySlug={categorySlug} />
                     ) : (
                         <Page />
                     )}

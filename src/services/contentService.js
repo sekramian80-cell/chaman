@@ -5,6 +5,7 @@ import { ensureProjectsNavItem, navItems } from '../content/navigation.js';
 import { heroContent, heroStats } from '../content/hero.js';
 import { services, servicePlans, serviceChecklist } from '../content/services.js';
 import { productCategoryConfig } from '../content/productCategories.js';
+import { mainCategorySlugs, productSubcategories } from '../content/productSubcategories.js';
 import { productHighlights, sportsProducts, decorativeProducts } from '../content/products.js';
 import { processSteps, processTimeline } from '../content/process.js';
 import { projects, projectStats } from '../content/projects.js';
@@ -14,8 +15,8 @@ import { trustItems } from '../content/trust.js';
 import { testimonial } from '../content/testimonial.js';
 import { CONFIG } from '../config/index.js';
 import { mapFaqsFromAPI } from '../models/FaqModel.js';
-import { filterProductsByCategory } from '../models/ProductModel.js';
 import { buildWooCategoryMap, mapWooProductsFromAPI } from '../models/WooProductModel.js';
+import { buildCategoryTree, groupProductsByCategory } from '../models/categoryTree.js';
 import { mapProjectsFromAPI } from '../models/ProjectModel.js';
 import { mapServicesFromAPI } from '../models/ServiceModel.js';
 import { fetchNavigationMenu } from './menuService.js';
@@ -23,20 +24,26 @@ import { getCachedApiBundle, setCachedApiBundle } from '../utils/contentCache.js
 import { getCustomPosts } from './wordpress.js';
 import { getWooCatalog } from './woocommerce.js';
 
+function buildLocalProducts() {
+    const cards = [...sportsProducts, ...decorativeProducts];
+    const cats = getLocalWooCategories();
+    const byCategory = groupProductsByCategory(cards, buildWooCategoryMap(cats));
+
+    return {
+        highlights: productHighlights,
+        categories: productCategoryConfig,
+        tree: buildCategoryTree(cats, byCategory),
+        byCategory,
+        cards,
+    };
+}
+
 export function getLocalContent() {
     return {
         navigation: { items: ensureProjectsNavItem(navItems) },
         hero: { content: heroContent, stats: heroStats },
         services: { items: services, plans: servicePlans, checklist: serviceChecklist },
-        products: {
-            highlights: productHighlights,
-            byCategory: {
-                sports: sportsProducts,
-                decorative: decorativeProducts,
-            },
-            categories: productCategoryConfig,
-            cards: [...sportsProducts, ...decorativeProducts],
-        },
+        products: buildLocalProducts(),
         process: { steps: processSteps, timeline: processTimeline },
         projects: { items: projects, stats: projectStats },
         faq: { items: faqs, support: supportItems },
@@ -60,28 +67,44 @@ function useApiSection(apiItems, localItems) {
     return apiItems.length > 0 ? apiItems : localItems;
 }
 
-function buildProductsState(apiItems, localProducts, categoryMap) {
+// دسته‌های محلیِ ساختگی برای fallback (وقتی API محصولی ندارد)
+function getLocalWooCategories() {
+    const cats = [];
+    let id = 9000;
+    mainCategorySlugs.forEach((parentSlug) => {
+        const parentId = id + 1;
+        id += 1;
+        cats.push({
+            id: parentId,
+            name: productCategoryConfig[parentSlug]?.title || parentSlug,
+            slug: parentSlug,
+            parent: 0,
+        });
+        (productSubcategories[parentSlug] || []).forEach((sub) => {
+            id += 1;
+            cats.push({ id, name: sub.label, slug: sub.slug, parent: parentId });
+        });
+    });
+    return cats;
+}
+
+function buildProductsState(apiItems, wooCategories, categoryMap, localProducts) {
     const mapped = mapWooProductsFromAPI(apiItems, categoryMap);
     const hasApiProducts = mapped.length > 0;
 
-    const sports = hasApiProducts
-        ? filterProductsByCategory(mapped, 'sports')
-        : localProducts.byCategory.sports;
-    const decorative = hasApiProducts
-        ? filterProductsByCategory(mapped, 'decorative')
-        : localProducts.byCategory.decorative;
+    const products = hasApiProducts ? mapped : localProducts.cards;
+    const cats = hasApiProducts ? wooCategories : getLocalWooCategories();
+    const map = hasApiProducts ? categoryMap : buildWooCategoryMap(cats);
+
+    const byCategory = groupProductsByCategory(products, map);
+    const tree = buildCategoryTree(cats, byCategory);
 
     return {
         highlights: localProducts.highlights,
         categories: localProducts.categories,
-        byCategory: {
-            sports: sports.length ? sports : localProducts.byCategory.sports,
-            decorative: decorative.length ? decorative : localProducts.byCategory.decorative,
-        },
-        cards: [
-            ...(sports.length ? sports : localProducts.byCategory.sports),
-            ...(decorative.length ? decorative : localProducts.byCategory.decorative),
-        ],
+        tree,
+        byCategory,
+        cards: products,
     };
 }
 
@@ -103,7 +126,7 @@ function buildContentFromApiBundle(bundle, local) {
             ...local.services,
             items: mergeServices(serviceItems, local.services.items),
         },
-        products: buildProductsState(productItems, local.products, categoryMap),
+        products: buildProductsState(productItems, wooCategories, categoryMap, local.products),
         projects: {
             ...local.projects,
             items: useApiSection(mapProjectsFromAPI(projectItems), local.projects.items),

@@ -4,8 +4,9 @@ import { ProductProjectCard } from '../components/ProductProjectCard.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import decorativeHero from '../assets/hero-artificial-grass.jpg';
 import sportsHero from '../assets/services/sports-field.jpg';
+import productsHero from '../assets/hero-products-football.jpg';
 import { productCategoryConfig } from '../content/productCategories.js';
-import { productSubcategories } from '../content/productSubcategories.js';
+import { findCategoryNode } from '../models/categoryTree.js';
 import { useSiteContent } from '../hooks/useSiteContent.js';
 import { getProductDetailPath } from '../utils/routing.js';
 import { toPersianNumber } from '../utils/persianNumber.js';
@@ -18,24 +19,32 @@ const categoryHeroImages = {
 
 export function ProductCategoryPage({ categorySlug }) {
     const { products } = useSiteContent();
-    const category = productCategoryConfig[categorySlug];
+    const tree = products?.tree || [];
+    const node = findCategoryNode(tree, categorySlug);
+    const config = productCategoryConfig[categorySlug];
+
     const items = products?.byCategory?.[categorySlug] || [];
     const [activeFilter, setActiveFilter] = useState('all');
     const [isPending, startTransition] = useTransition();
 
-    const availableSubcategories = useMemo(() => {
-        const used = new Set(items.map((item) => item.subcategory).filter(Boolean));
-        return (productSubcategories[categorySlug] || []).filter((item) => used.has(item.slug));
-    }, [categorySlug, items]);
+    // زیردسته‌ها: از درختِ داینامیک (فرزندانِ این دسته که محصول دارند)
+    const subcategories = useMemo(() => node?.children || [], [node]);
 
     const filtered = useMemo(() => {
         if (activeFilter === 'all') return items;
-        return items.filter((item) => item.subcategory === activeFilter);
+        return items.filter(
+            (item) =>
+                item.subcategory === activeFilter || item.categories?.includes(activeFilter),
+        );
     }, [activeFilter, items]);
 
-    if (!category) {
-        return null;
-    }
+    // عنوان/توضیح: کپیِ خوشگلِ هاردکد برای دسته‌های شناخته‌شده، وگرنه از ووکامرس
+    const title = config?.title || node?.title || categorySlug;
+    const eyebrow = config?.eyebrow || 'دستهٔ محصولات';
+    const description =
+        config?.description ||
+        `محصولات دستهٔ «${title}»؛ برای مشاوره و استعلام قیمت با ما در تماس باشید.`;
+    const heroImage = categoryHeroImages[categorySlug] || node?.image || productsHero;
 
     function onFilter(id) {
         startTransition(() => setActiveFilter(id));
@@ -44,13 +53,13 @@ export function ProductCategoryPage({ categorySlug }) {
     return (
         <div className={`product-category-page product-category-page--${categorySlug}`}>
             <PageHero
-                image={categoryHeroImages[categorySlug]}
-                eyebrow={category.eyebrow}
-                title={category.title}
+                image={heroImage}
+                eyebrow={eyebrow}
+                title={title}
                 description={
                     items.length > 0
-                        ? `${toPersianNumber(items.length)} نمونه اجرا در دستهٔ ${category.title}؛ جزئیات پروژه و متای هر مورد از محتوای ثبت‌شده خوانده می‌شود.`
-                        : category.description
+                        ? `${toPersianNumber(items.length)} محصول در دستهٔ ${title}؛ جزئیات هر مورد از پیشخوان ووکامرس خوانده می‌شود.`
+                        : description
                 }
                 primaryLabel="استعلام قیمت"
                 secondaryLabel="بازگشت به محصولات"
@@ -61,16 +70,13 @@ export function ProductCategoryPage({ categorySlug }) {
             <section className="section page-section product-category-page__gallery">
                 <div className="container">
                     <ScrollReveal className="product-category-page__intro" variant="scale">
-                        <span className="eyebrow">گالری اجرا</span>
-                        <h2>نمونه‌های واقعی {category.title}</h2>
-                        <p>
-                            مجموعه‌ای از پروژه‌های اجرا‌شده در این دسته؛ برای مشاوره و استعلام قیمت با ما در تماس
-                            باشید.
-                        </p>
+                        <span className="eyebrow">محصولات این دسته</span>
+                        <h2>{title}</h2>
+                        <p>{description}</p>
                         <div className="product-category-page__stats">
                             <div>
                                 <strong>{items.length ? toPersianNumber(items.length) : '—'}</strong>
-                                <span>کل نمونه</span>
+                                <span>کل محصول</span>
                             </div>
                             <div>
                                 <strong>
@@ -80,8 +86,8 @@ export function ProductCategoryPage({ categorySlug }) {
                             </div>
                             <div>
                                 <strong>
-                                    {availableSubcategories.length
-                                        ? toPersianNumber(availableSubcategories.length)
+                                    {subcategories.length
+                                        ? toPersianNumber(subcategories.length)
                                         : '—'}
                                 </strong>
                                 <span>زیردسته فعال</span>
@@ -89,9 +95,9 @@ export function ProductCategoryPage({ categorySlug }) {
                         </div>
                     </ScrollReveal>
 
-                    {availableSubcategories.length > 0 ? (
+                    {subcategories.length > 0 ? (
                         <ScrollReveal className="project-filters product-category-page__filters" delay={50}>
-                            <div role="tablist" aria-label={`فیلتر ${category.title}`} className="project-filters__row">
+                            <div role="tablist" aria-label={`فیلتر ${title}`} className="project-filters__row">
                                 <button
                                     type="button"
                                     role="tab"
@@ -101,7 +107,7 @@ export function ProductCategoryPage({ categorySlug }) {
                                 >
                                     همه
                                 </button>
-                                {availableSubcategories.map((item) => (
+                                {subcategories.map((item) => (
                                     <button
                                         type="button"
                                         role="tab"
@@ -110,7 +116,7 @@ export function ProductCategoryPage({ categorySlug }) {
                                         key={item.slug}
                                         onClick={() => onFilter(item.slug)}
                                     >
-                                        {item.label}
+                                        {item.title}
                                     </button>
                                 ))}
                             </div>
@@ -139,13 +145,13 @@ export function ProductCategoryPage({ categorySlug }) {
                         <ScrollReveal className="empty-state">
                             <strong>
                                 {items.length === 0
-                                    ? 'به‌زودی نمونه پروژه‌های این دسته اضافه می‌شود.'
-                                    : 'در این فیلتر نمونه‌ای یافت نشد.'}
+                                    ? 'به‌زودی محصولات این دسته اضافه می‌شود.'
+                                    : 'در این فیلتر محصولی یافت نشد.'}
                             </strong>
                             <p>
                                 {items.length === 0
-                                    ? `برای دیدن نمونه‌کارها یا دریافت مشاوره درباره «${category.title}» با ما تماس بگیرید.`
-                                    : 'فیلتر دیگری را انتخاب کنید یا همه نمونه‌ها را ببینید.'}
+                                    ? `برای دیدن محصولات یا دریافت مشاوره دربارهٔ «${title}» با ما تماس بگیرید.`
+                                    : 'فیلتر دیگری را انتخاب کنید یا همه را ببینید.'}
                             </p>
                         </ScrollReveal>
                     )}
@@ -155,12 +161,4 @@ export function ProductCategoryPage({ categorySlug }) {
             <ContactCTA />
         </div>
     );
-}
-
-export function ProductSportsPage() {
-    return <ProductCategoryPage categorySlug="sports" />;
-}
-
-export function ProductDecorativePage() {
-    return <ProductCategoryPage categorySlug="decorative" />;
 }

@@ -4,6 +4,7 @@
 
 const PROJECT_DETAIL_RE = /^\/projects\/([^/]+)\/?$/;
 const PRODUCT_DETAIL_RE = /^\/product\/([^/]+)\/?$/;
+const PRODUCT_CATEGORY_RE = /^\/products\/([^/]+)\/?$/;
 
 /**
  * decode امن برای بخش اسلاگ URL
@@ -31,42 +32,56 @@ export function normalizeProjectKey(value = '') {
  * @param {import('react').ComponentType} HomePage
  * @param {import('react').ComponentType} [ProductDetailPage]
  */
-export function resolveRoute(pathname, staticRoutes, ProjectDetailPage, HomePage, ProductDetailPage) {
+export function resolveRoute(
+    pathname,
+    staticRoutes,
+    ProjectDetailPage,
+    HomePage,
+    ProductDetailPage,
+    ProductCategoryPage,
+) {
     const path = pathname || '/';
 
+    const base = { isProjectDetail: false, isProductDetail: false, isProductCategory: false };
+
     if (staticRoutes[path]) {
-        return {
-            path,
-            Page: staticRoutes[path],
-            params: {},
-            isProjectDetail: false,
-            isProductDetail: false,
-        };
+        return { ...base, path, Page: staticRoutes[path], params: {} };
     }
 
     const projectMatch = path.match(PROJECT_DETAIL_RE);
     if (projectMatch) {
         return {
+            ...base,
             path,
             Page: ProjectDetailPage,
             params: { slug: safeDecodeURIComponent(projectMatch[1]) },
             isProjectDetail: true,
-            isProductDetail: false,
         };
     }
 
     const productMatch = ProductDetailPage ? path.match(PRODUCT_DETAIL_RE) : null;
     if (productMatch) {
         return {
+            ...base,
             path,
             Page: ProductDetailPage,
             params: { slug: safeDecodeURIComponent(productMatch[1]) },
-            isProjectDetail: false,
             isProductDetail: true,
         };
     }
 
-    return { path: '/', Page: HomePage, params: {}, isProjectDetail: false, isProductDetail: false };
+    const categoryMatch = ProductCategoryPage ? path.match(PRODUCT_CATEGORY_RE) : null;
+    if (categoryMatch) {
+        return {
+            ...base,
+            path,
+            Page: ProductCategoryPage,
+            params: { slug: safeDecodeURIComponent(categoryMatch[1]) },
+            isProductCategory: true,
+        };
+    }
+
+    return { ...base, path: '/', Page: HomePage, params: {} };
 }
 
 /**
@@ -117,4 +132,27 @@ export function getProductDetailPath(product) {
     const key = product.slug || product.id;
     if (!key && key !== 0) return '/products';
     return `/product/${encodeURIComponent(String(key))}`;
+}
+
+/**
+ * آیا مسیر مربوط به یک دستهٔ محصول است؟ (/products/<slug>)
+ */
+export function isProductCategoryPath(pathname = '') {
+    return PRODUCT_CATEGORY_RE.test(pathname);
+}
+
+/**
+ * استخراج اسلاگ دسته از مسیر
+ */
+export function getCategorySlugFromPath(pathname = '') {
+    const match = pathname.match(PRODUCT_CATEGORY_RE);
+    return match ? safeDecodeURIComponent(match[1]) : '';
+}
+
+/**
+ * ساخت مسیر صفحهٔ دسته
+ */
+export function getCategoryPath(slug) {
+    if (!slug) return '/products';
+    return `/products/${encodeURIComponent(String(slug))}`;
 }
