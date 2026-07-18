@@ -17,6 +17,8 @@ export const CONFIG = {
         SHOP_ORIGIN: "https://api.farazchaman.ir",
         /** endpoint انتقال سبد از React به سشن first-party ووکامرس و ریدایرکت به پرداخت */
         HANDOFF_URL: "https://api.farazchaman.ir/wp-json/faraz/v1/checkout-handoff",
+        /** تایم‌اوت مخصوص Store API (محصولات ممکن است کندتر از بقیه باشند) */
+        TIMEOUT: 20000,
     },
 
     /** تنظیمات درخواست‌ها */

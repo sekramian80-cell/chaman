@@ -80,29 +80,30 @@ function groupThousands(value) {
 
 /**
  * قالب‌بندی قیمت از prices ووکامرس
- * @returns {{ amount:number, label:string }}
+ * @returns {{ amount:number, label:string, symbol:string }}
  */
 function formatPrice(prices) {
+    const symbol = stripHtml(prices?.currency_symbol || '') || 'تومان';
+
     if (!prices || prices.price === undefined || prices.price === null || prices.price === '') {
-        return { amount: 0, label: '' };
+        return { amount: 0, label: '', symbol };
     }
 
     const minorUnit = Number(prices.currency_minor_unit ?? 0) || 0;
     const raw = Number(prices.price);
     if (!Number.isFinite(raw)) {
-        return { amount: 0, label: '' };
+        return { amount: 0, label: '', symbol };
     }
 
     const amount = minorUnit > 0 ? raw / 10 ** minorUnit : raw;
     if (amount <= 0) {
-        return { amount: 0, label: '' };
+        return { amount: 0, label: '', symbol };
     }
 
     const rounded = Math.round(amount);
-    const symbol = stripHtml(prices.currency_symbol || '') || 'تومان';
     const label = `${toPersianDigits(groupThousands(rounded))} ${symbol}`.trim();
 
-    return { amount: rounded, label };
+    return { amount: rounded, label, symbol };
 }
 
 function buildMeta(item, priceLabel) {
@@ -138,6 +139,7 @@ export function mapWooProductsFromAPI(apiItems = [], categoryMap) {
             price: price.label,
             priceAmount: price.amount,
             priceLabel: price.label,
+            currencySymbol: price.symbol,
             slug: item.slug || '',
             permalink: item.permalink || '',
             inStock: item.is_in_stock !== false,

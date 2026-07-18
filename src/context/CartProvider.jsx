@@ -73,6 +73,7 @@ export function CartProvider({ children }) {
                     image: product.image || '',
                     priceAmount: Number(product.priceAmount) || 0,
                     priceLabel: product.priceLabel || product.price || '',
+                    currencySymbol: product.currencySymbol || 'تومان',
                     qty: addQty,
                 },
             ];

@@ -5,14 +5,15 @@ import { CONFIG } from '../config/index.js';
 import { useCart } from '../hooks/useCart.js';
 import { toPersianDigits, toPersianNumber } from '../utils/persianNumber.js';
 
-function formatToman(amount) {
+function formatMoney(amount, symbol = 'تومان') {
     if (!amount) return '';
     const grouped = String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g, '٬');
-    return `${toPersianDigits(grouped)} تومان`;
+    return `${toPersianDigits(grouped)} ${symbol}`.trim();
 }
 
 export function CartPage() {
     const { items, count, totalAmount, remove, setQty } = useCart();
+    const currencySymbol = items[0]?.currencySymbol || 'تومان';
 
     // payload انتقال به checkout ووکامرس: [{ id, qty }]
     const handoffItems = JSON.stringify(items.map((item) => ({ id: item.id, qty: item.qty })));
@@ -92,7 +93,9 @@ export function CartPage() {
                                         </div>
                                     </div>
                                     {item.priceAmount ? (
-                                        <div className="cart-item__total">{formatToman(item.priceAmount * item.qty)}</div>
+                                        <div className="cart-item__total">
+                                            {formatMoney(item.priceAmount * item.qty, item.currencySymbol)}
+                                        </div>
                                     ) : null}
                                 </article>
                             ))}
@@ -108,7 +111,7 @@ export function CartPage() {
                                 <div className="cart-summary__row cart-summary__row--total">
                                     <span>مبلغ قابل پرداخت</span>
                                     <strong>
-                                        {totalAmount ? formatToman(totalAmount) : 'با استعلام'}
+                                        {totalAmount ? formatMoney(totalAmount, currencySymbol) : 'با استعلام'}
                                     </strong>
                                 </div>
 

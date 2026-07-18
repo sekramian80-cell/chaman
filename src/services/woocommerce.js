@@ -25,7 +25,10 @@ async function storeGet(path, params = {}) {
     url.searchParams.set('_', Date.now().toString());
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST.TIMEOUT);
+    const timeoutId = setTimeout(
+        () => controller.abort(),
+        CONFIG.WC?.TIMEOUT || CONFIG.REQUEST.TIMEOUT,
+    );
 
     try {
         const response = await fetch(url.toString(), {
