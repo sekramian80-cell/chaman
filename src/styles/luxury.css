@@ -1,16 +1,16 @@
 /* Luxury Outdoor Future — Home cinematic system */
 
 .lux-home {
-    --lux-ink: #f4fff0;
-    --lux-muted: rgba(214, 240, 214, 0.78);
-    --lux-lime: #b8f26d;
-    --lux-moss: #1a4a2a;
-    --lux-deep: #06140c;
-    --lux-glass: rgba(18, 48, 28, 0.42);
-    --lux-line: rgba(198, 255, 168, 0.22);
+    --lux-ink: #f2fbff;
+    --lux-muted: rgba(204, 236, 248, 0.78);
+    --lux-lime: #90e0ef;
+    --lux-moss: #02386e;
+    --lux-deep: #010f2c;
+    --lux-glass: rgba(3, 54, 110, 0.42);
+    --lux-line: rgba(173, 232, 244, 0.22);
     --lux-ease: cubic-bezier(0.22, 1, 0.36, 1);
     overflow: clip;
-    background: radial-gradient(circle at 20% -10%, rgba(120, 200, 90, 0.18), transparent 40%), var(--lux-deep);
+    background: radial-gradient(circle at 20% -10%, rgba(0, 180, 216, 0.18), transparent 40%), var(--lux-deep);
 }
 
 .lux-kicker {
@@ -18,9 +18,9 @@
     margin-bottom: 14px;
     padding: 6px 12px;
     color: var(--lux-lime);
-    border: 1px solid rgba(184, 242, 109, 0.28);
+    border: 1px solid rgba(72, 202, 228, 0.28);
     border-radius: 999px;
-    background: rgba(184, 242, 109, 0.08);
+    background: rgba(72, 202, 228, 0.08);
     font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.04em;
@@ -71,7 +71,7 @@
     position: absolute;
     inset: -8%;
     background:
-        linear-gradient(180deg, rgba(4, 16, 10, 0.35), rgba(4, 16, 10, 0.82) 70%),
+        linear-gradient(180deg, rgba(3, 20, 58, 0.35), rgba(3, 20, 58, 0.82) 70%),
         var(--hero-image) center / cover no-repeat;
     will-change: transform;
 }
@@ -80,9 +80,9 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 78% 18%, rgba(184, 242, 109, 0.18), transparent 28%),
-        radial-gradient(circle at 18% 72%, rgba(42, 157, 143, 0.22), transparent 34%),
-        linear-gradient(180deg, rgba(6, 20, 12, 0.2), rgba(6, 20, 12, 0.88));
+        radial-gradient(circle at 78% 18%, rgba(72, 202, 228, 0.18), transparent 28%),
+        radial-gradient(circle at 18% 72%, rgba(0, 150, 199, 0.22), transparent 34%),
+        linear-gradient(180deg, rgba(3, 26, 60, 0.2), rgba(3, 26, 60, 0.88));
 }
 
 .lux-hero__grain {
@@ -115,7 +115,7 @@
     height: min(42vw, 420px);
     top: 8%;
     left: 8%;
-    background: rgba(184, 242, 109, 0.22);
+    background: rgba(72, 202, 228, 0.22);
     animation: luxOrb 12s ease-in-out infinite alternate;
 }
 
@@ -124,7 +124,7 @@
     height: min(36vw, 360px);
     right: 4%;
     bottom: 18%;
-    background: rgba(42, 157, 143, 0.28);
+    background: rgba(0, 150, 199, 0.28);
     animation: luxOrb 15s ease-in-out infinite alternate-reverse;
 }
 
@@ -164,7 +164,7 @@
 .lux-hero__eyebrow {
     display: inline-block;
     margin-bottom: 16px;
-    color: rgba(244, 255, 240, 0.72);
+    color: rgba(240, 251, 255, 0.72);
     font-size: 0.92rem;
     font-weight: 700;
 }
@@ -206,14 +206,14 @@
     padding: 14px 16px;
     border: 1px solid var(--lux-line);
     border-radius: 18px;
-    background: rgba(10, 28, 16, 0.45);
+    background: rgba(3, 36, 78, 0.45);
     backdrop-filter: blur(16px) saturate(140%);
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
 .lux-hero__glass strong {
     display: block;
-    color: #f5ffe9;
+    color: #f2fbff;
 }
 
 .lux-hero__glass span {
@@ -229,7 +229,7 @@
     display: grid;
     justify-items: center;
     gap: 8px;
-    color: rgba(244, 255, 240, 0.7);
+    color: rgba(240, 251, 255, 0.7);
     font-size: 0.75rem;
     transform: translateX(-50%);
 }
@@ -274,14 +274,14 @@
 }
 
 .lux-btn--primary {
-    color: #0b1c10;
-    background: linear-gradient(135deg, #d8ff9a, var(--lux-lime) 45%, #7fd96a);
-    box-shadow: 0 16px 40px rgba(150, 230, 99, 0.28);
+    color: #011a3a;
+    background: linear-gradient(135deg, #caf0f8, var(--lux-lime) 45%, #48cae4);
+    box-shadow: 0 16px 40px rgba(72, 202, 228, 0.28);
 }
 
 .lux-btn--ghost {
-    color: #f4fff0;
-    border-color: rgba(244, 255, 240, 0.28);
+    color: #f2fbff;
+    border-color: rgba(240, 251, 255, 0.28);
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(12px);
 }
@@ -301,26 +301,26 @@
 }
 
 .lux-section--dark {
-    background: linear-gradient(180deg, rgba(8, 24, 14, 0.2), rgba(6, 18, 10, 0.95));
+    background: linear-gradient(180deg, rgba(3, 32, 70, 0.2), rgba(3, 24, 58, 0.95));
 }
 
 .lux-section--mist {
     background:
-        radial-gradient(circle at 80% 0%, rgba(184, 242, 109, 0.12), transparent 35%),
-        linear-gradient(180deg, #0d2416, #102a1a);
+        radial-gradient(circle at 80% 0%, rgba(72, 202, 228, 0.12), transparent 35%),
+        linear-gradient(180deg, #012a4a, #012f52);
 }
 
 .lux-section--deep {
     background:
-        radial-gradient(circle at 50% 0%, rgba(42, 157, 143, 0.16), transparent 40%),
-        #050f09;
+        radial-gradient(circle at 50% 0%, rgba(0, 150, 199, 0.16), transparent 40%),
+        #03082e;
 }
 
 .lux-section__glow {
     position: absolute;
     inset: auto 10% -20%;
     height: 50%;
-    background: radial-gradient(circle, rgba(184, 242, 109, 0.12), transparent 65%);
+    background: radial-gradient(circle, rgba(72, 202, 228, 0.12), transparent 65%);
     pointer-events: none;
 }
 
@@ -338,8 +338,8 @@
 /* Marquee */
 .lux-marquee {
     overflow: hidden;
-    border-block: 1px solid rgba(198, 255, 168, 0.12);
-    background: rgba(8, 24, 14, 0.85);
+    border-block: 1px solid rgba(173, 232, 244, 0.12);
+    background: rgba(3, 32, 70, 0.85);
     padding: 18px 0;
 }
 
@@ -351,7 +351,7 @@
 }
 
 .lux-marquee__item {
-    color: rgba(244, 255, 240, 0.78);
+    color: rgba(240, 251, 255, 0.78);
     font-size: 0.95rem;
     font-weight: 800;
     white-space: nowrap;
@@ -451,7 +451,7 @@
 .lux-parallax__veil {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(5, 15, 9, 0.45));
+    background: linear-gradient(180deg, transparent 50%, rgba(3, 20, 54, 0.45));
     pointer-events: none;
 }
 
@@ -472,7 +472,7 @@
 }
 
 .lux-bento-card__index {
-    color: rgba(184, 242, 109, 0.55);
+    color: rgba(72, 202, 228, 0.55);
     font-size: 1.4rem;
     font-weight: 950;
 }
@@ -480,8 +480,8 @@
 .lux-bento-card--accent {
     grid-column: span 1;
     background:
-        linear-gradient(160deg, rgba(184, 242, 109, 0.18), rgba(42, 157, 143, 0.12)),
-        rgba(12, 36, 20, 0.55);
+        linear-gradient(160deg, rgba(72, 202, 228, 0.18), rgba(0, 150, 199, 0.12)),
+        rgba(3, 44, 90, 0.55);
 }
 
 /* Stats */
@@ -534,7 +534,7 @@
     overflow: hidden;
     border: 1px solid var(--lux-line);
     border-radius: 28px;
-    background: rgba(12, 34, 20, 0.7);
+    background: rgba(3, 42, 88, 0.7);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
 }
 
@@ -639,7 +639,7 @@
     height: 44px;
     border-radius: 50%;
     border: 2px solid #fff;
-    background: rgba(12, 34, 20, 0.75);
+    background: rgba(3, 42, 88, 0.75);
     transform: translate(-50%, -50%);
     backdrop-filter: blur(8px);
 }
@@ -650,7 +650,7 @@
     top: 16px;
     padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(8, 24, 14, 0.7);
+    background: rgba(3, 32, 70, 0.7);
     color: #fff;
     font-size: 0.78rem;
     font-weight: 800;
@@ -683,8 +683,8 @@
     border: 1px solid var(--lux-line);
     border-radius: 32px;
     background:
-        radial-gradient(circle at 50% 0%, rgba(184, 242, 109, 0.16), transparent 45%),
-        rgba(12, 34, 20, 0.65);
+        radial-gradient(circle at 50% 0%, rgba(72, 202, 228, 0.16), transparent 45%),
+        rgba(3, 42, 88, 0.65);
     backdrop-filter: blur(18px);
 }
 
@@ -709,8 +709,8 @@
     min-height: 54px;
     padding: 0 22px;
     border-radius: 999px;
-    color: #0b1c10;
-    background: linear-gradient(135deg, #d8ff9a, var(--lux-lime));
+    color: #011a3a;
+    background: linear-gradient(135deg, #caf0f8, var(--lux-lime));
     box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(10px);
 }
@@ -718,8 +718,8 @@
 /* Glass header boost on home */
 .lux-home ~ .site-header,
 body:has(.lux-home) .site-header--premium {
-    background: rgba(8, 24, 14, 0.35);
-    border-bottom: 1px solid rgba(198, 255, 168, 0.12);
+    background: rgba(3, 32, 70, 0.35);
+    border-bottom: 1px solid rgba(173, 232, 244, 0.12);
     backdrop-filter: blur(18px) saturate(150%);
 }
 
