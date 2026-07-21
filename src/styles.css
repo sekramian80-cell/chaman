@@ -229,17 +229,7 @@ img {
 }
 
 .site-header::before {
-    position: absolute;
-    inset: -20px 8%;
-    z-index: -1;
-    content: "";
-    background:
-        radial-gradient(ellipse at 50% 50%, rgba(0, 180, 216, 0.24), transparent 58%),
-        linear-gradient(90deg, transparent, rgba(2, 80, 150, 0.24), transparent);
-    filter: blur(18px);
-    opacity: 0.85;
-    pointer-events: none;
-    animation: headerAura 7s ease-in-out infinite alternate;
+    display: none;
 }
 
 .site-header::after {
@@ -828,16 +818,14 @@ img {
     display: none;
 }
 
-/* روکشِ روشن: عکس دیده می‌شود، ولی سمتِ کارت (راست) روشن‌تر می‌شود */
+/* روکشِ تمیز: عکس دیده می‌شود، سمتِ کارت (راست) کمی روشن‌تر برای خوانایی */
 .hero__overlay {
     position: absolute;
     inset: 0;
     z-index: -2;
     background:
-        radial-gradient(circle at 16% 24%, rgba(47, 174, 95, 0.16), transparent 32%),
-        radial-gradient(circle at 84% 28%, rgba(0, 150, 199, 0.16), transparent 32%),
-        linear-gradient(90deg, rgba(244, 249, 254, 0) 30%, rgba(244, 249, 254, 0.3) 60%, rgba(244, 249, 254, 0.66) 100%),
-        linear-gradient(180deg, rgba(244, 249, 254, 0.14), rgba(244, 249, 254, 0.32));
+        linear-gradient(90deg, rgba(244, 249, 254, 0) 42%, rgba(244, 249, 254, 0.22) 72%, rgba(244, 249, 254, 0.5) 100%),
+        linear-gradient(180deg, rgba(10, 30, 55, 0.12), rgba(10, 30, 55, 0.04));
 }
 
 .hero__veil {
@@ -915,10 +903,61 @@ img {
 
 .hero h1 {
     max-width: none;
-    font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+    margin-top: 12px;
+    font-size: clamp(1.9rem, 3.6vw, 3rem);
     font-weight: 950;
-    line-height: 1.25;
+    line-height: 1.28;
+    letter-spacing: -0.01em;
     color: var(--color-ink);
+}
+
+.hero__hl {
+    background: linear-gradient(120deg, #1f9d54, #0096c7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+@media (max-width: 720px) {
+    .hero {
+        min-height: auto;
+    }
+
+    .hero__content {
+        min-height: 0;
+        padding: 118px 0 54px;
+        justify-items: stretch;
+    }
+
+    .hero__copy {
+        max-width: 100%;
+        padding: 24px 20px 26px;
+    }
+
+    .hero h1 {
+        font-size: clamp(1.55rem, 7vw, 2.1rem);
+    }
+
+    .hero__lead {
+        max-width: none;
+    }
+
+    .hero__actions {
+        width: 100%;
+    }
+
+    .hero__actions .btn {
+        flex: 1 1 46%;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 16px;
+    }
+
+    .hero__fifa {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 .hero__fifa {

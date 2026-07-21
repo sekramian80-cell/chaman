@@ -3,6 +3,21 @@ import heroImage from "../assets/hero-football-field.jpg";
 import { heroContent } from "../content/hero.js";
 import { SectionSeam } from "./SectionSeam.jsx";
 
+function renderTitle() {
+    const { title, titleHighlight } = heroContent;
+    if (titleHighlight && title.includes(titleHighlight)) {
+        const [before, after] = title.split(titleHighlight);
+        return (
+            <>
+                {before}
+                <span className="hero__hl">{titleHighlight}</span>
+                {after}
+            </>
+        );
+    }
+    return title;
+}
+
 export function Hero() {
     return (
         <section id="top" className="hero hero--premium" style={{ "--hero-image": `url(${heroImage})` }}>
@@ -13,7 +28,7 @@ export function Hero() {
                 <div className="hero__copy">
                     <p className="hero__brand">فراز چمن</p>
                     <span className="eyebrow">{heroContent.eyebrow}</span>
-                    <h1>{heroContent.title}</h1>
+                    <h1>{renderTitle()}</h1>
                     <p className="hero__lead">{heroContent.description}</p>
                     <div className="hero__actions">
                         <a className="btn btn--primary" href={heroContent.primaryCta.href}>

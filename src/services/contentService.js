@@ -134,8 +134,9 @@ function injectCategoriesIntoNav(navItems = [], tree = []) {
 
     return navItems.map((item) => {
         const isProducts = item.path === '/products' || item.href === '/products';
-        // کشوی «محصولات» همیشه درختِ کاملِ دسته‌ها (با زیردسته‌ها) را نشان می‌دهد.
-        if (isProducts) return { ...item, children };
+        // اگر «محصولات» در فهرست وردپرس خودش زیرمنو دارد، دقیقاً همان (فهرست کاربر) نمایش داده می‌شود؛
+        // فقط اگر زیرمنو نداشت، از دسته‌های ووکامرس پر می‌کنیم.
+        if (isProducts && !item.children?.length) return { ...item, children };
         return item;
     });
 }
