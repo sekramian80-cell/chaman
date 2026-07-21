@@ -70,7 +70,7 @@ export const CONFIG = {
          * false = همیشه منوی اصلیِ ثابتِ سایت نمایش داده می‌شود (بدون پرش/سوییچ).
          * دسته‌های زیر «محصولات» در هر حالت خودکار از ووکامرس می‌آیند.
          */
-        USE_WORDPRESS: false,
+        USE_WORDPRESS: true,
         LOCATION: "primary",
         SLUG: "منوی-اصلی",
     },

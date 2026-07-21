@@ -1,12 +1,9 @@
-import beforeImage from '../assets/services/residential-balcony.jpg';
-import afterImage from '../assets/hero-artificial-grass.jpg';
 import { ContactCTA } from '../components/ContactCTA.jsx';
 import { Hero } from '../components/Hero.jsx';
 import { PulseRibbon } from '../components/experience/PulseRibbon.jsx';
 import { ScrollReveal } from '../components/ScrollReveal.jsx';
 import { SubcategorySlider } from '../components/SubcategorySlider.jsx';
 import { TrustStrip } from '../components/TrustStrip.jsx';
-import { BeforeAfter } from '../components/luxury/BeforeAfter.jsx';
 import { heroContent } from '../content/hero.js';
 import { toPersianOrdinal } from '../utils/persianNumber.js';
 
@@ -71,26 +68,6 @@ export function HomePage() {
             </section>
 
             <SubcategorySlider />
-
-            <section className="section home-transform">
-                <div className="container home-transform__grid">
-                    <ScrollReveal className="home-transform__copy">
-                        <span className="eyebrow">تحول فضا</span>
-                        <h2>قبل و بعد را لمس کنید</h2>
-                        <p>
-                            اسلایدر را بکشید و تفاوت سطح خام با اجرای نهایی چمن مصنوعی را ببینید.
-                        </p>
-                    </ScrollReveal>
-                    <ScrollReveal className="home-transform__compare" delay={120}>
-                        <BeforeAfter
-                            beforeSrc={beforeImage}
-                            afterSrc={afterImage}
-                            beforeLabel="قبل"
-                            afterLabel="بعد"
-                        />
-                    </ScrollReveal>
-                </div>
-            </section>
 
             <ContactCTA />
         </div>
